@@ -1,0 +1,28 @@
+{
+    "name": "Favourites",
+    "fields": [
+        {
+            "fieldName": "favourite",
+            "fieldType": "Category",
+            "fieldValues": "SPORT,FOOD,MUSIC,PARTY,OTHER"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "favourites",
+            "relationshipName": "favourites",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200329215945",
+    "entityTableName": "favourites",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

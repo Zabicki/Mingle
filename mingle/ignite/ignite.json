@@ -1,0 +1,17 @@
+{
+  "name": "mingle",
+  "createdWith": "3.5.1",
+  "boilerplate": "ignite-jhipster",
+  "jhipsterDirectory": "../jhipster-api",
+  "authType": "jwt",
+  "searchEngine": false,
+  "websockets": false,
+  "detox": false,
+  "askToOverwrite": false,
+  "generators": {
+    "entity": "ignite-jhipster",
+    "import-jdl": "ignite-jhipster",
+    "upgrade": "ignite-jhipster"
+  },
+  "boilerplateVersion": "3.4.1"
+}

@@ -1,0 +1,81 @@
+entity User {
+	name String required
+    age Integer required
+    mail String required
+    picture ImageBlob
+    city String
+    description String
+}
+
+entity Chat {
+}
+
+entity Favourites {
+	favourite Category
+}
+
+entity Message {
+	message String
+    date LocalDate
+}
+
+entity Review {
+	score Integer required
+    review String
+}
+
+enum Category {
+	SPORT,
+    FOOD,
+    MUSIC,
+    PARTY,
+    OTHER
+}
+enum Privacy {
+	PUBLIC,
+    PRIVATE
+}
+
+entity Event {
+	name String required
+    description String required
+    picture ImageBlob
+    city String required
+    address String required
+    maxParticpants Integer
+    date LocalDate required
+    recurent Boolean required
+    interval Long
+    category Category required
+    privacy Privacy required
+}
+
+relationship ManyToOne {
+	// reviews
+	Review{reviews} to User
+    Review to User{reviewer} 
+    
+    // chat
+    Message to User{owner}
+    
+    // user events
+    Event to User{host}
+    
+    Favourites{favourites} to User
+}
+relationship OneToMany {
+	Chat to Message{messages}
+}
+
+relationship ManyToMany {
+	//chat
+	Chat{chats} to User{users}
+    
+    // events
+    Event{events} to User{participants}
+    
+}
+
+paginate Event with infinite-scroll
+
+service Event, Review, Chat with serviceClass

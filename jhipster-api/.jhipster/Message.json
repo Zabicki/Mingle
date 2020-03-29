@@ -1,0 +1,37 @@
+{
+    "name": "Message",
+    "fields": [
+        {
+            "fieldName": "message",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "date",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "owner"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "chat",
+            "otherEntityRelationshipName": "message",
+            "relationshipName": "messages",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200329192001",
+    "entityTableName": "message",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

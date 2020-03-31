@@ -1,0 +1,12 @@
+language: java
+jdk:
+	- openjdk11
+addons:
+	sonarcloud:
+		- organization: "mingle"
+		- token:
+			secure: b71e62492ab6eeaac57a141a5bd53d20052f2f32
+script:
+  - sonnar-scanner
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Zabicki_Mingle
+

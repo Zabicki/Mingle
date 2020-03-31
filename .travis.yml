@@ -32,7 +32,7 @@ before_install:
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
 install:
-  -  install
+  -  ./install
 script:
 notifications:
   webhooks:

@@ -14,6 +14,9 @@
 # ===================================================================
 
 spring:
+  profiles:
+    include:
+      - swagger
   application:
     name: mingle
   data:
@@ -79,6 +82,17 @@ jhipster:
     logs: # Reports metrics in the logs
       enabled: true
       report-frequency: 60 # in seconds
+  swagger:
+    default-include-pattern: /api/.*
+    title: culex API
+    description: culex API documentation
+    version: 0.0.1
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
+    license:
+    license-url:
 
 # ===================================================================
 # Application specific properties

@@ -2,6 +2,7 @@ os:
   - linux
 services:
   - docker
+  - mongodb
 language: node_js
 node_js:
   - '12.13.0'
@@ -39,6 +40,9 @@ before_install:
   - npm -v
 install:
   - npm install
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
 script:
   - cd jhipster-api
   - chmod +x mvnw

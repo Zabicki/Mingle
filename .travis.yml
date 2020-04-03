@@ -52,7 +52,7 @@ script:
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.organization=culex -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN; fi
   - ./mvnw -ntp verify -Pprod -DskipTests
   - cd ../mingle
-  - yarn test --runInBand --detectOpenHandles
+  - npm test --runInBand --detectOpenHandles
 notifications:
   webhooks:
     on_success: change # options: [always|never|change] default: always

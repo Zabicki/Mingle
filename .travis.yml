@@ -2,6 +2,7 @@ os:
   - linux
 services:
   - docker
+  - mongodb
 language: node_js
 node_js:
   - '12.13.0'
@@ -39,13 +40,19 @@ before_install:
   - npm -v
 install:
   - npm install
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
 script:
-  - chmod +x ./jhipster-api/mvnw
-  - ./jhipster-api/mvnw -ntp checkstyle:check
-  - ./jhipster-api/mvnw -ntp clean verify
-  - ./jhipster-api/mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test-ci' -Dmaven.repo.local=$MAVEN_USER_HOME
-  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./jhipster-api/mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.organization=culex -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN; fi
-  - ./jhipster-api/mvnw -ntp verify -Pprod -DskipTests
+  - cd jhipster-api
+  - chmod +x mvnw
+  - ./mvnw -ntp checkstyle:check
+  - ./mvnw -ntp clean verify
+  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test-ci' -Dmaven.repo.local=$MAVEN_USER_HOME
+  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.organization=culex -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN; fi
+  - ./mvnw -ntp verify -Pprod -DskipTests
+  - cd ../mingle
+  - yarn test --runInBand --detectOpenHandles
 notifications:
   webhooks:
     on_success: change # options: [always|never|change] default: always

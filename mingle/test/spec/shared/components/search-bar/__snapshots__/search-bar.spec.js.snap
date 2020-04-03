@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchBar component renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "rgba(0,0,0,0)",
+      "flexDirection": "row",
+      "marginTop": 5,
+      "width": 740,
+    }
+  }
+>
+  <Icon
+    name="search"
+    size={15}
+    style={
+      Object {
+        "alignSelf": "center",
+        "backgroundColor": "rgba(0,0,0,0)",
+        "color": "white",
+        "left": 20,
+      }
+    }
+  />
+  <TextInput
+    allowFontScaling={true}
+    autoCapitalize="none"
+    autoCorrect={false}
+    onChangeText={[Function]}
+    onSubmitEditing={[Function]}
+    placeholder="Search"
+    placeholderTextColor="white"
+    rejectResponderTermination={true}
+    returnKeyType="search"
+    selectionColor="white"
+    style={
+      Object {
+        "alignSelf": "center",
+        "borderColor": "white",
+        "borderRadius": 5,
+        "borderWidth": 1,
+        "color": "white",
+        "flex": 5,
+        "flexDirection": "row",
+        "fontFamily": "Avenir-Book",
+        "fontSize": undefined,
+        "height": 30,
+        "padding": 5,
+        "paddingLeft": 30,
+        "textAlign": "left",
+      }
+    }
+    underlineColorAndroid="transparent"
+  />
+  <View
+    accessible={true}
+    focusable={true}
+    isTVSelectable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "center",
+        "marginHorizontal": 10,
+        "opacity": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "white",
+          "fontFamily": "Avenir-Book",
+          "fontSize": 17,
+        }
+      }
+    >
+      Cancel
+    </Text>
+  </View>
+</View>
+`;

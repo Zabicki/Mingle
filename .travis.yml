@@ -4,6 +4,7 @@ services:
   - docker
   - mongodb
 language: node_js
+dist: trusty
 node_js:
   - '12.13.0'
 cache:
@@ -11,6 +12,10 @@ cache:
     - node
     - node_modules
     - $HOME/.m2
+addons:
+  sonarcloud:
+    organization: "mingle"
+    token: $SONAR_TOKEN
 env:
   global:
     - NODE_VERSION=12.13.0
@@ -31,32 +36,33 @@ before_install:
       sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
       java -version
     fi
-  - java -version
-  - sudo /etc/init.d/mysql stop
-  - sudo /etc/init.d/postgresql stop
-  - nvm install $NODE_VERSION
-  - npm install -g npm
-  - node -v
-  - npm -v
-install:
-  - cd jhipster-api
-  - npm install
-  - cd ../mingle
-  - npm install
-  - cd ..
-before_script:
-  - sleep 15
-  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+#  - java -version
+#  - sudo /etc/init.d/mysql stop
+#  - sudo /etc/init.d/postgresql stop
+#  - nvm install $NODE_VERSION
+#  - npm install -g npm
+#  - node -v
+#  - npm -v
+#install:
+#  - cd jhipster-api
+#  - npm install
+#  - cd ../mingle
+#  - npm install
+#  - cd ..
+#before_script:
+#  - sleep 15
+#  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
 script:
-  - cd jhipster-api
-  - chmod +x mvnw
-  - ./mvnw -ntp checkstyle:check
-  - ./mvnw -ntp clean verify
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test-ci' -Dmaven.repo.local=$MAVEN_USER_HOME
-  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.organization=culex -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN; fi
-  - ./mvnw -ntp verify -Pprod -DskipTests
-  - cd ../mingle
-  - npm test --runInBand --detectOpenHandles
+#  - cd jhipster-api
+#  - chmod +x mvnw
+#  - ./mvnw -ntp checkstyle:check
+#  - ./mvnw -ntp clean verify
+#  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test-ci' -Dmaven.repo.local=$MAVEN_USER_HOME
+#  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.organization=culex -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN; fi
+#  - ./mvnw -ntp verify -Pprod -DskipTests
+#  - cd ../mingle
+#  - npm test --runInBand --detectOpenHandles
+  - sonar-scanner
 notifications:
   webhooks:
     on_success: change # options: [always|never|change] default: always

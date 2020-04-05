@@ -57,7 +57,6 @@ script:
   - chmod +x mvnw
   - ./mvnw -ntp checkstyle:check
   - ./mvnw -ntp clean verify
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test-ci' -Dmaven.repo.local=$MAVEN_USER_HOME
   - ./mvnw -ntp verify -Pprod -DskipTests
   - cd ../mingle
   - npm test --runInBand --detectOpenHandles

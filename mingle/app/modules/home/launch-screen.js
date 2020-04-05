@@ -6,6 +6,8 @@ import { Navigation } from 'react-native-navigation'
 import LearnMoreLinks from './learn-more-links.component.js'
 import { Images } from '../../shared/themes'
 import styles from './launch-screen.styles'
+import RoundedButton from '../../shared/components/rounded-button/rounded-button'
+import {testScreen} from '../../navigation/layouts'
 
 export default class LaunchScreen extends React.Component {
   constructor(props) {
@@ -88,6 +90,11 @@ export default class LaunchScreen extends React.Component {
             </View>
             <LearnMoreLinks />
           </View>
+          <RoundedButton
+            onPress={testScreen}
+            title="Go to test screen"
+            color="#841584"
+          />
         </ScrollView>
       </View>
     )

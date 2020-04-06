@@ -73,37 +73,6 @@
     "reactotron-redux-saga": "4.2.2",
     "rimraf": "3.0.0"
   },
-  "jest": {
-    "testMatch": [
-      "**/test/**/*.js",
-      "**/?(*.)(spec|test).js?(x)"
-    ],
-    "testResultsProcessor": "jest-sonar-reporter",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/e2e/",
-      "test/setup.js"
-    ],
-    "moduleNameMapper": {
-      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "identity-obj-proxy"
-    },
-    "setupFiles": [
-      "./test/setup"
-    ],
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native-community|tcomb-form-native|react-native))"
-    ],
-    "coveragePathIgnorePatterns": [
-      "app/shared/services/api.js",
-      "app/shared/themes/",
-      "/storybook/",
-      "/*\\.story\\.js"
-    ],
-    "preset": "react-native"
-  },
   "lint-staged": {
     "{,app/**/,test/**/}*.{js}": [
       "prettier --write",
@@ -112,9 +81,13 @@
     ]
   },
   "jestSonar": {
-	"reportPath": "target",
-	"reportFile": "test-report.xml",
-	"indent": 4
+    "reportPath": "target",
+    "reportFile": "test-report.xml",
+    "indent": 4
   },
-  "config": {}
+  "config": {},
+  "scripts":{
+     "test": "npm run jest",
+     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js"
+  }
 }

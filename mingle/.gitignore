@@ -55,6 +55,8 @@ buck-out/
 # Bundle artifact
 *.jsbundle
 
+target
+
 # CocoaPods
 /ios/Pods/
 coverage/

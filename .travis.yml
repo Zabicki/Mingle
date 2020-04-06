@@ -61,7 +61,7 @@ script:
   - cd ../mingle
   - npm test --runInBand --detectOpenHandles
   - cd ..
-  - sonar-scanner
+  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then sonar-scanner; fi
 notifications:
   webhooks:
     on_success: change # options: [always|never|change] default: always

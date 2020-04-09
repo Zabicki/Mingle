@@ -60,6 +60,9 @@ public class EventResourceIT {
     private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
+    private static final double[] DEFAULT_LOCATION = {50,20};
+    private static final double[] UPDATED_LOCATION = {60,30};
+
     private static final Integer DEFAULT_MAX_PARTICPANTS = 1;
     private static final Integer UPDATED_MAX_PARTICPANTS = 2;
 
@@ -132,6 +135,7 @@ public class EventResourceIT {
             .pictureContentType(DEFAULT_PICTURE_CONTENT_TYPE)
             .city(DEFAULT_CITY)
             .address(DEFAULT_ADDRESS)
+            .location(DEFAULT_LOCATION)
             .maxParticpants(DEFAULT_MAX_PARTICPANTS)
             .date(DEFAULT_DATE)
             .recurent(DEFAULT_RECURENT)
@@ -189,6 +193,7 @@ public class EventResourceIT {
         assertThat(testEvent.getPictureContentType()).isEqualTo(DEFAULT_PICTURE_CONTENT_TYPE);
         assertThat(testEvent.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testEvent.getAddress()).isEqualTo(DEFAULT_ADDRESS);
+        assertThat(testEvent.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testEvent.getMaxParticpants()).isEqualTo(DEFAULT_MAX_PARTICPANTS);
         assertThat(testEvent.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testEvent.isRecurent()).isEqualTo(DEFAULT_RECURENT);
@@ -368,6 +373,8 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].picture").value(hasItem(Base64Utils.encodeToString(DEFAULT_PICTURE))))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
+            .andExpect(jsonPath("$.[*].location",hasItem(hasItem(DEFAULT_LOCATION[0]))))
+            .andExpect(jsonPath("$.[*].location",hasItem(hasItem(DEFAULT_LOCATION[1]))))
             .andExpect(jsonPath("$.[*].maxParticpants").value(hasItem(DEFAULT_MAX_PARTICPANTS)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].recurent").value(hasItem(DEFAULT_RECURENT.booleanValue())))
@@ -375,7 +382,7 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY.toString())))
             .andExpect(jsonPath("$.[*].privacy").value(hasItem(DEFAULT_PRIVACY.toString())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllEventsWithEagerRelationshipsIsEnabled() throws Exception {
         EventResource eventResource = new EventResource(eventServiceMock);
@@ -425,6 +432,8 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.picture").value(Base64Utils.encodeToString(DEFAULT_PICTURE)))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
+            .andExpect(jsonPath("$.location",hasItem(DEFAULT_LOCATION[0])))
+            .andExpect(jsonPath("$.location",hasItem(DEFAULT_LOCATION[1])))
             .andExpect(jsonPath("$.maxParticpants").value(DEFAULT_MAX_PARTICPANTS))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
             .andExpect(jsonPath("$.recurent").value(DEFAULT_RECURENT.booleanValue()))
@@ -456,6 +465,7 @@ public class EventResourceIT {
             .pictureContentType(UPDATED_PICTURE_CONTENT_TYPE)
             .city(UPDATED_CITY)
             .address(UPDATED_ADDRESS)
+            .location(UPDATED_LOCATION)
             .maxParticpants(UPDATED_MAX_PARTICPANTS)
             .date(UPDATED_DATE)
             .recurent(UPDATED_RECURENT)
@@ -478,6 +488,7 @@ public class EventResourceIT {
         assertThat(testEvent.getPictureContentType()).isEqualTo(UPDATED_PICTURE_CONTENT_TYPE);
         assertThat(testEvent.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testEvent.getAddress()).isEqualTo(UPDATED_ADDRESS);
+        assertThat(testEvent.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testEvent.getMaxParticpants()).isEqualTo(UPDATED_MAX_PARTICPANTS);
         assertThat(testEvent.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testEvent.isRecurent()).isEqualTo(UPDATED_RECURENT);

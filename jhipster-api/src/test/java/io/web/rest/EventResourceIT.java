@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -28,9 +31,11 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.web.rest.TestUtil.convertObjectToJsonBytes;
 import static io.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -157,6 +162,7 @@ public class EventResourceIT {
             .picture(UPDATED_PICTURE)
             .pictureContentType(UPDATED_PICTURE_CONTENT_TYPE)
             .city(UPDATED_CITY)
+            .location(UPDATED_LOCATION)
             .address(UPDATED_ADDRESS)
             .maxParticpants(UPDATED_MAX_PARTICPANTS)
             .date(UPDATED_DATE)
@@ -530,4 +536,33 @@ public class EventResourceIT {
         List<Event> eventList = eventRepository.findAll();
         assertThat(eventList).hasSize(databaseSizeBeforeDelete - 1);
     }
+
+    @Test
+    public void testNearbyEvents() throws Exception{
+        eventService.save(event);
+
+        eventService.save(createUpdatedEntity());
+
+        restEventMockMvc.perform(get("/api/events/near/{latitude}/{longitude}/{radius}","60.2","30.2","30"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.[*].name").value(hasSize(1)))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(UPDATED_NAME)));
+
+    }
+
+    @Test
+    public void testEventsFromCity() throws Exception{
+        eventService.save(event);
+
+        eventService.save(createUpdatedEntity());
+
+        restEventMockMvc.perform(get("/api/events/city/{city}",DEFAULT_CITY))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.[*].name").value(hasSize(1)))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+
+    }
+
 }

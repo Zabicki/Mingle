@@ -9,12 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,6 +35,7 @@ class EventServiceTest {
     private final double[] otherCracowLocation = {50.2,20.2};
     private final double[] warsawLocation = {52.2297700,21.0117800};
     private final double[] otherWarsawLocation = {52.1,20.98};
+    private final Pageable pageable = Pageable.unpaged();
 
 
     public Event createEvent(String name, String description, String city, String address, double[] location,
@@ -63,25 +65,25 @@ class EventServiceTest {
     public void assertThatFindByLocationNearWorks(){
         Point userLocation = new Point(50,20);
         Distance distance = new Distance(50, Metrics.KILOMETERS);
-        List<Event> foundEvents = eventService.findAllByLocationNear(userLocation,distance);
-        assertThat(foundEvents.size()).isEqualTo(2);
-        assertThat(foundEvents.get(0).getName()).isEqualTo("running");
-        assertThat(foundEvents.get(1).getName()).isEqualTo("skiing");
+        Page<Event> foundEvents = eventService.findAllByLocationNear(pageable,userLocation,distance);
+        assertThat(foundEvents.getTotalElements()).isEqualTo(2);
+        assertThat(foundEvents.getContent().get(0).getName()).isEqualTo("running");
+        assertThat(foundEvents.getContent().get(1).getName()).isEqualTo("skiing");
 
         Point userLocation2 = new Point(52,20.7);
-        List<Event> foundEvents2 = eventService.findAllByLocationNear(userLocation2,distance);
-        assertThat(foundEvents2.size()).isEqualTo(2);
-        assertThat(foundEvents2.get(0).getName()).isEqualTo("football");
-        assertThat(foundEvents2.get(1).getName()).isEqualTo("basketball");
+        Page<Event> foundEvents2 = eventService.findAllByLocationNear(pageable,userLocation2,distance);
+        assertThat(foundEvents2.getTotalElements()).isEqualTo(2);
+        assertThat(foundEvents2.getContent().get(0).getName()).isEqualTo("football");
+        assertThat(foundEvents2.getContent().get(1).getName()).isEqualTo("basketball");
 
     }
 
     @Test
     public void assertThatFindEventsFromCityWorks(){
-        List<Event> foundEvents = eventService.findAllFromCity("Warsaw");
-        assertThat(foundEvents.size() == 2).isTrue();
-        assertThat(foundEvents.get(0).getName()).isEqualTo("basketball");
-        assertThat(foundEvents.get(1).getName()).isEqualTo("football");
+        Page<Event> foundEvents = eventService.findAllFromCity(pageable,"Warsaw");
+        assertThat(foundEvents.getTotalElements()).isEqualTo(2);
+        assertThat(foundEvents.getContent().get(0).getName()).isEqualTo("basketball");
+        assertThat(foundEvents.getContent().get(1).getName()).isEqualTo("football");
     }
 
 }

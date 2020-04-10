@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -104,6 +107,48 @@ public class EventResource {
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET /events/near/:latitude/:longitude/:radius} : get all nearby events.
+     *
+     * @param pageable the pagination information.
+     * @param latitude latitude of the user.
+     * @param longitude longitude of the user.
+     * @param radius maximal distance to event.
+     * @return the {@link ResponseEntity} with status {@code 200(ok)} and the list of events in body.
+     */
+    @GetMapping("/events/near/{latitude}/{longitude}/{radius}")
+    public ResponseEntity<List<Event>> getAllNearbyEvents(Pageable pageable, @PathVariable String latitude,
+                                                          @PathVariable String longitude, @PathVariable String radius){
+        log.debug("REST request to get all nearby events");
+        Point point;
+        Distance distance;
+        try {
+            point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+            distance = new Distance(Double.parseDouble(radius), Metrics.KILOMETERS);
+        }catch (NumberFormatException e){
+            throw new BadRequestAlertException("Parameters are not numbers ", latitude + ", " + longitude + "," + radius,"invalidParameters");
+        }
+
+        Page<Event> foundEvents = eventService.findAllByLocationNear(pageable, point, distance);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
+        return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
+    }
+
+    /**
+     * {@code GET /events/city/:city} : get all events from city.
+     *
+     * @param pageable the pagination information.
+     * @param city given city.
+     * @return the {@link ResponseEntity} with status {@code 200(ok)} and the list of events in body.
+     */
+    @GetMapping("/events/city/{city}")
+    public ResponseEntity<List<Event>> getAllEventsFromCity(Pageable pageable, @PathVariable String city){
+        log.debug("REST request to get all events from city : {}",city);
+        Page<Event> foundEvents = eventService.findAllFromCity(pageable,city);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
+        return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
     }
 
     /**

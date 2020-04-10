@@ -57,9 +57,9 @@ public class EventService {
      * @param distance maximal distance to event.
      * @return the list of Events.
      */
-    public List<Event> findAllByLocationNear(Point point, Distance distance){
+    public Page<Event> findAllByLocationNear(Pageable pageable,Point point, Distance distance){
         log.debug("Request to get all nearby Events");
-        return eventRepository.findByLocationNear(point, distance);
+        return eventRepository.findByLocationNear(pageable, point, distance);
     }
 
     /**
@@ -68,9 +68,9 @@ public class EventService {
      * @param city given city.
      * @return the list of Events.
      */
-    public List<Event> findAllFromCity(String city){
+    public Page<Event> findAllFromCity(Pageable pageable, String city){
         log.debug("Request to get all Events from city : {}",city);
-        return eventRepository.findByCity(city);
+        return eventRepository.findByCity(pageable,city);
     }
 
     /**

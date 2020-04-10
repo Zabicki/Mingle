@@ -26,8 +26,8 @@ public interface EventRepository extends MongoRepository<Event, String> {
     @Query("{'id': ?0}")
     Optional<Event> findOneWithEagerRelationships(String id);
 
-    List<Event> findByLocationNear(Point point, Distance distance);
+    Page<Event> findByLocationNear(Pageable pageable, Point point, Distance distance);
 
-    List<Event> findByCity(String city);
+    Page<Event> findByCity(Pageable pageable, String city);
 
 }

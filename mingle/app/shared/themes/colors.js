@@ -11,8 +11,8 @@ const colors = {
   frost: '#D8D8D8',
   cloud: 'rgba(200,200,200, 0.35)',
   windowTint: 'rgba(0, 0, 0, 0.4)',
-  panther: '#161616',
-  charcoal: '#595959',
+  sun: '#FFBD59',
+  savanna: '#D59F4E',
   coal: '#2d2d2d',
   bloodOrange: '#fb5f26',
   snow: 'white',
@@ -23,6 +23,10 @@ const colors = {
   border: '#483F53',
   banner: '#5F3E63',
   text: '#E0D7E5',
+  tmp: '#161616',
+  grey: '#EDEDED',
+
 }
+
 
 export default colors

@@ -3,26 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint app test index.js --ext .js",
-    "clean": "rimraf $TMPDIR/react-* && watchman watch-del-all && npm cache clean --force",
-    "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android",
-    "newclear": "rimraf $TMPDIR/react-* && watchman watch-del-all && rimraf ios/build && rimraf node_modules/ && npm cache clean --force && npm i",
-    "test:watch": "jest --watch",
-    "updateSnapshot": "jest --updateSnapshot",
-    "coverage": "jest --coverage && open coverage/lcov-report/index.html || xdg-open coverage/lcov-report/index.html",
-    "android:build": "cd android && ./gradlew assembleRelease",
-    "android:install": "cd android && ./gradlew assembleRelease && ./gradlew installRelease",
-    "android:hockeyapp": "cd android && ./gradlew assembleRelease && puck -submit=auto app/build/outputs/apk/app-release.apk",
-    "android:devices": "$ANDROID_HOME/platform-tools/adb devices",
-    "android:logcat": "$ANDROID_HOME/platform-tools/adb logcat *:S ReactNative:V ReactNativeJS:V",
-    "android:shake": "$ANDROID_HOME/platform-tools/adb devices | grep '\\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} $ANDROID_HOME/platform-tools/adb -s {} shell input keyevent 82",
-    "prettier": "prettier --write \"app/**/*.js\" \"test/**/*.js\" index.js",
-    "precommit": "lint-staged",
-    "postinstall": "patch-package"
+    "test": "npm run jest",
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js"
   },
   "dependencies": {
     "@react-native-community/async-storage": "1.6.1",
@@ -85,9 +67,5 @@
     "reportFile": "test-report.xml",
     "indent": 4
   },
-  "config": {},
-  "scripts":{
-     "test": "npm run jest",
-     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js"
-  }
+  "config": {}
 }

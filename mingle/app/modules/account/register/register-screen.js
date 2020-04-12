@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, ScrollView, Text, TouchableHighlight } from 'react-native'
+import { View, Alert, ScrollView, Text, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Navigation } from 'react-native-navigation'
@@ -10,6 +10,25 @@ import RegisterActions from '../register/register.reducer'
 import styles from './register-screen.styles'
 
 let Form = t.form.Form
+
+var _ = require('lodash');
+const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
+
+stylesheet.textbox.normal.borderTopWidth = 0;
+stylesheet.textbox.error.borderTopWidth = 0;
+stylesheet.textbox.normal.borderLeftWidth = 0;
+stylesheet.textbox.error.borderLeftWidth = 0;
+stylesheet.textbox.normal.borderRightWidth = 0;
+stylesheet.textbox.error.borderRightWidth = 0;
+stylesheet.textbox.normal.marginBottom = 0;
+stylesheet.textbox.error.marginBottom = 0;
+stylesheet.textbox.normal.fontSize = 16;
+stylesheet.textbox.error.fontSize = 16;
+
+stylesheet.textboxView.normal.marginBottom = 5;
+stylesheet.textboxView.error.marginBottom = 5;
+stylesheet.textboxView.normal.marginTop = 8;
+stylesheet.textboxView.error.marginTop = 8;
 
 class RegisterScreen extends React.Component {
   constructor(props) {
@@ -25,23 +44,27 @@ class RegisterScreen extends React.Component {
       }),
       accountValue: { login: null, password: null, confirmPassword: null, email: null, langKey: 'en' },
       options: {
+        auto: 'placeholders',
         fields: {
           login: {
-            label: 'Username',
+            error: 'Enter login',
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('password').refs.input.focus(),
           },
           password: {
+            error: 'Enter password',
             secureTextEntry: true,
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('confirmPassword').refs.input.focus(),
           },
           confirmPassword: {
+            error: 'Confirm password',
             secureTextEntry: true,
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('email').refs.input.focus(),
           },
           email: {
+            error: 'Enter e-mail address',
             returnKeyType: 'done',
             onSubmitEditing: () => this.submitUpdate(),
           },
@@ -49,6 +72,7 @@ class RegisterScreen extends React.Component {
             hidden: true,
           },
         },
+        stylesheet: stylesheet,
       },
     }
     this.submitUpdate = this.submitUpdate.bind(this)
@@ -98,9 +122,11 @@ class RegisterScreen extends React.Component {
             value={this.state.accountValue}
             onChange={this.accountChange}
           />
-          <TouchableHighlight style={styles.button} onPress={this.submitUpdate} underlayColor="#99d9f4">
-            <Text style={styles.buttonText}>Register</Text>
-          </TouchableHighlight>
+          <View style={styles.buttonSection}>
+            <TouchableHighlight style={styles.button} onPress={this.submitUpdate} underlayColor="#D59F4E">
+              <Text style={styles.buttonText}>Register</Text>
+            </TouchableHighlight>
+          </View>
         </ScrollView>
       </KeyboardAwareScrollView>
     )

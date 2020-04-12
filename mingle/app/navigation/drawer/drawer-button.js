@@ -12,7 +12,7 @@ class DrawerButton extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity testID={this.props.testID} onPress={this.props.onPress}>
+      <TouchableOpacity style={styles.button} testID={this.props.testID} onPress={this.props.onPress}>
         <Text style={styles.text}>{this.props.text}</Text>
       </TouchableOpacity>
     )

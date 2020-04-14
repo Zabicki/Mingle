@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Alert, Image, View, ScrollView, Text, TextInput, TouchableOpacity } from 'react-native'
+import { Alert, Image, View, ScrollView, Text, TextInput, TouchableHighlight } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
 
@@ -85,6 +85,7 @@ class LoginScreen extends React.Component {
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.passwordInput.focus()}
               placeholder="Username"
+              placeholderTextColor="#484848"
             />
           </View>
 
@@ -107,20 +108,17 @@ class LoginScreen extends React.Component {
               underlineColorAndroid="transparent"
               onSubmitEditing={this.handlePressLogin}
               placeholder="Password"
+              placeholderTextColor="#484848"
             />
           </View>
 
-          <View style={[styles.loginRow]}>
-            <TouchableOpacity testID="loginScreenLoginButton" style={styles.loginButtonWrapper} onPress={this.handlePressLogin}>
-              <View style={styles.loginButton}>
-                <Text style={styles.loginText}>Sign In</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity testID="loginScreenCancelButton" style={styles.loginButtonWrapper} onPress={this.handlePressCancel}>
-              <View style={styles.loginButton}>
-                <Text style={styles.loginText}>Cancel</Text>
-              </View>
-            </TouchableOpacity>
+          <View style={styles.buttonSection}>
+            <TouchableHighlight testID="loginScreenLoginButton" style={styles.button} onPress={this.handlePressLogin}>
+              <Text style={styles.buttonText}>Sign In</Text>
+            </TouchableHighlight>
+            <TouchableHighlight testID="loginScreenCancelButton" style={styles.button} onPress={this.handlePressCancel}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableHighlight>
           </View>
         </View>
       </ScrollView>

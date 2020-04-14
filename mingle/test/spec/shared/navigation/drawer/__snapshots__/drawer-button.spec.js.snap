@@ -14,6 +14,11 @@ exports[`AlertMessage component renders correctly 1`] = `
   onStartShouldSetResponder={[Function]}
   style={
     Object {
+      "backgroundColor": "#EDEDED",
+      "borderColor": "#CACACA",
+      "borderRadius": 2,
+      "marginBottom": 5,
+      "marginTop": 5,
       "opacity": 1,
     }
   }
@@ -21,9 +26,11 @@ exports[`AlertMessage component renders correctly 1`] = `
   <Text
     style={
       Object {
-        "color": "white",
+        "color": "#CACACA",
         "fontFamily": "Avenir-Book",
         "fontSize": 20,
+        "fontWeight": "650",
+        "marginLeft": 20,
         "marginVertical": 10,
       }
     }

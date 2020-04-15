@@ -7,8 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -48,6 +51,29 @@ public class EventService {
     }
 
     /**
+     *  Get all nearby events.
+     *
+     * @param point location of the user.
+     * @param distance maximal distance to event.
+     * @return the list of Events.
+     */
+    public Page<Event> findAllByLocationNear(Pageable pageable,Point point, Distance distance){
+        log.debug("Request to get all nearby Events");
+        return eventRepository.findByLocationNear(pageable, point, distance);
+    }
+
+    /**
+     * Get all events from given city.
+     *
+     * @param city given city.
+     * @return the list of Events.
+     */
+    public Page<Event> findAllFromCity(Pageable pageable, String city){
+        log.debug("Request to get all Events from city : {}",city);
+        return eventRepository.findByCity(pageable,city);
+    }
+
+    /**
      * Get all the events with eager load of many-to-many relationships.
      *
      * @return the list of entities.
@@ -55,7 +81,7 @@ public class EventService {
     public Page<Event> findAllWithEagerRelationships(Pageable pageable) {
         return eventRepository.findAllWithEagerRelationships(pageable);
     }
-    
+
 
     /**
      * Get one event by id.

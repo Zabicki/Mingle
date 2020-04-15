@@ -103,6 +103,9 @@ export class Event extends React.Component<IEventProps, IEventState> {
                     <th className="hand" onClick={this.sort('address')}>
                       Address <FontAwesomeIcon icon="sort" />
                     </th>
+                    <th className="hand" onClick={this.sort('location')}>
+                      Location <FontAwesomeIcon icon="sort" />
+                    </th>
                     <th className="hand" onClick={this.sort('maxParticpants')}>
                       Max Particpants <FontAwesomeIcon icon="sort" />
                     </th>
@@ -152,6 +155,7 @@ export class Event extends React.Component<IEventProps, IEventState> {
                       </td>
                       <td>{event.city}</td>
                       <td>{event.address}</td>
+                      <td>{event.location}</td>
                       <td>{event.maxParticpants}</td>
                       <td>
                         <TextFormat type="date" value={event.date} format={APP_LOCAL_DATE_FORMAT} />

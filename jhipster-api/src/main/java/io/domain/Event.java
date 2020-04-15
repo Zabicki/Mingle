@@ -1,6 +1,7 @@
 package io.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -47,6 +48,11 @@ public class Event implements Serializable {
     @NotNull
     @Field("address")
     private String address;
+
+    @NotNull
+    @GeoSpatialIndexed
+    @Field("location")
+    private double[] location;
 
     @Field("max_particpants")
     private Integer maxParticpants;
@@ -164,6 +170,19 @@ public class Event implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public double[] getLocation(){
+        return location;
+    }
+
+    public Event location(double [] location){
+        this.location = location;
+        return this;
+    }
+
+    public void setLocation(double[] location){
+        this.location = location;
     }
 
     public Integer getMaxParticpants() {
@@ -307,6 +326,7 @@ public class Event implements Serializable {
             ", pictureContentType='" + getPictureContentType() + "'" +
             ", city='" + getCity() + "'" +
             ", address='" + getAddress() + "'" +
+            ", location='" + getLocation() + "'" +
             ", maxParticpants=" + getMaxParticpants() +
             ", date='" + getDate() + "'" +
             ", recurent='" + isRecurent() + "'" +

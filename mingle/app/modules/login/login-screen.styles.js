@@ -72,7 +72,6 @@ export default StyleSheet.create({
     borderRadius: 3,
     marginBottom: 20,
     justifyContent: 'center',
-
   },
   buttonSection: {
     marginTop: 10,

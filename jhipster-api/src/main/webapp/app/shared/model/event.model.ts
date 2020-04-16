@@ -11,6 +11,7 @@ export interface IEvent {
   picture?: any;
   city?: string;
   address?: string;
+  location?: number[];
   maxParticpants?: number;
   date?: Moment;
   recurent?: boolean;

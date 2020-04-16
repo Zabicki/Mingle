@@ -28,4 +28,8 @@ export default StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
   },
+  textInput: {
+    borderBottomColor: '#000', 
+    borderBottomWidth: 2
+  },
 })

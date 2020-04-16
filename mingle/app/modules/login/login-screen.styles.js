@@ -8,19 +8,23 @@ export default StyleSheet.create({
   },
   container: {
     paddingTop: 70,
-    backgroundColor: Colors.jhipsterBlue,
+    backgroundColor: Colors.snow,
   },
   form: {
-    backgroundColor: Colors.snow,
-    margin: Metrics.baseMargin,
-    borderRadius: 4,
+    backgroundColor: Colors.grey,
+    margin: 15,
+    paddingTop: 10,
+    borderRadius: 5,
   },
   row: {
     paddingVertical: Metrics.doubleBaseMargin,
-    paddingHorizontal: Metrics.doubleBaseMargin,
+    paddingHorizontal: 20,
   },
   rowLabel: {
-    color: Colors.charcoal,
+    fontSize: 18,
+    fontFamily: 'verdana',
+    fontWeight: 'bold',
+    color: Colors.sun,
   },
   textInput: {
     height: 40,
@@ -41,8 +45,8 @@ export default StyleSheet.create({
   loginButton: {
     flex: 1,
     borderWidth: 1,
-    borderColor: Colors.charcoal,
-    backgroundColor: Colors.panther,
+    borderColor: Colors.savanna,
+    backgroundColor: Colors.sun,
     padding: 6,
   },
   loginText: {
@@ -52,5 +56,25 @@ export default StyleSheet.create({
   topLogo: {
     alignSelf: 'center',
     resizeMode: 'contain',
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: 'white',
+    alignSelf: 'center',
+  },
+  button: {
+    height: 40,
+    width: 350,
+    backgroundColor: Colors.sun,
+    borderColor: Colors.sun,
+    borderWidth: 1,
+    borderRadius: 3,
+    marginBottom: 20,
+    justifyContent: 'center',
+  },
+  buttonSection: {
+    marginTop: 10,
+    alignItems: 'center',
   },
 })

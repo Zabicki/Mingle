@@ -19,7 +19,7 @@ exports[`SearchBar component renders correctly 1`] = `
         "alignSelf": "center",
         "backgroundColor": "rgba(0,0,0,0)",
         "color": "white",
-        "left": 20,
+        "left": 5,
       }
     }
   />

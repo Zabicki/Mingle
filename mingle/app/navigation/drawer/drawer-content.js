@@ -78,13 +78,12 @@ class DrawerContent extends Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Image testID="drawerLogo" source={Images.logoJhipster} style={styles.logo} />
+        <Image testID="drawerLogo" source={Images.logoLogin} style={styles.logo} />
         {!this.props.loggedIn && <DrawerButton testID="loginDrawerButton" text="Login" onPress={this.handlePressLogin} />}
         {!this.props.loggedIn && <DrawerButton testID="registerDrawerButton" text="Register" onPress={this.handlePressRegister} />}
         {!this.props.loggedIn && (
           <DrawerButton testID="forgotPasswordDrawerButton" text="Forgot Password" onPress={this.handlePressForgotPassword} />
         )}
-
         {this.props.loggedIn && <DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
         {this.props.loggedIn && <DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}
         {this.props.loggedIn && (

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, ScrollView, Text, TouchableHighlight } from 'react-native'
+import { View, Alert, ScrollView, Text, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import t from 'tcomb-form-native'
@@ -9,6 +9,24 @@ import styles from './change-password-screen.styles'
 
 const Form = t.form.Form
 
+var _ = require('lodash');
+const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
+
+stylesheet.textbox.normal.borderTopWidth = 0;
+stylesheet.textbox.error.borderTopWidth = 0;
+stylesheet.textbox.normal.borderLeftWidth = 0;
+stylesheet.textbox.error.borderLeftWidth = 0;
+stylesheet.textbox.normal.borderRightWidth = 0;
+stylesheet.textbox.error.borderRightWidth = 0;
+stylesheet.textbox.normal.marginBottom = 0;
+stylesheet.textbox.error.marginBottom = 0;
+stylesheet.textbox.normal.fontSize = 16;
+stylesheet.textbox.error.fontSize = 16;
+
+stylesheet.textboxView.normal.marginBottom = 5;
+stylesheet.textboxView.error.marginBottom = 5;
+stylesheet.textboxView.normal.marginTop = 8;
+stylesheet.textboxView.error.marginTop = 8;
 class ChangePasswordScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -20,6 +38,7 @@ class ChangePasswordScreen extends React.Component {
       }),
       formValue: { password: null, confirmPassword: null },
       formOptions: {
+        auto: 'placeholders',
         fields: {
           currentPassword: {
             secureTextEntry: true,
@@ -40,6 +59,7 @@ class ChangePasswordScreen extends React.Component {
             onSubmitEditing: () => this.submitForm(),
           },
         },
+        stylesheet: stylesheet,
       },
     }
     this.submitForm = this.submitForm.bind(this)
@@ -88,9 +108,11 @@ class ChangePasswordScreen extends React.Component {
             value={this.state.formValue}
             onChange={this.formChange}
           />
-          <TouchableHighlight testID="changePasswordSubmitButton" style={styles.button} onPress={this.submitForm} underlayColor="#99d9f4">
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableHighlight>
+          <View style={styles.buttonSection}>
+            <TouchableHighlight testID="changePasswordSubmitButton" style={styles.button} onPress={this.submitForm} underlayColor="#D59F4E">
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableHighlight>
+          </View>
         </ScrollView>
       </KeyboardAwareScrollView>
     )

@@ -1,9 +1,10 @@
 import React from 'react'
-import { Alert, ScrollView, Text, TouchableHighlight } from 'react-native'
+import { Alert, ScrollView, Text, TouchableHighlight, View } from 'react-native'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import t from 'tcomb-form-native'
-
+import { Navigation } from 'react-native-navigation'
+import {changePasswordScreen} from '../../../navigation/layouts'
 import AccountActions from '../../../shared/reducers/account.reducer'
 // Styles
 import styles from './settings-screen.styles'
@@ -20,34 +21,28 @@ class SettingsScreen extends React.Component {
         login: t.String,
         email: t.maybe(t.String),
         langKey: t.String,
-        activated: t.Boolean,
+        show_current_localisation: t.Boolean,
       }),
       accountValue: this.props.account,
       options: {
         fields: {
           firstName: {
-            returnKeyType: 'next',
-            testID: 'firstNameInput',
-            onSubmitEditing: () => this.form.getComponent('lastName').refs.input.focus(),
+            hidden: true,
           },
           lastName: {
-            returnKeyType: 'next',
-            testID: 'lastNameInput',
-            onSubmitEditing: () => this.form.getComponent('email').refs.input.focus(),
+            hidden: true,
           },
           login: {
             hidden: true,
           },
           email: {
-            returnKeyType: 'done',
-            testID: 'emailInput',
-            onSubmitEditing: () => this.submitUpdate(),
+            hidden: true,
           },
           langKey: {
             hidden: true,
           },
-          activated: {
-            hidden: true,
+          show_current_localisation: {
+            hidden: false,
           },
         },
       },
@@ -81,6 +76,12 @@ class SettingsScreen extends React.Component {
       accountValue: newValue,
     })
   }
+  handlePressChangePassword = () => {
+    changePasswordScreen()
+  }
+  deleteAccount = () => {
+
+  }
 
   render() {
     return (
@@ -95,9 +96,14 @@ class SettingsScreen extends React.Component {
             value={this.state.accountValue}
             onChange={this.accountChange}
           />
-          <TouchableHighlight testID="settingsSubmitButton" style={styles.button} onPress={this.submitUpdate} underlayColor="#99d9f4">
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableHighlight>
+          <View style={styles.buttonSection}>
+            <TouchableHighlight testID="changePasswordButton" style={styles.button} onPress={this.handlePressChangePassword} underlayColor="Colors.sun">
+              <Text style={styles.buttonText}>Change password</Text>
+            </TouchableHighlight>
+            <TouchableHighlight testID="changeDeleteAccount" style={styles.button} onPress={this.deleteAccount} underlayColor="Colors.sun">
+              <Text style={styles.buttonText}>Delete account</Text>
+            </TouchableHighlight>
+           </View>
         </ScrollView>
       </KeyboardAwareScrollView>
     )

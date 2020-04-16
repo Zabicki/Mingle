@@ -10,17 +10,22 @@ export default StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
+    fontWeight: '600',
     color: 'white',
     alignSelf: 'center',
   },
   button: {
-    height: 36,
-    backgroundColor: Colors.jhipsterBlue,
-    borderColor: Colors.jhipsterBlue,
+    height: 45,
+    backgroundColor: Colors.sun,
+    borderColor: Colors.sun,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 3,
     marginBottom: 10,
-    alignSelf: 'stretch',
     justifyContent: 'center',
+    alignSelf: 'stretch',
+  },
+  buttonSection: {
+    marginTop: 10,
+    alignItems: 'center',
   },
 })

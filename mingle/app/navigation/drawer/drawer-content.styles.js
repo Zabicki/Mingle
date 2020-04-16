@@ -3,11 +3,10 @@ export default {
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: Colors.background,
+    backgroundColor: 'white',
   },
   logo: {
     alignSelf: 'center',
-    height: 80,
-    width: 80,
+    marginBottom: 20,
   },
 }

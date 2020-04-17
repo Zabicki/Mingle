@@ -41,7 +41,7 @@ class EventServiceTest {
     public Event createEvent(String name, String description, String city, String address, double[] location,
                              LocalDate date, Boolean recurrent, Category category, Privacy privacy){
         return new Event().name(name).description(description).city(city).address(address).location(location)
-            .date(date).recurent(recurrent).category(category).privacy(privacy);
+            .date(date).recurrent(recurrent).category(category).privacy(privacy);
     }
 
     @BeforeEach

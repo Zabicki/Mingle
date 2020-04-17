@@ -3,7 +3,7 @@ import { Metrics, Colors, Fonts } from '../../shared/themes'
 export default {
   text: {
     ...Fonts.style.h5,
-    fontWeight: '650',
+    fontWeight: 'bold',
     color: Colors.greyDark,
     marginVertical: Metrics.baseMargin,
     marginLeft: 20,

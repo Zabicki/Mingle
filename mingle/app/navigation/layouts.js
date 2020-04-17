@@ -64,6 +64,15 @@ export const TEST_SCREEN = 'nav.TestScreen'
 
 const store = createStore()
 
+function LogoTitle() {
+  return (
+    <Image
+      style={{ width: 50, height: 50 }}
+      source={Images.logoLogin}
+    />
+  );
+}
+
 export const appStack = {
   root: {
     sideMenu: {
@@ -82,7 +91,7 @@ export const appStack = {
                 options: {
                   topBar: {
                     title: {
-                      text: 'Welcome!',
+                      text: 'Events',
                       color: Colors.snow,
                     },
                     leftButtons: [
@@ -181,7 +190,7 @@ export function registerScreensAndStartApp() {
           iconColor: Colors.snow,
         },
         background: {
-          color: Colors.background,
+          color: Colors.greyDark,
         },
       },
       sideMenu: {

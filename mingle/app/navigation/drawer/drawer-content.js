@@ -84,7 +84,6 @@ class DrawerContent extends Component {
         {!this.props.loggedIn && (
           <DrawerButton testID="forgotPasswordDrawerButton" text="Forgot Password" onPress={this.handlePressForgotPassword} />
         )}
-
         {this.props.loggedIn && <DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
         {this.props.loggedIn && <DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}
         {this.props.loggedIn && (

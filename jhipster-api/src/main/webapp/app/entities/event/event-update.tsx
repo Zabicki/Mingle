@@ -60,7 +60,8 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
       const entity = {
         ...eventEntity,
         ...values,
-        events: mapIdList(values.events)
+        events: mapIdList(values.events),
+        location: [values.X, values.Y]
       };
 
       if (this.state.isNew) {
@@ -181,6 +182,26 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                       required: { value: true, errorMessage: 'This field is required.' }
                     }}
                   />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="locationX" for="event-LocationX">
+                    Location
+                  </Label>
+                  <AvField id="event-locationX" type="string" className="form-control" name="X"
+                    validate={{
+                      required: { value: true, errorMessage: 'This field is required.' }
+                    }}
+                   />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="locationY" for="event-LocationY">
+                    Location
+                  </Label>
+                  <AvField id="event-locationY" type="string" className="form-control" name="Y"
+                    validate={{
+                      required: { value: true, errorMessage: 'This field is required.' }
+                    }}
+                   />
                 </AvGroup>
                 <AvGroup>
                   <Label id="maxParticpantsLabel" for="event-maxParticpants">

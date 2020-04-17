@@ -1,4 +1,4 @@
-import { Metrics, Colors, Fonts } from '../../shared/themes'
+  import { Metrics, Colors, Fonts } from '../../shared/themes'
 
 export default {
   text: {

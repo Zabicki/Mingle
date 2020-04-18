@@ -1,5 +1,4 @@
 package io.domain;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,17 +22,15 @@ public class Review implements Serializable {
     @Field("score")
     private Integer score;
 
-    @Field("review")
-    private String review;
+    @Field("text")
+    private String text;
 
     @DBRef
-    @Field("reviews")
-    @JsonIgnoreProperties("reviews")
-    private User reviews;
+    @Field("reviewer")
+    private User reviewer;
 
     @DBRef
     @Field("user")
-    @JsonIgnoreProperties("reviewers")
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -58,30 +55,30 @@ public class Review implements Serializable {
         this.score = score;
     }
 
-    public String getReview() {
-        return review;
+    public String getText() {
+        return text;
     }
 
-    public Review review(String review) {
-        this.review = review;
+    public Review text(String review) {
+        this.text = review;
         return this;
     }
 
-    public void setReview(String review) {
-        this.review = review;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public User getReviews() {
-        return reviews;
+    public User getReviewer() {
+        return reviewer;
     }
 
-    public Review reviews(User user) {
-        this.reviews = user;
+    public Review reviewer(User user) {
+        this.reviewer = user;
         return this;
     }
 
-    public void setReviews(User user) {
-        this.reviews = user;
+    public void setReviewer(User user) {
+        this.reviewer = user;
     }
 
     public User getUser() {
@@ -119,7 +116,7 @@ public class Review implements Serializable {
         return "Review{" +
             "id=" + getId() +
             ", score=" + getScore() +
-            ", review='" + getReview() + "'" +
+            ", text='" + getText() + "'" +
             "}";
     }
 }

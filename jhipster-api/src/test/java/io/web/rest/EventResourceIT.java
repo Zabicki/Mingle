@@ -13,10 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
-import org.springframework.data.geo.Point;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -31,7 +27,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.web.rest.TestUtil.convertObjectToJsonBytes;
 import static io.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -68,14 +63,14 @@ public class EventResourceIT {
     private static final double[] DEFAULT_LOCATION = {50,20};
     private static final double[] UPDATED_LOCATION = {60,30};
 
-    private static final Integer DEFAULT_MAX_PARTICPANTS = 1;
-    private static final Integer UPDATED_MAX_PARTICPANTS = 2;
+    private static final Integer DEFAULT_MAX_PARTICIPANTS = 1;
+    private static final Integer UPDATED_MAX_PARTICIPANTS = 2;
 
     private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
 
-    private static final Boolean DEFAULT_RECURENT = false;
-    private static final Boolean UPDATED_RECURENT = true;
+    private static final Boolean DEFAULT_RECURRENT = false;
+    private static final Boolean UPDATED_RECURRENT = true;
 
     private static final Long DEFAULT_INTERVAL = 1L;
     private static final Long UPDATED_INTERVAL = 2L;
@@ -141,9 +136,9 @@ public class EventResourceIT {
             .city(DEFAULT_CITY)
             .address(DEFAULT_ADDRESS)
             .location(DEFAULT_LOCATION)
-            .maxParticpants(DEFAULT_MAX_PARTICPANTS)
+            .maxParticipants(DEFAULT_MAX_PARTICIPANTS)
             .date(DEFAULT_DATE)
-            .recurent(DEFAULT_RECURENT)
+            .recurrent(DEFAULT_RECURRENT)
             .interval(DEFAULT_INTERVAL)
             .category(DEFAULT_CATEGORY)
             .privacy(DEFAULT_PRIVACY);
@@ -164,9 +159,9 @@ public class EventResourceIT {
             .city(UPDATED_CITY)
             .location(UPDATED_LOCATION)
             .address(UPDATED_ADDRESS)
-            .maxParticpants(UPDATED_MAX_PARTICPANTS)
+            .maxParticipants(UPDATED_MAX_PARTICIPANTS)
             .date(UPDATED_DATE)
-            .recurent(UPDATED_RECURENT)
+            .recurrent(UPDATED_RECURRENT)
             .interval(UPDATED_INTERVAL)
             .category(UPDATED_CATEGORY)
             .privacy(UPDATED_PRIVACY);
@@ -200,9 +195,9 @@ public class EventResourceIT {
         assertThat(testEvent.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testEvent.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testEvent.getLocation()).isEqualTo(DEFAULT_LOCATION);
-        assertThat(testEvent.getMaxParticpants()).isEqualTo(DEFAULT_MAX_PARTICPANTS);
+        assertThat(testEvent.getMaxParticipants()).isEqualTo(DEFAULT_MAX_PARTICIPANTS);
         assertThat(testEvent.getDate()).isEqualTo(DEFAULT_DATE);
-        assertThat(testEvent.isRecurent()).isEqualTo(DEFAULT_RECURENT);
+        assertThat(testEvent.isRecurrent()).isEqualTo(DEFAULT_RECURRENT);
         assertThat(testEvent.getInterval()).isEqualTo(DEFAULT_INTERVAL);
         assertThat(testEvent.getCategory()).isEqualTo(DEFAULT_CATEGORY);
         assertThat(testEvent.getPrivacy()).isEqualTo(DEFAULT_PRIVACY);
@@ -316,7 +311,7 @@ public class EventResourceIT {
     public void checkRecurentIsRequired() throws Exception {
         int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
-        event.setRecurent(null);
+        event.setRecurrent(null);
 
         // Create the Event, which fails.
 
@@ -381,9 +376,9 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].location",hasItem(hasItem(DEFAULT_LOCATION[0]))))
             .andExpect(jsonPath("$.[*].location",hasItem(hasItem(DEFAULT_LOCATION[1]))))
-            .andExpect(jsonPath("$.[*].maxParticpants").value(hasItem(DEFAULT_MAX_PARTICPANTS)))
+            .andExpect(jsonPath("$.[*].maxParticipants").value(hasItem(DEFAULT_MAX_PARTICIPANTS)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].recurent").value(hasItem(DEFAULT_RECURENT.booleanValue())))
+            .andExpect(jsonPath("$.[*].recurrent").value(hasItem(DEFAULT_RECURRENT.booleanValue())))
             .andExpect(jsonPath("$.[*].interval").value(hasItem(DEFAULT_INTERVAL.intValue())))
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY.toString())))
             .andExpect(jsonPath("$.[*].privacy").value(hasItem(DEFAULT_PRIVACY.toString())));
@@ -440,9 +435,9 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
             .andExpect(jsonPath("$.location",hasItem(DEFAULT_LOCATION[0])))
             .andExpect(jsonPath("$.location",hasItem(DEFAULT_LOCATION[1])))
-            .andExpect(jsonPath("$.maxParticpants").value(DEFAULT_MAX_PARTICPANTS))
+            .andExpect(jsonPath("$.maxParticipants").value(DEFAULT_MAX_PARTICIPANTS))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
-            .andExpect(jsonPath("$.recurent").value(DEFAULT_RECURENT.booleanValue()))
+            .andExpect(jsonPath("$.recurrent").value(DEFAULT_RECURRENT.booleanValue()))
             .andExpect(jsonPath("$.interval").value(DEFAULT_INTERVAL.intValue()))
             .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY.toString()))
             .andExpect(jsonPath("$.privacy").value(DEFAULT_PRIVACY.toString()));
@@ -472,9 +467,9 @@ public class EventResourceIT {
             .city(UPDATED_CITY)
             .address(UPDATED_ADDRESS)
             .location(UPDATED_LOCATION)
-            .maxParticpants(UPDATED_MAX_PARTICPANTS)
+            .maxParticipants(UPDATED_MAX_PARTICIPANTS)
             .date(UPDATED_DATE)
-            .recurent(UPDATED_RECURENT)
+            .recurrent(UPDATED_RECURRENT)
             .interval(UPDATED_INTERVAL)
             .category(UPDATED_CATEGORY)
             .privacy(UPDATED_PRIVACY);
@@ -495,9 +490,9 @@ public class EventResourceIT {
         assertThat(testEvent.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testEvent.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testEvent.getLocation()).isEqualTo(UPDATED_LOCATION);
-        assertThat(testEvent.getMaxParticpants()).isEqualTo(UPDATED_MAX_PARTICPANTS);
+        assertThat(testEvent.getMaxParticipants()).isEqualTo(UPDATED_MAX_PARTICIPANTS);
         assertThat(testEvent.getDate()).isEqualTo(UPDATED_DATE);
-        assertThat(testEvent.isRecurent()).isEqualTo(UPDATED_RECURENT);
+        assertThat(testEvent.isRecurrent()).isEqualTo(UPDATED_RECURRENT);
         assertThat(testEvent.getInterval()).isEqualTo(UPDATED_INTERVAL);
         assertThat(testEvent.getCategory()).isEqualTo(UPDATED_CATEGORY);
         assertThat(testEvent.getPrivacy()).isEqualTo(UPDATED_PRIVACY);

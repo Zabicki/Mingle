@@ -3,6 +3,7 @@ package io.domain;
 import io.config.Constants;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.domain.enumeration.Category;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -75,6 +76,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Field("reset_date")
     private Instant resetDate = null;
+
+    @Field("favourites")
+    private Set<Category> favourites = new HashSet<>();
 
     @Field("age")
     private Integer age;
@@ -186,6 +190,25 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setLangKey(String langKey) {
         this.langKey = langKey;
+    }
+
+    public User favourites(Set<Category> favourites) {
+        this.favourites = favourites;
+        return this;
+    }
+
+    public User addFavourites(Category category) {
+        this.favourites.add(category);
+        return this;
+    }
+
+    public User removeFavourites(Category category) {
+        this.favourites.remove(category);
+        return this;
+    }
+
+    public void setFavourites(Set<Category> favourites) {
+        this.favourites = favourites;
     }
 
     public Set<Authority> getAuthorities() {

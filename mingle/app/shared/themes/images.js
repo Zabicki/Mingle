@@ -8,6 +8,7 @@ const images = {
   chevronLeftIcon: require('../images/chevron-left.png'),
   menuIcon: require('../images/bars.png'),
   background: require('../images/bg.png'),
+  football: require('../images/football.png')
 }
 
 export default images

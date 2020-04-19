@@ -54,16 +54,16 @@ public class Event implements Serializable {
     @Field("location")
     private double[] location;
 
-    @Field("max_particpants")
-    private Integer maxParticpants;
+    @Field("max_participants")
+    private Integer maxParticipants;
 
     @NotNull
     @Field("date")
     private LocalDate date;
 
     @NotNull
-    @Field("recurent")
-    private Boolean recurent;
+    @Field("recurrent")
+    private Boolean recurrent;
 
     @Field("interval")
     private Long interval;
@@ -77,13 +77,13 @@ public class Event implements Serializable {
     private Privacy privacy;
 
     @DBRef
-    @Field("user")
+    @Field("host")
     @JsonIgnoreProperties("hosts")
-    private User user;
+    private User host;
 
     @DBRef
-    @Field("events")
-    private Set<User> events = new HashSet<>();
+    @Field("participants")
+    private Set<User> participants = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -185,17 +185,17 @@ public class Event implements Serializable {
         this.location = location;
     }
 
-    public Integer getMaxParticpants() {
-        return maxParticpants;
+    public Integer getMaxParticipants() {
+        return maxParticipants;
     }
 
-    public Event maxParticpants(Integer maxParticpants) {
-        this.maxParticpants = maxParticpants;
+    public Event maxParticipants(Integer maxParticipants) {
+        this.maxParticipants = maxParticipants;
         return this;
     }
 
-    public void setMaxParticpants(Integer maxParticpants) {
-        this.maxParticpants = maxParticpants;
+    public void setMaxParticipants(Integer maxParticipants) {
+        this.maxParticipants = maxParticipants;
     }
 
     public LocalDate getDate() {
@@ -211,17 +211,17 @@ public class Event implements Serializable {
         this.date = date;
     }
 
-    public Boolean isRecurent() {
-        return recurent;
+    public Boolean isRecurrent() {
+        return recurrent;
     }
 
-    public Event recurent(Boolean recurent) {
-        this.recurent = recurent;
+    public Event recurrent(Boolean recurent) {
+        this.recurrent = recurent;
         return this;
     }
 
-    public void setRecurent(Boolean recurent) {
-        this.recurent = recurent;
+    public void setRecurrent(Boolean recurrent) {
+        this.recurrent = recurrent;
     }
 
     public Long getInterval() {
@@ -263,40 +263,40 @@ public class Event implements Serializable {
         this.privacy = privacy;
     }
 
-    public User getUser() {
-        return user;
+    public User getHost() {
+        return host;
     }
 
     public Event user(User user) {
-        this.user = user;
+        this.host = user;
         return this;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setHost(User host) {
+        this.host = host;
     }
 
-    public Set<User> getEvents() {
-        return events;
+    public Set<User> getParticipants() {
+        return participants;
     }
 
-    public Event events(Set<User> users) {
-        this.events = users;
+    public Event participants(Set<User> users) {
+        this.participants = users;
         return this;
     }
 
-    public Event addEvents(User user) {
-        this.events.add(user);
+    public Event addParticipants(User user) {
+        this.participants.add(user);
         return this;
     }
 
-    public Event removeEvents(User user) {
-        this.events.remove(user);
+    public Event removeParticipants(User user) {
+        this.participants.remove(user);
         return this;
     }
 
-    public void setEvents(Set<User> users) {
-        this.events = users;
+    public void setParticipants(Set<User> users) {
+        this.participants = users;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -327,9 +327,9 @@ public class Event implements Serializable {
             ", city='" + getCity() + "'" +
             ", address='" + getAddress() + "'" +
             ", location='" + getLocation() + "'" +
-            ", maxParticpants=" + getMaxParticpants() +
+            ", maxParticipants=" + getMaxParticipants() +
             ", date='" + getDate() + "'" +
-            ", recurent='" + isRecurent() + "'" +
+            ", recurrent='" + isRecurrent() + "'" +
             ", interval=" + getInterval() +
             ", category='" + getCategory() + "'" +
             ", privacy='" + getPrivacy() + "'" +

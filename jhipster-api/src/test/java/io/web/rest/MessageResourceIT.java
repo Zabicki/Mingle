@@ -79,7 +79,7 @@ public class MessageResourceIT {
      */
     public static Message createEntity() {
         Message message = new Message()
-            .message(DEFAULT_MESSAGE)
+            .text(DEFAULT_MESSAGE)
             .date(DEFAULT_DATE);
         return message;
     }
@@ -91,7 +91,7 @@ public class MessageResourceIT {
      */
     public static Message createUpdatedEntity() {
         Message message = new Message()
-            .message(UPDATED_MESSAGE)
+            .text(UPDATED_MESSAGE)
             .date(UPDATED_DATE);
         return message;
     }
@@ -116,7 +116,7 @@ public class MessageResourceIT {
         List<Message> messageList = messageRepository.findAll();
         assertThat(messageList).hasSize(databaseSizeBeforeCreate + 1);
         Message testMessage = messageList.get(messageList.size() - 1);
-        assertThat(testMessage.getMessage()).isEqualTo(DEFAULT_MESSAGE);
+        assertThat(testMessage.getText()).isEqualTo(DEFAULT_MESSAGE);
         assertThat(testMessage.getDate()).isEqualTo(DEFAULT_DATE);
     }
 
@@ -149,10 +149,10 @@ public class MessageResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(message.getId())))
-            .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE)))
+            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_MESSAGE)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
     }
-    
+
     @Test
     public void getMessage() throws Exception {
         // Initialize the database
@@ -163,7 +163,7 @@ public class MessageResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(message.getId()))
-            .andExpect(jsonPath("$.message").value(DEFAULT_MESSAGE))
+            .andExpect(jsonPath("$.text").value(DEFAULT_MESSAGE))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()));
     }
 
@@ -184,7 +184,7 @@ public class MessageResourceIT {
         // Update the message
         Message updatedMessage = messageRepository.findById(message.getId()).get();
         updatedMessage
-            .message(UPDATED_MESSAGE)
+            .text(UPDATED_MESSAGE)
             .date(UPDATED_DATE);
 
         restMessageMockMvc.perform(put("/api/messages")
@@ -196,7 +196,7 @@ public class MessageResourceIT {
         List<Message> messageList = messageRepository.findAll();
         assertThat(messageList).hasSize(databaseSizeBeforeUpdate);
         Message testMessage = messageList.get(messageList.size() - 1);
-        assertThat(testMessage.getMessage()).isEqualTo(UPDATED_MESSAGE);
+        assertThat(testMessage.getText()).isEqualTo(UPDATED_MESSAGE);
         assertThat(testMessage.getDate()).isEqualTo(UPDATED_DATE);
     }
 

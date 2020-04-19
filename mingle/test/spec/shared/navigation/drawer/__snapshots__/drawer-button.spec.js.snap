@@ -29,7 +29,7 @@ exports[`AlertMessage component renders correctly 1`] = `
         "color": "#CACACA",
         "fontFamily": "Avenir-Book",
         "fontSize": 20,
-        "fontWeight": "650",
+        "fontWeight": "bold",
         "marginLeft": 20,
         "marginVertical": 10,
       }

@@ -113,10 +113,10 @@ class LoginScreen extends React.Component {
           </View>
 
           <View style={styles.buttonSection}>
-            <TouchableHighlight testID="loginScreenLoginButton" style={styles.button} onPress={this.handlePressLogin}>
+            <TouchableHighlight testID="loginScreenLoginButton" style={styles.button} onPress={this.handlePressLogin} underlayColor="#D59F4E">
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableHighlight>
-            <TouchableHighlight testID="loginScreenCancelButton" style={styles.button} onPress={this.handlePressCancel}>
+            <TouchableHighlight testID="loginScreenCancelButton" style={styles.button} onPress={this.handlePressCancel} underlayColor="#D59F4E">
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableHighlight>
           </View>

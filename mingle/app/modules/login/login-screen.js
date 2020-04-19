@@ -85,7 +85,7 @@ class LoginScreen extends React.Component {
               underlineColorAndroid="transparent"
               onSubmitEditing={() => this.passwordInput.focus()}
               placeholder="Username"
-              placeholderTextColor="#484848"
+              placeholderTextColor="#FFFFFF"
             />
           </View>
 
@@ -108,11 +108,11 @@ class LoginScreen extends React.Component {
               underlineColorAndroid="transparent"
               onSubmitEditing={this.handlePressLogin}
               placeholder="Password"
-              placeholderTextColor="#484848"
+              placeholderTextColor="#FFFFFF"
             />
           </View>
-
-          <View style={styles.buttonSection}>
+        </View>
+        <View style={styles.buttonSection}>
             <TouchableHighlight testID="loginScreenLoginButton" style={styles.button} onPress={this.handlePressLogin} underlayColor="#D59F4E">
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableHighlight>
@@ -120,7 +120,6 @@ class LoginScreen extends React.Component {
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableHighlight>
           </View>
-        </View>
       </ScrollView>
     )
   }

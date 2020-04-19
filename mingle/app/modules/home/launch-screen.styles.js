@@ -121,7 +121,7 @@ export default StyleSheet.create({
   },
   textDescription: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: 'bold',
     color: Colors.greyDark,
     margin: 15,
   },

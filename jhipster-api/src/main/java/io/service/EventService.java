@@ -1,7 +1,13 @@
 package io.service;
 
 import io.domain.Event;
+import io.domain.User;
 import io.repository.EventRepository;
+import io.security.SecurityUtils;
+import io.service.errors.EventIsFull;
+import io.service.errors.InvalidId;
+import io.service.errors.UserNotLoggedIn;
+import io.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +17,6 @@ import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,8 +29,11 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    public EventService(EventRepository eventRepository) {
+    private final UserService userService;
+
+    public EventService(EventRepository eventRepository, UserService userService) {
         this.eventRepository = eventRepository;
+        this.userService = userService;
     }
 
     /**
@@ -53,6 +61,7 @@ public class EventService {
     /**
      *  Get all nearby events.
      *
+     * @param pageable the pagination information.
      * @param point location of the user.
      * @param distance maximal distance to event.
      * @return the list of Events.
@@ -65,6 +74,7 @@ public class EventService {
     /**
      * Get all events from given city.
      *
+     * @param pageable the pagination information.
      * @param city given city.
      * @return the list of Events.
      */
@@ -80,6 +90,24 @@ public class EventService {
      */
     public Page<Event> findAllWithEagerRelationships(Pageable pageable) {
         return eventRepository.findAllWithEagerRelationships(pageable);
+    }
+
+    public Event acceptEvent(String id){
+        Event event = findOne(id).orElseThrow(
+            InvalidId::new
+        );
+        User logged = userService.getUserWithAuthorities().orElseThrow(
+            UserNotLoggedIn::new
+        );
+        if( event.getMaxParticipants() == null ||
+        event.getParticipants().size() < event.getMaxParticipants()){
+            event.addParticipants(logged);
+            eventRepository.save(event);
+        }
+        else {
+            throw new EventIsFull();
+        }
+        return event;
     }
 
 

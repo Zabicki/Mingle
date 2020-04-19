@@ -89,6 +89,27 @@ public class EventResource {
     }
 
     /**
+     * {@code PUT /events/accept/:id} : accept event.
+     *
+     * @param id id of the event.
+     * @return the {@link ResponseEntity} with status {@code 200 (ok)} and with body of updated event.
+     */
+    @PutMapping("/events/accept/{id}")
+    public ResponseEntity<Event> acceptEvent(@PathVariable String id){
+        log.debug("REST request to accept Event with id : {}",id);
+        Event result;
+        try {
+            result = eventService.acceptEvent(id);
+        }
+        catch (Exception e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"accepterror");
+        }
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName,false,ENTITY_NAME,result.getId()))
+            .body(result);
+    }
+
+    /**
      * {@code GET  /events} : get all the events.
      *
 

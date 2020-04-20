@@ -60,7 +60,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
       const entity = {
         ...eventEntity,
         ...values,
-        events: mapIdList(values.events),
+        participants: mapIdList(values.participants),
         location: [values.X, values.Y]
       };
 
@@ -204,10 +204,10 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                    />
                 </AvGroup>
                 <AvGroup>
-                  <Label id="maxParticpantsLabel" for="event-maxParticpants">
-                    Max Particpants
+                  <Label id="maxParticipantsLabel" for="event-maxParticipants">
+                    Max Participants
                   </Label>
-                  <AvField id="event-maxParticpants" type="string" className="form-control" name="maxParticpants" />
+                  <AvField id="event-maxParticipants" type="string" className="form-control" name="maxParticipants" />
                 </AvGroup>
                 <AvGroup>
                   <Label id="dateLabel" for="event-date">
@@ -224,9 +224,9 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                   />
                 </AvGroup>
                 <AvGroup>
-                  <Label id="recurentLabel" check>
-                    <AvInput id="event-recurent" type="checkbox" className="form-control" name="recurent" />
-                    Recurent
+                  <Label id="recurrentLabel" check>
+                    <AvInput id="event-recurrent" type="checkbox" className="form-control" name="recurrent" />
+                    Recurrent
                   </Label>
                 </AvGroup>
                 <AvGroup>
@@ -269,8 +269,8 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                   </AvInput>
                 </AvGroup>
                 <AvGroup>
-                  <Label for="event-user">User</Label>
-                  <AvInput id="event-user" type="select" className="form-control" name="user.id">
+                  <Label for="event-host">Host</Label>
+                  <AvInput id="event-host" type="select" className="form-control" name="host.id">
                     <option value="" key="0" />
                     {users
                       ? users.map(otherEntity => (
@@ -282,13 +282,13 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                   </AvInput>
                 </AvGroup>
                 <AvGroup>
-                  <Label for="event-events">Events</Label>
+                  <Label for="event-participants">Participants</Label>
                   <AvInput
-                    id="event-events"
+                    id="event-participants"
                     type="select"
                     multiple
                     className="form-control"
-                    name="events"
+                    name="participants"
                     value={eventEntity.events && eventEntity.events.map(e => e.id)}
                   >
                     <option value="" key="0" />

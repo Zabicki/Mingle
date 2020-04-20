@@ -86,3 +86,27 @@ test('failure deleting a event', () => {
   expect(state.errorDeleting).toEqual({ error: 'Not found' })
   expect(state.event).toEqual(INITIAL_STATE.event)
 })
+test('attempt accepting event', () => {
+  const state = reducer(INITIAL_STATE, Actions.eventAcceptRequest({ id: 1 }))
+
+  expect(state.updating).toBe(true)
+})
+test('success accepting event', () => {
+  const state = reducer(INITIAL_STATE, Actions.eventAcceptSuccess({ id: 1 }))
+
+  expect(state.updating).toBe(false)
+  expect(state.errorUpdating).toBe(null)
+  expect(state.event).toEqual({ id: 1 })
+})
+test('failure accepting event', () => {
+  const state = reducer(INITIAL_STATE, Actions.eventAcceptFailure({ error: 'Not found' }))
+
+  expect(state.updating).toBe(false)
+  expect(state.errorUpdating).toEqual({ error: 'Not found' })
+  expect(state.event).toEqual(INITIAL_STATE.event)
+})
+test('attempt setting maybe events', () => {
+  const state = reducer(INITIAL_STATE, Actions.eventSetMaybe([{ id: 1 },{id: 2}]))
+
+  expect(state.maybeEvents).toEqual([{ id: 1},{id: 2}])
+})

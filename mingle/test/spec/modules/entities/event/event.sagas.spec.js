@@ -1,7 +1,7 @@
 import { put } from 'redux-saga/effects'
 
 import FixtureAPI from '../../../../../app/shared/services/fixture-api'
-import { getEvent, getEvents, updateEvent, deleteEvent } from '../../../../../app/modules/entities/event/event.sagas'
+import { getEvent, getEvents, updateEvent, deleteEvent, acceptEvent } from '../../../../../app/modules/entities/event/event.sagas'
 import EventActions from '../../../../../app/modules/entities/event/event.reducer'
 
 const stepper = fn => mock => fn.next(mock).value
@@ -76,4 +76,22 @@ test('delete failure path', () => {
   step()
   // Step 2: Failed response.
   expect(step(response)).toEqual(put(EventActions.eventDeleteFailure()))
+})
+
+test('accept success path', () => {
+  const response = FixtureAPI.acceptEvent(1)
+  const step = stepper(acceptEvent(FixtureAPI, { eventId: { id: 1 } }))
+  // Step 1: Hit the api
+  step()
+  // Step 2: Successful return and data!
+  expect(step(response)).toEqual(put(EventActions.eventAcceptSuccess({ id: 1 })))
+})
+
+test('accept failure path', () => {
+  const response = { ok: false }
+  const step = stepper(acceptEvent(FixtureAPI, { eventId: { id: 1 } }))
+  // Step 1: Hit the api
+  step()
+  // Step 2: Failed response.
+  expect(step(response)).toEqual(put(EventActions.eventAcceptFailure()))
 })

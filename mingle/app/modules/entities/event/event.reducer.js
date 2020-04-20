@@ -8,16 +8,21 @@ const { Types, Creators } = createActions({
   eventAllRequest: ['options'],
   eventUpdateRequest: ['event'],
   eventDeleteRequest: ['eventId'],
+  eventAcceptRequest: ['eventId'],
 
   eventSuccess: ['event'],
   eventAllSuccess: ['events'],
   eventUpdateSuccess: ['event'],
   eventDeleteSuccess: [],
+  eventAcceptSuccess: ['event'],
 
   eventFailure: ['error'],
   eventAllFailure: ['error'],
   eventUpdateFailure: ['error'],
   eventDeleteFailure: ['error'],
+  eventAcceptFailure: ['error'],
+
+  eventSetMaybe: ['events'],
 })
 
 export const EventTypes = Types
@@ -36,6 +41,7 @@ export const INITIAL_STATE = Immutable({
   errorAll: null,
   errorUpdating: null,
   errorDeleting: null,
+  maybeEvents: [],
 })
 
 /* ------------- Reducers ------------- */
@@ -138,6 +144,13 @@ export const deleteFailure = (state, action) => {
   })
 }
 
+export const setMaybe = (state,action) =>{
+  const {events} = action
+  return state.merge({
+    maybeEvents: events,
+  })
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -145,14 +158,19 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.EVENT_ALL_REQUEST]: allRequest,
   [Types.EVENT_UPDATE_REQUEST]: updateRequest,
   [Types.EVENT_DELETE_REQUEST]: deleteRequest,
+  [Types.EVENT_ACCEPT_REQUEST]: updateRequest,
 
   [Types.EVENT_SUCCESS]: success,
   [Types.EVENT_ALL_SUCCESS]: allSuccess,
   [Types.EVENT_UPDATE_SUCCESS]: updateSuccess,
   [Types.EVENT_DELETE_SUCCESS]: deleteSuccess,
+  [Types.EVENT_ACCEPT_SUCCESS]: updateSuccess,
 
   [Types.EVENT_FAILURE]: failure,
   [Types.EVENT_ALL_FAILURE]: allFailure,
   [Types.EVENT_UPDATE_FAILURE]: updateFailure,
   [Types.EVENT_DELETE_FAILURE]: deleteFailure,
+  [Types.EVENT_ACCEPT_FAILURE]: updateFailure,
+
+  [Types.EVENT_SET_MAYBE]: setMaybe,
 })

@@ -74,6 +74,12 @@ export default {
   updateEvent: event => {
     return {
       ok: true,
+      data: require('../../shared/fixtures/accept-event.json'),
+    }
+  },
+  acceptEvent: eventId => {
+    return {
+      ok: true,
       data: require('../../shared/fixtures/update-event.json'),
     }
   },

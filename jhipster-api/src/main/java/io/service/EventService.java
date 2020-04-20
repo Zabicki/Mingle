@@ -3,11 +3,9 @@ package io.service;
 import io.domain.Event;
 import io.domain.User;
 import io.repository.EventRepository;
-import io.security.SecurityUtils;
 import io.service.errors.EventIsFull;
 import io.service.errors.InvalidId;
 import io.service.errors.UserNotLoggedIn;
-import io.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

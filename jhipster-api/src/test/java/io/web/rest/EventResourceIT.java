@@ -2,10 +2,13 @@ package io.web.rest;
 
 import io.MingleApp;
 import io.domain.Event;
+import io.domain.User;
 import io.repository.EventRepository;
+import io.repository.UserRepository;
 import io.service.EventService;
 import io.web.rest.errors.ExceptionTranslator;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Base64Utils;
@@ -84,6 +88,9 @@ public class EventResourceIT {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Mock
     private EventRepository eventRepositoryMock;
 
@@ -119,6 +126,13 @@ public class EventResourceIT {
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator).build();
+        userRepository.deleteAll();
+        User user = new User();
+        user.setLogin("user");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        user.setEmail("some@mail.com");
+        userRepository.save(user);
     }
 
     /**
@@ -558,6 +572,44 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasSize(1)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
 
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void testCorrectAccept() throws Exception{
+        eventService.save(event);
+
+        restEventMockMvc.perform(put("/api/events/accept/{id}",event.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+    }
+
+    @Test
+    public void testAcceptWithNoOneLoggedIn() throws Exception{
+        eventService.save(event);
+
+        restEventMockMvc.perform(put("/api/events/accept/{id}",event.getId()))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void testAcceptWithFullEvent() throws Exception{
+        event.setMaxParticipants(0);
+        eventService.save(event);
+
+        restEventMockMvc.perform(put("/api/events/accept/{id}",event.getId()))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void testAcceptWithIncorrectId() throws Exception{
+        eventService.save(event);
+
+        restEventMockMvc.perform(put("/api/events/accept/{id}","123"))
+            .andExpect(status().isBadRequest());
     }
 
 }

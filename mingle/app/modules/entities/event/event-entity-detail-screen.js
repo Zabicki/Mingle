@@ -60,9 +60,9 @@ class EventEntityDetailScreen extends React.Component {
         <Text testID="picture">Picture: {this.props.event.picture}</Text>
         <Text testID="city">City: {this.props.event.city}</Text>
         <Text testID="address">Address: {this.props.event.address}</Text>
-        <Text testID="maxParticpants">MaxParticpants: {this.props.event.maxParticpants}</Text>
+        <Text testID="maxParticipants">MaxParticpants: {this.props.event.maxParticipants}</Text>
         <Text testID="date">Date: {jsDateToLocalDate(this.props.event.date)}</Text>
-        <Text testID="recurent">Recurent: {this.props.event.recurent}</Text>
+        <Text testID="recurrent">Recurrent: {this.props.event.recurrent}</Text>
         <Text testID="interval">Interval: {this.props.event.interval}</Text>
         <Text testID="category">Category: {this.props.event.category}</Text>
         <Text testID="privacy">Privacy: {this.props.event.privacy}</Text>

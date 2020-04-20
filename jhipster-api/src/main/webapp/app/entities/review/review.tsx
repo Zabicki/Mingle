@@ -35,7 +35,7 @@ export class Review extends React.Component<IReviewProps> {
                 <tr>
                   <th>ID</th>
                   <th>Score</th>
-                  <th>Review</th>
+                  <th>Review text</th>
                   <th>Reviews</th>
                   <th>User</th>
                   <th />
@@ -50,7 +50,7 @@ export class Review extends React.Component<IReviewProps> {
                       </Button>
                     </td>
                     <td>{review.score}</td>
-                    <td>{review.review}</td>
+                    <td>{review.text}</td>
                     <td>{review.reviews ? review.reviews.id : ''}</td>
                     <td>{review.user ? review.user.id : ''}</td>
                     <td className="text-right">

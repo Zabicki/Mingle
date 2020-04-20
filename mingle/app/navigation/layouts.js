@@ -32,7 +32,6 @@ import EventEntityEditScreen from '../modules/entities/event/event-entity-edit-s
 import MessageEntityScreen from '../modules/entities/message/message-entity-screen'
 import MessageEntityDetailScreen from '../modules/entities/message/message-entity-detail-screen'
 import MessageEntityEditScreen from '../modules/entities/message/message-entity-edit-screen'
-import TestScreen from '../modules/testScreen/test-screen'
 // ignite-jhipster-navigation-import-needle
 
 export const LOGIN_SCREEN = 'nav.LoginScreen'
@@ -59,7 +58,6 @@ export const EVENT_ENTITY_EDIT_SCREEN = 'nav.EventEntityEditScreen'
 export const MESSAGE_ENTITY_SCREEN = 'nav.MessageEntityScreen'
 export const MESSAGE_ENTITY_DETAIL_SCREEN = 'nav.MessageEntityDetailScreen'
 export const MESSAGE_ENTITY_EDIT_SCREEN = 'nav.MessageEntityEditScreen'
-export const TEST_SCREEN = 'nav.TestScreen'
 // ignite-jhipster-navigation-declaration-needle
 
 const store = createStore()
@@ -171,7 +169,6 @@ export function registerScreensAndStartApp() {
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_SCREEN, () => MessageEntityScreen, Provider, store)
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_DETAIL_SCREEN, () => MessageEntityDetailScreen, Provider, store)
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_EDIT_SCREEN, () => MessageEntityEditScreen, Provider, store)
-  Navigation.registerComponentWithRedux(TEST_SCREEN, () => TestScreen, Provider, store)
   // ignite-jhipster-navigation-registration-needle
 
   Navigation.events().registerAppLaunchedListener(() => {
@@ -597,22 +594,7 @@ export const messageEntityDetailScreen = data =>
       options: {
         topBar: {
           title: {
-            text: 'TestScreen',
-            color: Colors.snow,
-          },
-        },
-      },
-    },
-  })
-
-export const testScreen = () =>
-  Navigation.push('center', {
-    component: {
-      name: TEST_SCREEN,
-      options: {
-        topBar: {
-          title: {
-            text: 'Reviews',
+            text: 'Messages',
             color: Colors.snow,
           },
         },

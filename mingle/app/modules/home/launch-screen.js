@@ -7,7 +7,6 @@ import LearnMoreLinks from './learn-more-links.component.js'
 import { Images } from '../../shared/themes'
 import styles from './launch-screen.styles'
 import RoundedButton from '../../shared/components/rounded-button/rounded-button'
-import {testScreen} from '../../navigation/layouts'
 
 export default class LaunchScreen extends React.Component {
   constructor(props) {
@@ -58,7 +57,7 @@ export default class LaunchScreen extends React.Component {
                 <Image source={Images.football} style={styles.logo} />
               </View>
               <View style={styles.wrapper}>
-                <View> 
+                <View>
                   <Text style={styles.textHost}>Host name</Text>
                   <Text style={styles.textHost}>Age</Text>
                 </View>

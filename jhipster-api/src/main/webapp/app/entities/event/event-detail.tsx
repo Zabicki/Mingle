@@ -58,9 +58,9 @@ export class EventDetail extends React.Component<IEventDetailProps> {
             </dt>
             <dd>{eventEntity.address}</dd>
             <dt>
-              <span id="maxParticpants">Max Particpants</span>
+              <span id="maxParticipants">Max Participants</span>
             </dt>
-            <dd>{eventEntity.maxParticpants}</dd>
+            <dd>{eventEntity.maxParticipants}</dd>
             <dt>
               <span id="date">Date</span>
             </dt>
@@ -68,9 +68,9 @@ export class EventDetail extends React.Component<IEventDetailProps> {
               <TextFormat value={eventEntity.date} type="date" format={APP_LOCAL_DATE_FORMAT} />
             </dd>
             <dt>
-              <span id="recurent">Recurent</span>
+              <span id="recurrent">Recurrent</span>
             </dt>
-            <dd>{eventEntity.recurent ? 'true' : 'false'}</dd>
+            <dd>{eventEntity.recurrent ? 'true' : 'false'}</dd>
             <dt>
               <span id="interval">Interval</span>
             </dt>
@@ -83,15 +83,15 @@ export class EventDetail extends React.Component<IEventDetailProps> {
               <span id="privacy">Privacy</span>
             </dt>
             <dd>{eventEntity.privacy}</dd>
-            <dt>User</dt>
-            <dd>{eventEntity.user ? eventEntity.user.id : ''}</dd>
-            <dt>Events</dt>
+            <dt>Host</dt>
+            <dd>{eventEntity.host ? eventEntity.host.id : ''}</dd>
+            <dt>Participants</dt>
             <dd>
-              {eventEntity.events
-                ? eventEntity.events.map((val, i) => (
+              {eventEntity.participants
+                ? eventEntity.participants.map((val, i) => (
                     <span key={val.id}>
                       <a>{val.id}</a>
-                      {i === eventEntity.events.length - 1 ? '' : ', '}
+                      {i === eventEntity.participants.length - 1 ? '' : ', '}
                     </span>
                   ))
                 : null}{' '}

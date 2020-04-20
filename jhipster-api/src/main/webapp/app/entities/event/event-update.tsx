@@ -289,7 +289,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                     multiple
                     className="form-control"
                     name="participants"
-                    value={eventEntity.events && eventEntity.events.map(e => e.id)}
+                    value={eventEntity.participants && eventEntity.participants.map(e => e.id)}
                   >
                     <option value="" key="0" />
                     {users

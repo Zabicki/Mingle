@@ -164,25 +164,6 @@ export class LaunchScreen extends React.Component {
            </View>
         )
          }
-         {this.props.maybe && this.props.maybe.length > 0 &&
-         (
-         <View style={styles.wrapper}>
-          <View style={styles.wrapper}>
-            <Text style={styles.text}>
-              Maybe list
-            </Text>
-          </View>
-          <View style = {styles.wrapper}>
-             {this.props.maybe.map((maybe, i) =>(
-              <View style={styles.wrapper} key ={`maybe-${i}`}>
-                <Text style={styles.text}>
-                  {maybe.description}
-                </Text>
-               </View>
-             ))}
-         </View>
-         </View>
-         )}
       </View>
     )
   }

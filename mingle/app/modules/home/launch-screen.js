@@ -8,7 +8,6 @@ import LearnMoreLinks from './learn-more-links.component.js'
 import { Images } from '../../shared/themes'
 import styles from './launch-screen.styles'
 import RoundedButton from '../../shared/components/rounded-button/rounded-button'
-import {testScreen} from '../../navigation/layouts'
 import EventAction from '../entities/event/event.reducer'
 
 export class LaunchScreen extends React.Component {

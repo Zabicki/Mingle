@@ -80,6 +80,18 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("favourites")
     private Set<Category> favourites = new HashSet<>();
 
+    @Field("age")
+    private Integer age;
+
+    @Field("picture")
+    private String picture;
+
+    @Field("city")
+    private String city;
+
+    @Field("description")
+    private String description;
+
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
 
@@ -205,6 +217,38 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

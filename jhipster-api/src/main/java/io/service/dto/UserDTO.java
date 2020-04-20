@@ -53,6 +53,14 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private Integer age;
+
+    private String picture;
+
+    private String city;
+
+    private String description;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -73,6 +81,10 @@ public class UserDTO {
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
+        this.age = user.getAge();
+        this.picture = user.getPicture();
+        this.city = user.getCity();
+        this.description = user.getDescription();
     }
 
     public String getId() {
@@ -179,6 +191,38 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -186,6 +230,9 @@ public class UserDTO {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
+            ", age='" + age + '\'' +
+            ", city='" + city + '\'' +
+            ", description='" + description + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

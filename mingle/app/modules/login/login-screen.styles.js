@@ -8,13 +8,20 @@ export default StyleSheet.create({
   },
   container: {
     paddingTop: 70,
+    padding: 20,
     backgroundColor: Colors.snow,
   },
   form: {
-    backgroundColor: Colors.grey,
-    margin: 15,
+    backgroundColor: Colors.greyDark,
+    marginTop: 15,
+    marginBottom: 15,
     paddingTop: 10,
-    borderRadius: 5,
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 8,
+    elevation: 5,
   },
   row: {
     paddingVertical: Metrics.doubleBaseMargin,
@@ -24,15 +31,15 @@ export default StyleSheet.create({
     fontSize: 18,
     fontFamily: 'verdana',
     fontWeight: 'bold',
-    color: Colors.sun,
+    color: Colors.snow,
   },
   textInput: {
     height: 40,
-    color: Colors.coal,
+    color: Colors.snow,
   },
   textInputReadonly: {
     height: 40,
-    color: Colors.steel,
+    color: Colors.snow,
   },
   loginRow: {
     paddingBottom: Metrics.doubleBaseMargin,
@@ -64,18 +71,18 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   button: {
-    height: 40,
-    width: 350,
+    height: 45,
     backgroundColor: Colors.sun,
     borderColor: Colors.sun,
     borderWidth: 1,
     borderRadius: 3,
-    marginBottom: 20,
+    marginBottom: 10,
     justifyContent: 'center',
-
+    alignSelf: 'stretch',
   },
   buttonSection: {
     marginTop: 10,
+    marginBottom: 10,
     alignItems: 'center',
   },
 })

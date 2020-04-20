@@ -31,9 +31,9 @@ export class ReviewDetail extends React.Component<IReviewDetailProps> {
             </dt>
             <dd>{reviewEntity.score}</dd>
             <dt>
-              <span id="review">Review</span>
+              <span id="review">Review text</span>
             </dt>
-            <dd>{reviewEntity.review}</dd>
+            <dd>{reviewEntity.text}</dd>
             <dt>Reviews</dt>
             <dd>{reviewEntity.reviews ? reviewEntity.reviews.id : ''}</dd>
             <dt>User</dt>

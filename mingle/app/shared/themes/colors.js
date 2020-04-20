@@ -25,7 +25,7 @@ const colors = {
   text: '#E0D7E5',
   tmp: '#161616',
   grey: '#EDEDED',
-  greyDark: '#CACACA',
+  greyDark: '#707070',
 
 }
 

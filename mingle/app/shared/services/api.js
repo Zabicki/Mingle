@@ -83,6 +83,7 @@ const create = (baseURL = AppConfig.apiUrl) => {
   const createEvent = event => api.post('api/events', event)
   const updateEvent = event => api.put('api/events', event)
   const deleteEvent = eventId => api.delete('api/events/' + eventId)
+  const acceptEvent = eventId => api.put('api/events/accept/' + eventId)
 
   const getMessage = messageId => api.get('api/messages/' + messageId)
   const getMessages = options => api.get('api/messages', options)
@@ -134,6 +135,7 @@ const create = (baseURL = AppConfig.apiUrl) => {
     getEvents,
     getEvent,
     deleteEvent,
+    acceptEvent,
 
     createMessage,
     updateMessage,

@@ -61,6 +61,21 @@ export function* deleteEvent(api, action) {
     yield put(EventActions.eventDeleteFailure(response.data))
   }
 }
+
+export function* acceptEvent(api,action){
+  const { eventId }  = action
+
+  const apiCall = call(api.acceptEvent,eventId)
+  const response = yield call(callApi,apiCall)
+
+  //success?
+  if(response.ok){
+    yield put(EventActions.eventAcceptSuccess(response.data))
+  } else{
+    yield put(EventActions.eventAcceptFailure(response.data))
+  }
+
+}
 function mapDateFields(data) {
   if (data.date) {
     data.date = localDateToJsDate(data.date)

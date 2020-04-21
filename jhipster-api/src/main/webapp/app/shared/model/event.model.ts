@@ -12,16 +12,16 @@ export interface IEvent {
   city?: string;
   address?: string;
   location?: number[];
-  maxParticpants?: number;
+  maxParticipants?: number;
   date?: Moment;
-  recurent?: boolean;
+  recurrent?: boolean;
   interval?: number;
   category?: Category;
   privacy?: Privacy;
-  user?: IUser;
-  events?: IUser[];
+  host?: IUser;
+  participants?: IUser[];
 }
 
 export const defaultValue: Readonly<IEvent> = {
-  recurent: false
+  recurrent: false
 };

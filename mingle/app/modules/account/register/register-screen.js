@@ -36,16 +36,23 @@ class RegisterScreen extends React.Component {
     Navigation.events().bindComponent(this)
     this.state = {
       accountModel: t.struct({
+        name: t.String,
         login: t.String,
         password: t.String,
         confirmPassword: t.String,
         email: t.String,
+        birthDate: t.Date,
         langKey: t.String,
       }),
-      accountValue: { login: null, password: null, confirmPassword: null, email: null, langKey: 'en' },
+      accountValue: { name: null, login: null, password: null, confirmPassword: null, email: null, birthDate: null, langKey: 'en' },
       options: {
         auto: 'placeholders',
         fields: {
+          name: {
+            error: 'Enter name',
+            returnKeyType: 'next',
+            onSubmitEditing: () => this.form.getComponent('login').refs.input.focus(),
+          },
           login: {
             error: 'Enter login',
             returnKeyType: 'next',
@@ -62,10 +69,17 @@ class RegisterScreen extends React.Component {
             secureTextEntry: true,
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('email').refs.input.focus(),
-          },
+          },      
           email: {
             error: 'Enter e-mail address',
             returnKeyType: 'done',
+          },
+          birthDate: {
+            defaultValueText: 'Enter birth date',
+            mode: 'date',
+            dialogMode: 'calendar',
+            error: 'Enter birth date',
+            returnKeyType: 'next',
             onSubmitEditing: () => this.submitUpdate(),
           },
           langKey: {

@@ -106,14 +106,14 @@ export class Event extends React.Component<IEventProps, IEventState> {
                     <th className="hand" onClick={this.sort('location')}>
                       Location <FontAwesomeIcon icon="sort" />
                     </th>
-                    <th className="hand" onClick={this.sort('maxParticpants')}>
-                      Max Particpants <FontAwesomeIcon icon="sort" />
+                    <th className="hand" onClick={this.sort('maxParticipants')}>
+                      Max Participants <FontAwesomeIcon icon="sort" />
                     </th>
                     <th className="hand" onClick={this.sort('date')}>
                       Date <FontAwesomeIcon icon="sort" />
                     </th>
-                    <th className="hand" onClick={this.sort('recurent')}>
-                      Recurent <FontAwesomeIcon icon="sort" />
+                    <th className="hand" onClick={this.sort('recurrent')}>
+                      Recurrent <FontAwesomeIcon icon="sort" />
                     </th>
                     <th className="hand" onClick={this.sort('interval')}>
                       Interval <FontAwesomeIcon icon="sort" />
@@ -125,7 +125,7 @@ export class Event extends React.Component<IEventProps, IEventState> {
                       Privacy <FontAwesomeIcon icon="sort" />
                     </th>
                     <th>
-                      User <FontAwesomeIcon icon="sort" />
+                      Host <FontAwesomeIcon icon="sort" />
                     </th>
                     <th />
                   </tr>
@@ -156,15 +156,15 @@ export class Event extends React.Component<IEventProps, IEventState> {
                       <td>{event.city}</td>
                       <td>{event.address}</td>
                       <td>{event.location}</td>
-                      <td>{event.maxParticpants}</td>
+                      <td>{event.maxParticipants}</td>
                       <td>
                         <TextFormat type="date" value={event.date} format={APP_LOCAL_DATE_FORMAT} />
                       </td>
-                      <td>{event.recurent ? 'true' : 'false'}</td>
+                      <td>{event.recurrent ? 'true' : 'false'}</td>
                       <td>{event.interval}</td>
                       <td>{event.category}</td>
                       <td>{event.privacy}</td>
-                      <td>{event.user ? event.user.id : ''}</td>
+                      <td>{event.host ? event.host.id : ''}</td>
                       <td className="text-right">
                         <div className="btn-group flex-btn-group-container">
                           <Button tag={Link} to={`${match.url}/${event.id}`} color="info" size="sm">

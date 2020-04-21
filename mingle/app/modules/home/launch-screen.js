@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Text, Image, View, Platform } from 'react-native'
+import { ScrollView, Text, Image, View, Platform, TouchableHighlight } from 'react-native'
 import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
 import { Navigation } from 'react-native-navigation'
 
@@ -7,7 +7,6 @@ import LearnMoreLinks from './learn-more-links.component.js'
 import { Images } from '../../shared/themes'
 import styles from './launch-screen.styles'
 import RoundedButton from '../../shared/components/rounded-button/rounded-button'
-import {testScreen} from '../../navigation/layouts'
 
 export default class LaunchScreen extends React.Component {
   constructor(props) {
@@ -43,59 +42,49 @@ export default class LaunchScreen extends React.Component {
   render() {
     return (
       <View style={styles.mainContainer} testID="launchScreen">
-        <Image source={Images.background} style={styles.backgroundImage} resizeMode="stretch" />
-        <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
-          <View style={styles.centered}>
-            <Image source={Images.logoJhipster} style={styles.logo} />
-            <Text style={styles.welcomeText}>{'Hello!!!'}</Text>
-          </View>
-          <View style={styles.hairline} />
-          {/* <Header /> */}
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            {Platform.OS === 'ios' ? null : (
-              <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>Step Zero</Text>
-                <Text style={styles.sectionDescription}>
-                  Run <Text style={styles.highlight}>adb reverse tcp:8080 tcp:8080</Text> to be able to connect to your JHipster backend
-                  (Android only).
-                </Text>
+        <View style={styles.scrollView}>
+          <View style={styles.form}>
+            <View style={styles.row}>
+              <View style={styles.wrapper}>
+                <Text style={styles.text}>Date</Text>
               </View>
-            )}
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>app/modules/home/launch-screen.js</Text> to change this screen and then come back to see
-                your edits.
-              </Text>
+              <View style={styles.wrapper}>
+                <Text style={styles.text}>Location</Text>
+              </View>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
+            <View style={styles.rowHost}>
+              <View style={styles.wrapper}>
+                <Image source={Images.football} style={styles.logo} />
+              </View>
+              <View style={styles.wrapper}>
+                <View>
+                  <Text style={styles.textHost}>Host name</Text>
+                  <Text style={styles.textHost}>Age</Text>
+                </View>
+              </View>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
+            <View style={styles.description}>
+              <Text style={styles.textDescription}>Looking for someone who plays at intermediate level. Meeting at 3 pm at AGH, building C1</Text>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
+            <View style={styles.row}>
+              <TouchableHighlight testID="acceptButton" style={styles.wrapper} onPress={this.handlePressLogin} underlayColor="#D59F4E">
+                <View style={styles.button}>
+                  <Text style={styles.textButton}>Accept</Text>
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight testID="maybeButton" style={styles.wrapper} onPress={this.handlePressCancel} underlayColor="#D59F4E">
+                <View style={styles.button}>
+                  <Text style={styles.textButton}>Maybe</Text>
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight testID="declineButton" style={styles.wrapper} onPress={this.handlePressCancel} underlayColor="#D59F4E">
+                <View style={styles.button}>
+                  <Text style={styles.textButton}>Decline</Text>
+                </View>
+              </TouchableHighlight>
             </View>
-            <LearnMoreLinks />
           </View>
-          <RoundedButton
-            onPress={testScreen}
-            title="Go to test screen"
-            color="#841584"
-          />
-        </ScrollView>
+        </View>
       </View>
     )
   }

@@ -110,7 +110,7 @@ export class ReviewUpdate extends React.Component<IReviewUpdateProps, IReviewUpd
                   <Label id="reviewLabel" for="review-review">
                     Review
                   </Label>
-                  <AvField id="review-review" type="text" name="review" />
+                  <AvField id="review-review" type="text" name="text" />
                 </AvGroup>
                 <AvGroup>
                   <Label for="review-reviews">Reviews</Label>

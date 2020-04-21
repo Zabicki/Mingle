@@ -19,21 +19,16 @@ public class Message implements Serializable {
     @Id
     private String id;
 
-    @Field("message")
-    private String message;
+    @Field("text")
+    private String text;
 
     @Field("date")
     private LocalDate date;
 
     @DBRef
-    @Field("user")
-    @JsonIgnoreProperties("owners")
-    private User user;
+    @Field("author")
+    private User author;
 
-    @DBRef
-    @Field("messages")
-    @JsonIgnoreProperties("messages")
-    private Chat messages;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -44,17 +39,17 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public String getMessage() {
-        return message;
+    public String getText() {
+        return text;
     }
 
-    public Message message(String message) {
-        this.message = message;
+    public Message text(String message) {
+        this.text = message;
         return this;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public LocalDate getDate() {
@@ -70,32 +65,19 @@ public class Message implements Serializable {
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
+    public User getAuthor() {
+        return author;
     }
 
-    public Message user(User user) {
-        this.user = user;
+    public Message author(User user) {
+        this.author = user;
         return this;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
-    public Chat getMessages() {
-        return messages;
-    }
-
-    public Message messages(Chat chat) {
-        this.messages = chat;
-        return this;
-    }
-
-    public void setMessages(Chat chat) {
-        this.messages = chat;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {
@@ -117,7 +99,7 @@ public class Message implements Serializable {
     public String toString() {
         return "Message{" +
             "id=" + getId() +
-            ", message='" + getMessage() + "'" +
+            ", text='" + getText() + "'" +
             ", date='" + getDate() + "'" +
             "}";
     }

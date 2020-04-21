@@ -82,7 +82,7 @@ public class ReviewResourceIT {
     public static Review createEntity() {
         Review review = new Review()
             .score(DEFAULT_SCORE)
-            .review(DEFAULT_REVIEW);
+            .text(DEFAULT_REVIEW);
         return review;
     }
     /**
@@ -94,7 +94,7 @@ public class ReviewResourceIT {
     public static Review createUpdatedEntity() {
         Review review = new Review()
             .score(UPDATED_SCORE)
-            .review(UPDATED_REVIEW);
+            .text(UPDATED_REVIEW);
         return review;
     }
 
@@ -119,7 +119,7 @@ public class ReviewResourceIT {
         assertThat(reviewList).hasSize(databaseSizeBeforeCreate + 1);
         Review testReview = reviewList.get(reviewList.size() - 1);
         assertThat(testReview.getScore()).isEqualTo(DEFAULT_SCORE);
-        assertThat(testReview.getReview()).isEqualTo(DEFAULT_REVIEW);
+        assertThat(testReview.getText()).isEqualTo(DEFAULT_REVIEW);
     }
 
     @Test
@@ -169,9 +169,9 @@ public class ReviewResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(review.getId())))
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
-            .andExpect(jsonPath("$.[*].review").value(hasItem(DEFAULT_REVIEW)));
+            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_REVIEW)));
     }
-    
+
     @Test
     public void getReview() throws Exception {
         // Initialize the database
@@ -183,7 +183,7 @@ public class ReviewResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(review.getId()))
             .andExpect(jsonPath("$.score").value(DEFAULT_SCORE))
-            .andExpect(jsonPath("$.review").value(DEFAULT_REVIEW));
+            .andExpect(jsonPath("$.text").value(DEFAULT_REVIEW));
     }
 
     @Test
@@ -204,7 +204,7 @@ public class ReviewResourceIT {
         Review updatedReview = reviewRepository.findById(review.getId()).get();
         updatedReview
             .score(UPDATED_SCORE)
-            .review(UPDATED_REVIEW);
+            .text(UPDATED_REVIEW);
 
         restReviewMockMvc.perform(put("/api/reviews")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -216,7 +216,7 @@ public class ReviewResourceIT {
         assertThat(reviewList).hasSize(databaseSizeBeforeUpdate);
         Review testReview = reviewList.get(reviewList.size() - 1);
         assertThat(testReview.getScore()).isEqualTo(UPDATED_SCORE);
-        assertThat(testReview.getReview()).isEqualTo(UPDATED_REVIEW);
+        assertThat(testReview.getText()).isEqualTo(UPDATED_REVIEW);
     }
 
     @Test

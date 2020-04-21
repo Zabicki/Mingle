@@ -110,6 +110,10 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
+        newUser.setAge(userDTO.getAge());
+        newUser.setCity(userDTO.getCity());
+        newUser.setPicture(userDTO.getPicture());
+        newUser.setDescription(userDTO.getDescription());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -139,6 +143,10 @@ public class UserService {
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail().toLowerCase());
         user.setImageUrl(userDTO.getImageUrl());
+        user.setAge(userDTO.getAge());
+        user.setCity(userDTO.getCity());
+        user.setPicture(userDTO.getPicture());
+        user.setDescription(userDTO.getDescription());
         if (userDTO.getLangKey() == null) {
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
@@ -172,7 +180,7 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, Integer age, String city, String picture, String description) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -181,6 +189,10 @@ public class UserService {
                 user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
+                user.setAge(age);
+                user.setCity(city);
+                user.setPicture(picture);
+                user.setDescription(description);
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
@@ -204,6 +216,10 @@ public class UserService {
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
                 user.setEmail(userDTO.getEmail().toLowerCase());
+                user.setAge(userDTO.getAge());
+                user.setCity(userDTO.getCity());
+                user.setPicture(userDTO.getPicture());
+                user.setDescription(userDTO.getDescription());
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());

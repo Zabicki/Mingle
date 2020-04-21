@@ -20,7 +20,7 @@ public class Chat implements Serializable {
     private String id;
 
     @DBRef
-    @Field("message")
+    @Field("messages")
     private Set<Message> messages = new HashSet<>();
 
     @DBRef
@@ -45,15 +45,13 @@ public class Chat implements Serializable {
         return this;
     }
 
-    public Chat addMessage(Message message) {
+    public Chat addMessages(Message message) {
         this.messages.add(message);
-        message.setMessages(this);
         return this;
     }
 
-    public Chat removeMessage(Message message) {
+    public Chat removeMessages(Message message) {
         this.messages.remove(message);
-        message.setMessages(null);
         return this;
     }
 

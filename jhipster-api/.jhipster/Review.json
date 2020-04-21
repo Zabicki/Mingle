@@ -9,7 +9,7 @@
             ]
         },
         {
-            "fieldName": "review",
+            "fieldName": "text",
             "fieldType": "String"
         }
     ],

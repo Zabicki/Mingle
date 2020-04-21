@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux'
 import { persistReducer } from 'redux-persist'
+import {resettableReducer} from 'reduxsauce'
 
 import configureStore from './create-store'
 import rootSaga from '../sagas'
 import ReduxPersist from '../../config/redux-persist'
+
+const resettable = resettableReducer("LOGOUT_SUCCESS")
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
@@ -12,7 +15,7 @@ export const reducers = combineReducers({
   chats: require('../../modules/entities/chat/chat.reducer').reducer,
   favourites: require('../../modules/entities/favourites/favourites.reducer').reducer,
   reviews: require('../../modules/entities/review/review.reducer').reducer,
-  events: require('../../modules/entities/event/event.reducer').reducer,
+  events: resettable(require('../../modules/entities/event/event.reducer').reducer),
   messages: require('../../modules/entities/message/message.reducer').reducer,
   // ignite-jhipster-redux-store-import-needle
   account: require('./account.reducer').reducer,

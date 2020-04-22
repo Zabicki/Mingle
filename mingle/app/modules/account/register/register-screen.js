@@ -8,6 +8,7 @@ import t from 'tcomb-form-native'
 import RegisterActions from '../register/register.reducer'
 // Styles
 import styles from './register-screen.styles'
+import {loginScreen, registerScreen} from '../../../navigation/layouts'
 
 let Form = t.form.Form
 
@@ -69,7 +70,7 @@ class RegisterScreen extends React.Component {
             secureTextEntry: true,
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('email').refs.input.focus(),
-          },      
+          },
           email: {
             error: 'Enter e-mail address',
             returnKeyType: 'done',
@@ -91,6 +92,10 @@ class RegisterScreen extends React.Component {
     }
     this.submitUpdate = this.submitUpdate.bind(this)
     this.accountChange = this.accountChange.bind(this)
+  }
+
+  handlePressCancel = () => {
+    loginScreen()
   }
 
   submitUpdate() {
@@ -138,7 +143,10 @@ class RegisterScreen extends React.Component {
           />
           <View style={styles.buttonSection}>
             <TouchableHighlight style={styles.button} onPress={this.submitUpdate} underlayColor="#D59F4E">
-              <Text style={styles.buttonText}>Register</Text>
+              <Text style={styles.buttonText}>Sign up</Text>
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={this.handlePressCancel} underlayColor="#D59F4E">
+              <Text style={styles.buttonText}>Cancel</Text>
             </TouchableHighlight>
           </View>
         </ScrollView>

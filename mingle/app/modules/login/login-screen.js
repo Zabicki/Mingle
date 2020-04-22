@@ -8,6 +8,8 @@ import styles from './login-screen.styles'
 import { Images, Metrics } from '../../shared/themes'
 import LoginActions from './login.reducer'
 
+import {appStack, forgotPasswordScreen, launchScreen, registerScreen} from '../../navigation/layouts'
+
 class LoginScreen extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -42,9 +44,15 @@ class LoginScreen extends React.Component {
     // attempt a login - a saga is listening to pick it up from here.
     this.props.attemptLogin(username, password)
   }
-  handlePressCancel = () => {
-    this.props.logout()
+
+  handlePressRegister = () => {
     Navigation.dismissModal(this.props.componentId)
+    registerScreen()
+  }
+
+  handlePressForgotPassword = () => {
+    Navigation.dismissModal(this.props.componentId)
+    forgotPasswordScreen()
   }
 
   handleChangeUsername = text => {
@@ -116,9 +124,8 @@ class LoginScreen extends React.Component {
             <TouchableHighlight testID="loginScreenLoginButton" style={styles.button} onPress={this.handlePressLogin} underlayColor="#D59F4E">
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableHighlight>
-            <TouchableHighlight testID="loginScreenCancelButton" style={styles.button} onPress={this.handlePressCancel} underlayColor="#D59F4E">
-              <Text style={styles.buttonText}>Cancel</Text>
-            </TouchableHighlight>
+          <Text style = {styles.clickable} onPress={()=> this.handlePressRegister()}>Don't have account? <Text style={{ fontWeight: 'bold' }}>Sign up</Text> now!</Text>
+          <Text style = {styles.clickable} onPress={()=> this.handlePressForgotPassword()}>Forgot password?</Text>
           </View>
       </ScrollView>
     )

@@ -24,7 +24,7 @@ class SettingsScreen extends React.Component {
         login: t.String,
         email: t.maybe(t.String),
         langKey: t.String,
-        show_current_localisation: t.Boolean,
+        show_current_localization: t.Boolean,
       }),
       accountValue: this.props.account,
       options: {
@@ -44,7 +44,7 @@ class SettingsScreen extends React.Component {
           langKey: {
             hidden: true,
           },
-          show_current_localisation: {
+          show_current_localization: {
             hidden: false,
           },
         },
@@ -91,15 +91,15 @@ class SettingsScreen extends React.Component {
     invalidPasswordVisible: false,
     confirmationVisible: false
   };
- 
+
   showDialog = () => {
     this.setState({ dialogVisible: true });
   };
- 
+
   handleNo = () => {
     this.setState({ dialogVisible: false });
   };
- 
+
   handleYes = () => {
     this.setState({ dialogVisible: false, enterPasswordVisible: true });
 
@@ -107,7 +107,7 @@ class SettingsScreen extends React.Component {
   handleCancel = () => {
     this.setState({ enterPasswordVisible: false });
   };
- 
+
   handleDelete = () => {
     //Logic of deleting account
     //Compare passwords

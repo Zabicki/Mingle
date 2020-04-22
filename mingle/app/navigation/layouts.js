@@ -227,6 +227,25 @@ export const loginScreen = () =>
     },
   })
 
+export const launchScreen = () =>
+  Navigation.showModal({
+    stack: {
+      children: [
+        {
+          component: {
+            name: LAUNCH_SCREEN,
+            options: {
+              topBar: {
+                visible: false,
+                drawBehind: true,
+              },
+            },
+          },
+        },
+      ],
+    },
+  })
+
 export const registerScreen = () =>
   Navigation.push('center', {
     component: {

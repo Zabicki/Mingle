@@ -7,6 +7,7 @@ import t from 'tcomb-form-native'
 
 import ForgotPasswordActions from './forgot-password.reducer'
 import styles from './forgot-password-screen.styles'
+import {loginScreen} from '../../../navigation/layouts'
 
 const Form = t.form.Form
 
@@ -77,6 +78,10 @@ class ForgotPasswordScreen extends React.Component {
     })
   }
 
+  handlePressCancel = () => {
+    loginScreen()
+  }
+
   render() {
     return (
       <KeyboardAwareScrollView>
@@ -93,6 +98,9 @@ class ForgotPasswordScreen extends React.Component {
           <View style={styles.buttonSection}>
             <TouchableHighlight style={styles.button} onPress={this.submitForm} underlayColor="#D59F4E">
               <Text style={styles.buttonText}>Reset</Text>
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={this.handlePressCancel} underlayColor="#D59F4E">
+              <Text style={styles.buttonText}>Cancel</Text>
             </TouchableHighlight>
           </View>
         </ScrollView>

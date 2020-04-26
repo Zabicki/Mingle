@@ -1,6 +1,7 @@
 package io.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -50,7 +51,7 @@ public class Event implements Serializable {
     private String address;
 
     @NotNull
-    @GeoSpatialIndexed
+    @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     @Field("location")
     private double[] location;
 
@@ -267,7 +268,7 @@ public class Event implements Serializable {
         return host;
     }
 
-    public Event user(User user) {
+    public Event host(User user) {
         this.host = user;
         return this;
     }
@@ -321,6 +322,7 @@ public class Event implements Serializable {
         return "Event{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", host='" + getHost() + "'" +
             ", description='" + getDescription() + "'" +
             ", picture='" + getPicture() + "'" +
             ", pictureContentType='" + getPictureContentType() + "'" +

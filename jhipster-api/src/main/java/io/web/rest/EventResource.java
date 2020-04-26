@@ -2,6 +2,7 @@ package io.web.rest;
 
 import io.domain.Event;
 import io.service.EventService;
+import io.service.errors.UserNotLoggedIn;
 import io.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -12,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -144,15 +143,19 @@ public class EventResource {
                                                           @PathVariable String longitude, @PathVariable String radius){
         log.debug("REST request to get all nearby events");
         Point point;
-        Distance distance;
+        double distance;
         try {
             point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
-            distance = new Distance(Double.parseDouble(radius), Metrics.KILOMETERS);
+            distance = Double.parseDouble(radius) * 1000;
         }catch (NumberFormatException e){
             throw new BadRequestAlertException("Parameters are not numbers ", latitude + ", " + longitude + "," + radius,"invalidParameters");
         }
-
-        Page<Event> foundEvents = eventService.findAllByLocationNear(pageable, point, distance);
+        Page<Event> foundEvents;
+        try {
+            foundEvents = eventService.findAllByLocationNear(pageable, point, distance);
+        }catch (UserNotLoggedIn e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"nooneloggedin");
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
         return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
     }
@@ -167,7 +170,12 @@ public class EventResource {
     @GetMapping("/events/city/{city}")
     public ResponseEntity<List<Event>> getAllEventsFromCity(Pageable pageable, @PathVariable String city){
         log.debug("REST request to get all events from city : {}",city);
-        Page<Event> foundEvents = eventService.findAllFromCity(pageable,city);
+        Page<Event> foundEvents;
+        try {
+            foundEvents = eventService.findAllFromCity(pageable, city);
+        }catch (UserNotLoggedIn e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"nooneloggedin");
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
         return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
     }

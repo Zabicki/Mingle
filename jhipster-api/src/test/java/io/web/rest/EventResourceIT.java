@@ -547,6 +547,7 @@ public class EventResourceIT {
     }
 
     @Test
+    @WithMockUser("user")
     public void testNearbyEvents() throws Exception{
         eventService.save(event);
 
@@ -561,6 +562,7 @@ public class EventResourceIT {
     }
 
     @Test
+    @WithMockUser("user")
     public void testEventsFromCity() throws Exception{
         eventService.save(event);
 

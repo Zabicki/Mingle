@@ -2,6 +2,7 @@ package io.service;
 
 import io.domain.Event;
 import io.domain.User;
+import io.domain.enumeration.Category;
 import io.repository.EventRepository;
 import io.service.errors.EventIsFull;
 import io.service.errors.InvalidId;
@@ -11,11 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Event}.
@@ -64,9 +67,13 @@ public class EventService {
      * @param distance maximal distance to event.
      * @return the list of Events.
      */
-    public Page<Event> findAllByLocationNear(Pageable pageable,Point point, Distance distance){
+    public Page<Event> findAllByLocationNear(Pageable pageable,Point point, double distance){
         log.debug("Request to get all nearby Events");
-        return eventRepository.findByLocationNear(pageable, point, distance);
+        User logged = userService.getUserWithAuthorities().orElseThrow(
+            UserNotLoggedIn::new
+        );
+        String regex = createRegexFavourites(logged);
+        return eventRepository.findByLocationNear(point, distance,regex,logged.getId(),pageable);
     }
 
     /**
@@ -78,7 +85,11 @@ public class EventService {
      */
     public Page<Event> findAllFromCity(Pageable pageable, String city){
         log.debug("Request to get all Events from city : {}",city);
-        return eventRepository.findByCity(pageable,city);
+        User logged = userService.getUserWithAuthorities().orElseThrow(
+            UserNotLoggedIn::new
+        );
+        String regex = createRegexFavourites(logged);
+        return eventRepository.findByCity(city,regex,logged.getId(),pageable);
     }
 
     /**
@@ -90,6 +101,26 @@ public class EventService {
         return eventRepository.findAllWithEagerRelationships(pageable);
     }
 
+    /**
+     * creates regex pattern for favourite categories.
+     *
+     * @param user given user.
+     * @return return string like 'CATEGORY|CATEGORY|...|CATEGORY'.
+     */
+    public String createRegexFavourites(@NotNull User user){
+        Set<Category> favourites = user.getFavourites();
+        if (favourites.isEmpty()){
+            return ".*";
+        }
+        return favourites.stream().map(Enum::toString).collect(Collectors.joining("|"));
+    }
+
+    /**
+     * handles joining events.
+     *
+     * @param id id of event user wants to join.
+     * @return returns updated event.
+     */
     public Event acceptEvent(String id){
         Event event = findOne(id).orElseThrow(
             InvalidId::new

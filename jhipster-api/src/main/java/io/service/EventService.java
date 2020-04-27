@@ -16,6 +16,7 @@ import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -73,7 +74,7 @@ public class EventService {
             UserNotLoggedIn::new
         );
         String regex = createRegexFavourites(logged);
-        return eventRepository.findByLocationNear(point, distance,regex,logged.getId(),pageable);
+        return eventRepository.findByLocationNear(point, distance,regex,logged.getId(), LocalDate.now(),pageable);
     }
 
     /**
@@ -89,7 +90,7 @@ public class EventService {
             UserNotLoggedIn::new
         );
         String regex = createRegexFavourites(logged);
-        return eventRepository.findByCity(city,regex,logged.getId(),pageable);
+        return eventRepository.findByCity(city,regex,logged.getId(),LocalDate.now(),pageable);
     }
 
     /**
@@ -159,5 +160,31 @@ public class EventService {
     public void delete(String id) {
         log.debug("Request to delete Event : {}", id);
         eventRepository.deleteById(id);
+    }
+
+    /**
+     * get all events where logged user is a host.
+     *
+     * @param pageable pagination information.
+     * @return page of events hosted by user.
+     */
+    public Page<Event> findUserEvents(Pageable pageable){
+        User logged = userService.getUserWithAuthorities().orElseThrow(
+            UserNotLoggedIn::new
+        );
+        return eventRepository.findByHost(logged.getId(), pageable);
+    }
+
+    /**
+     * get all events user has accpeted.
+     *
+     * @param pageable pagination information.
+     * @return page of events accepted by user.
+     */
+    public Page<Event> findEventsAcceptedByUser(Pageable pageable){
+        User logged = userService.getUserWithAuthorities().orElseThrow(
+            UserNotLoggedIn::new
+        );
+        return eventRepository.findByParticipants(logged.getId(),pageable);
     }
 }

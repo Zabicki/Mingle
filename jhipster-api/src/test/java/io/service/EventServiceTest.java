@@ -65,19 +65,19 @@ class EventServiceTest {
     public void init(){
         eventRepository.deleteAll();
         event = createEvent("running","just run","Cracow","some address", cracowLocation,
-        LocalDate.of(2020,5,26),false,Category.SPORT,Privacy.PUBLIC);
+        LocalDate.now().plusMonths(5),false,Category.SPORT,Privacy.PUBLIC);
         eventRepository.save(event);
         event2 = createEvent("skiing","let's go skiing","Cracow","some other address", otherCracowLocation,
-            LocalDate.of(2021,2,12),false,Category.SPORT,Privacy.PUBLIC);
+            LocalDate.now().plusDays(28),false,Category.SPORT,Privacy.PUBLIC);
         eventRepository.save(event2);
         event3 = createEvent("basketball","some interesting description","Warsaw","some other other address", warsawLocation,
-            LocalDate.of(2020,7,2),false,Category.SPORT,Privacy.PUBLIC);
+            LocalDate.now().plusDays(89),false,Category.SPORT,Privacy.PUBLIC);
         eventRepository.save(event3);
         event4 = createEvent("football","fascinating description","Warsaw","unique address", otherWarsawLocation,
-            LocalDate.of(2020,8,22),false,Category.SPORT,Privacy.PUBLIC);
+            LocalDate.now().plusDays(123),false,Category.SPORT,Privacy.PUBLIC);
         eventRepository.save(event4);
         event5 = createEvent("eating","fascinating description","Cracow","other unique address",
-            cracowLocation, LocalDate.of(2020,7,2),false,Category.FOOD,Privacy.PUBLIC);
+            cracowLocation, LocalDate.now().plusDays(5),false,Category.FOOD,Privacy.PUBLIC);
         eventRepository.save(event5);
 
         userRepository.deleteAll();
@@ -224,7 +224,52 @@ class EventServiceTest {
         assertThat(foundEvents2.getTotalElements()).isEqualTo(2);
         assertThat(foundEvents2.getContent().get(0).getName()).isEqualTo("running");
         assertThat(foundEvents2.getContent().get(1).getName()).isEqualTo("skiing");
+    }
 
+    @Test
+    @WithMockUser("user")
+    public void assertThatOnlyCurrentEventsAreShown(){
+        event4.setDate(LocalDate.now().minusDays(1));
+        eventRepository.save(event4);
+
+        Page<Event> foundEvents = eventService.findAllByLocationNear(pageable,userLocation2,50 * 1000);
+        assertThat(foundEvents.getTotalElements()).isEqualTo(1);
+        assertThat(foundEvents.getContent().get(0).getName()).isEqualTo("basketball");
+
+        Page<Event> foundEvents2 = eventService.findAllFromCity(pageable,"Warsaw");
+        assertThat(foundEvents2.getTotalElements()).isEqualTo(1);
+        assertThat(foundEvents2.getContent().get(0).getName()).isEqualTo("basketball");
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void assertThatOnlyUserEventsAreShown(){
+        event3.setHost(userService.getUserWithAuthorities().get());
+        eventRepository.save(event3);
+        event4.setHost(user2);
+        eventRepository.save(event4);
+
+        Page<Event> foundEvents = eventService.findUserEvents(pageable);
+        assertThat(foundEvents.getTotalElements()).isEqualTo(1);
+        assertThat(foundEvents.getContent().get(0).getName()).isEqualTo("basketball");
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void assertThatOnlyAcceptedEventsAreShown(){
+        event2.addParticipants(userService.getUserWithAuthorities().get());
+        event2.addParticipants(user2);
+        event3.addParticipants(userService.getUserWithAuthorities().get());
+        event.addParticipants(user2);
+
+        eventRepository.save(event);
+        eventRepository.save(event2);
+        eventRepository.save(event3);
+
+        Page<Event> foundEvents = eventService.findEventsAcceptedByUser(pageable);
+        assertThat(foundEvents.getTotalElements()).isEqualTo(2);
+        assertThat(foundEvents.getContent().get(0).getName()).isEqualTo("skiing");
+        assertThat(foundEvents.getContent().get(1).getName()).isEqualTo("basketball");
 
     }
 }

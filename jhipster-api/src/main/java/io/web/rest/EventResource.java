@@ -205,4 +205,42 @@ public class EventResource {
         eventService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
+
+    /**
+     * {@code GET /events/user/hosted} : get events hosted by logged user.
+     *
+     * @param pageable pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200(ok)} and the list of events in body.
+     */
+    @GetMapping("/events/user/hosted")
+    public ResponseEntity<List<Event>> getUserEvents(Pageable pageable){
+        log.debug("REST request to get all events hosted by logged user ");
+        Page<Event> foundEvents;
+        try {
+            foundEvents = eventService.findUserEvents(pageable);
+        }catch (UserNotLoggedIn e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"nooneloggedin");
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
+        return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
+    }
+
+    /**
+     * {@code GET /events/user/accepted} : get events accepted by logged user.
+     *
+     * @param pageable pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200(ok)} and the list of events in body.
+     */
+    @GetMapping("/events/user/accepted")
+    public ResponseEntity<List<Event>> getUserAcceptedEvents(Pageable pageable){
+        log.debug("REST request to get all events accepted by logged user ");
+        Page<Event> foundEvents;
+        try {
+            foundEvents = eventService.findEventsAcceptedByUser(pageable);
+        }catch (UserNotLoggedIn e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"nooneloggedin");
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
+        return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
+    }
 }

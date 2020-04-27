@@ -6,6 +6,7 @@ import io.domain.User;
 import io.repository.EventRepository;
 import io.repository.UserRepository;
 import io.service.EventService;
+import io.service.UserService;
 import io.web.rest.errors.ExceptionTranslator;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -70,8 +71,8 @@ public class EventResourceIT {
     private static final Integer DEFAULT_MAX_PARTICIPANTS = 1;
     private static final Integer UPDATED_MAX_PARTICIPANTS = 2;
 
-    private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate DEFAULT_DATE = LocalDate.now().plusDays(78);
+    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault()).plusDays(10);
 
     private static final Boolean DEFAULT_RECURRENT = false;
     private static final Boolean UPDATED_RECURRENT = true;
@@ -101,6 +102,9 @@ public class EventResourceIT {
     private EventService eventService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -116,6 +120,8 @@ public class EventResourceIT {
 
     private Event event;
 
+    private User user;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -127,7 +133,7 @@ public class EventResourceIT {
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator).build();
         userRepository.deleteAll();
-        User user = new User();
+        user = new User();
         user.setLogin("user");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
@@ -322,7 +328,7 @@ public class EventResourceIT {
     }
 
     @Test
-    public void checkRecurentIsRequired() throws Exception {
+    public void checkRecurrentIsRequired() throws Exception {
         int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
         event.setRecurrent(null);
@@ -611,6 +617,54 @@ public class EventResourceIT {
         eventService.save(event);
 
         restEventMockMvc.perform(put("/api/events/accept/{id}","123"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void testGetUserEvents() throws Exception{
+        event.setHost(userService.getUserWithAuthorities().get());
+        eventService.save(event);
+        eventService.save(createUpdatedEntity());
+
+        restEventMockMvc.perform(get("/api/events/user/hosted"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.[*].name").value(hasSize(1)))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+    }
+
+    @Test
+    public void testGetUserEventsRequiresLoggedInUser() throws Exception{
+        event.setHost(user);
+        eventService.save(event);
+        eventService.save(createUpdatedEntity());
+
+        restEventMockMvc.perform(get("/api/events/user/hosted"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void testGetUserAcceptedEvents() throws Exception{
+        event.addParticipants(userService.getUserWithAuthorities().get());
+        eventService.save(event);
+        eventService.save(createUpdatedEntity());
+
+        restEventMockMvc.perform(get("/api/events/user/accepted"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.[*].name").value(hasSize(1)))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+    }
+
+    @Test
+    public void testGetUserAcceptedEventsRequiresLoggedInUser() throws Exception{
+        event.addParticipants(user);
+        eventService.save(event);
+        eventService.save(createUpdatedEntity());
+
+        restEventMockMvc.perform(get("/api/events/user/hosted"))
             .andExpect(status().isBadRequest());
     }
 

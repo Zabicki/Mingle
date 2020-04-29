@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +36,8 @@ public class EventResource {
     private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
     private static final String ENTITY_NAME = "event";
+
+    private static final String NO_ONE_LOGGED_IN = "nooneloggedin";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -62,7 +63,7 @@ public class EventResource {
         }
         Event result = eventService.save(event);
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -83,7 +84,7 @@ public class EventResource {
         }
         Event result = eventService.save(event);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, event.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, event.getId()))
             .body(result);
     }
 
@@ -154,7 +155,7 @@ public class EventResource {
         try {
             foundEvents = eventService.findAllByLocationNear(pageable, point, distance);
         }catch (UserNotLoggedIn e){
-            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"nooneloggedin");
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,NO_ONE_LOGGED_IN);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
         return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
@@ -174,7 +175,7 @@ public class EventResource {
         try {
             foundEvents = eventService.findAllFromCity(pageable, city);
         }catch (UserNotLoggedIn e){
-            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"nooneloggedin");
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,NO_ONE_LOGGED_IN);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
         return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
@@ -219,7 +220,7 @@ public class EventResource {
         try {
             foundEvents = eventService.findUserEvents(pageable);
         }catch (UserNotLoggedIn e){
-            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"nooneloggedin");
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,NO_ONE_LOGGED_IN);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
         return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
@@ -238,7 +239,7 @@ public class EventResource {
         try {
             foundEvents = eventService.findEventsAcceptedByUser(pageable);
         }catch (UserNotLoggedIn e){
-            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"nooneloggedin");
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,NO_ONE_LOGGED_IN);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
         return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());

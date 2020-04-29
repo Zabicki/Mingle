@@ -100,6 +100,30 @@ export default {
       ok: true,
     }
   },
+  getNearby: () => {
+    return {
+      ok: true,
+      data: require('../../shared/fixtures/get-events.json'),
+    }
+  },
+  getFromCity: () => {
+    return {
+      ok: true,
+      data: require('../../shared/fixtures/get-events.json'),
+    }
+  },
+  getHosted: () => {
+    return {
+      ok: true,
+      data: require('../../shared/fixtures/get-events.json'),
+    }
+  },
+  getAccepted: () => {
+    return {
+      ok: true,
+      data: require('../../shared/fixtures/get-events.json'),
+    }
+  },
   updateMessage: message => {
     return {
       ok: true,

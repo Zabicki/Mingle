@@ -84,6 +84,10 @@ const create = (baseURL = AppConfig.apiUrl) => {
   const updateEvent = event => api.put('api/events', event)
   const deleteEvent = eventId => api.delete('api/events/' + eventId)
   const acceptEvent = eventId => api.put('api/events/accept/' + eventId)
+  const getNearby = (options, latitude, longitude, radius) => api.get(`api/events/near/${latitude}/${longitude}/${radius}`,options)
+  const getFromCity = (options, city) => api.get('api/events/city/' + city, options)
+  const getHosted = options => api.get('api/events/user/hosted',options)
+  const getAccepted = options => api.get('api/events/user/accepted',options)
 
   const getMessage = messageId => api.get('api/messages/' + messageId)
   const getMessages = options => api.get('api/messages', options)
@@ -136,6 +140,10 @@ const create = (baseURL = AppConfig.apiUrl) => {
     getEvent,
     deleteEvent,
     acceptEvent,
+    getNearby,
+    getFromCity,
+    getHosted,
+    getAccepted,
 
     createMessage,
     updateMessage,

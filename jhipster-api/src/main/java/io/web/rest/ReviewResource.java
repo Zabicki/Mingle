@@ -54,7 +54,7 @@ public class ReviewResource {
         }
         Review result = reviewService.save(review);
         return ResponseEntity.created(new URI("/api/reviews/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -75,7 +75,7 @@ public class ReviewResource {
         }
         Review result = reviewService.save(review);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, review.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, review.getId()))
             .body(result);
     }
 

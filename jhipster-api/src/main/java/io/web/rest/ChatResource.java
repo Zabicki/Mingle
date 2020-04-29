@@ -53,7 +53,7 @@ public class ChatResource {
         }
         Chat result = chatService.save(chat);
         return ResponseEntity.created(new URI("/api/chats/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -74,7 +74,7 @@ public class ChatResource {
         }
         Chat result = chatService.save(chat);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, chat.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, chat.getId()))
             .body(result);
     }
 

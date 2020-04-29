@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional; 
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -54,7 +53,7 @@ public class MessageResource {
         }
         Message result = messageRepository.save(message);
         return ResponseEntity.created(new URI("/api/messages/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -75,7 +74,7 @@ public class MessageResource {
         }
         Message result = messageRepository.save(message);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, message.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, message.getId()))
             .body(result);
     }
 

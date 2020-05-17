@@ -4,7 +4,6 @@ import { Switch } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
-import Chat from './chat';
 import Favourites from './favourites';
 import Review from './review';
 import Event from './event';
@@ -14,7 +13,6 @@ const Routes = ({ match }) => (
   <div>
     <Switch>
       {/* prettier-ignore */}
-      <ErrorBoundaryRoute path={`${match.url}chat`} component={Chat} />
       <ErrorBoundaryRoute path={`${match.url}favourites`} component={Favourites} />
       <ErrorBoundaryRoute path={`${match.url}review`} component={Review} />
       <ErrorBoundaryRoute path={`${match.url}event`} component={Event} />

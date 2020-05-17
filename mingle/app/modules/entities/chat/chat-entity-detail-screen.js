@@ -1,12 +1,8 @@
 import React from 'react'
-import { FlatList, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation'
-import { chatEntityEditScreen } from '../../../navigation/layouts'
 
 import ChatActions from './chat.reducer'
-import RoundedButton from '../../../shared/components/rounded-button/rounded-button'
-import styles from './chat-entity-detail-screen-style'
 
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';

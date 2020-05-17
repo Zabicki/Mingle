@@ -12,10 +12,6 @@ import password, { PasswordState } from 'app/modules/account/password/password.r
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
 // prettier-ignore
-import chat, {
-  ChatState
-} from 'app/entities/chat/chat.reducer';
-// prettier-ignore
 import favourites, {
   FavouritesState
 } from 'app/entities/favourites/favourites.reducer';
@@ -39,7 +35,6 @@ export interface IRootState {
   readonly passwordReset: PasswordResetState;
   readonly password: PasswordState;
   readonly settings: SettingsState;
-  readonly chat: ChatState;
   readonly favourites: FavouritesState;
   readonly review: ReviewState;
   readonly event: EventState;
@@ -57,7 +52,6 @@ const rootReducer = combineReducers<IRootState>({
   passwordReset,
   password,
   settings,
-  chat,
   favourites,
   review,
   event,

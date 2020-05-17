@@ -56,7 +56,8 @@ export default function* root() {
     takeLatest(ForgotPasswordTypes.FORGOT_PASSWORD_REQUEST, forgotPassword, api),
     takeLatest(ChangePasswordTypes.CHANGE_PASSWORD_REQUEST, changePassword, api),
 
-    takeLatest(ChatTypes.CHAT_REQUEST, getChat, api),
+    takeLatest(ChatTypes.CHAT_MESSAGES_REQUEST, getChat, api),
+    takeLatest(ChatTypes.CHAT_INIT_MESSAGES_REQUEST, getChat, api),
     takeLatest(ChatTypes.CHAT_ALL_REQUEST, getChats, api),
     takeLatest(ChatTypes.CHAT_UPDATE_REQUEST, updateChat, api),
     takeLatest(ChatTypes.CHAT_DELETE_REQUEST, deleteChat, api),

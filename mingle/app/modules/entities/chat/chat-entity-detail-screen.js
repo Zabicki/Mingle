@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, ScrollView, Text, View } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation'
 import { chatEntityEditScreen } from '../../../navigation/layouts'
@@ -8,72 +8,121 @@ import ChatActions from './chat.reducer'
 import RoundedButton from '../../../shared/components/rounded-button/rounded-button'
 import styles from './chat-entity-detail-screen-style'
 
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+
+import { GiftedChat } from 'react-native-gifted-chat';
+
+if (typeof TextEncoder !== 'function') {
+    const TextEncodingPolyfill = require('text-encoding')
+    TextEncoder = TextEncodingPolyfill.TextEncoder
+    TextDecoder = TextEncodingPolyfill.TextDecoder
+}
+
+var client = null;
 class ChatEntityDetailScreen extends React.Component {
   constructor(props) {
     super(props)
     Navigation.events().bindComponent(this)
-    this.props.getChat(this.props.data.entityId)
+    this.state = {
+      page: 0,
+      sort: 'createdAt,desc',
+      size: 20,
+      channelConnected: false,
+    };
+    this.props.getInitChat(this.props.data.entityId, { page: this.state.page, sort: this.state.sort, size: this.state.size })
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.deleting && !this.props.deleting) {
-      if (this.props.errorDeleting) {
-        Alert.alert('Error', 'Something went wrong deleting the entity', [{ text: 'OK' }])
-      } else {
-        this.props.getAllChats()
-        Navigation.pop(this.props.componentId)
-      }
+  componentDidMount(){
+    const url = "http://localhost:8080/websocket/chat";
+    client = new Client({
+    brokerURL: url,
+    connectHeaders: this.customHeaders,
+    webSocketFactory: () => {
+      return SockJS(url);
+    },
+    onConnect: (frame) => {
+      this.setState({
+        channelConnected: true,
+      });
+
+      client.subscribe("/topic/chat/" + this.props.data.entityId , this.onMessageReceived);
+    },
+    });
+    client.activate();
+  }
+
+  componentWillUnMount(){
+    client.deactivate();
+    this.props.clearMessages();
+  }
+
+  sendMessage = (message) => {
+    const jsonMessage = {
+    "text": message.text,
+     };
+    if(this.state.channelConnected){
+      client.publish({destination: "/topic/send/"+ this.props.data.entityId, body: JSON.stringify(jsonMessage)})
     }
   }
 
-  confirmDelete = () => {
-    Alert.alert(
-      'Delete Chat?',
-      'Are you sure you want to delete the Chat?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'OK',
-          onPress: () => {
-            this.props.deleteChat(this.props.data.entityId)
-          },
-        },
-      ],
-      { cancelable: false },
-    )
+   onMessageReceived = (payload) => {
+     var message = JSON.parse(payload.body);
+     this.props.newMessage(message);
+   }
+
+
+  loadMOAR = () => {
+    if(this.props.done || this.props.fetching ){
+      return
+    }
+    this.setState((state)=>{
+      const newPage = state.page +1;
+      return {
+        page: newPage,
+      };
+    },
+    () => this.fetchMessages());
   }
+
+  fetchMessages = () =>{
+    this.props.getChat(this.props.data.entityId, { page: this.state.page, sort: this.state.sort, size: this.state.size })
+  }
+
+  customHeaders = {
+    "Authorization": "Bearer " + this.props.token,
+  };
+
 
   render() {
-    if (!this.props.chat) {
-      return (
-        <View>
-          <Text>Loading...</Text>
-        </View>
-      )
-    }
     return (
-      <ScrollView style={styles.container}>
-        <Text>ID: {this.props.chat.id}</Text>
-        <RoundedButton text="Edit" onPress={chatEntityEditScreen.bind(this, { entityId: this.props.chat.id })} />
-        <RoundedButton text="Delete" onPress={this.confirmDelete} />
-      </ScrollView>
+      <GiftedChat
+        messages = {this.props.messages}
+        onSend = { message => this.sendMessage(message[0]) }
+        //Todo add logged user login here
+        user = {{login: "admin"}}
+        loadEarlier = {!this.props.done}
+        onLoadEarlier = {this.loadMOAR}
+      />
     )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    chat: state.chats.chat,
-    deleting: state.chats.deleting,
-    errorDeleting: state.chats.errorDeleting,
+    token: state.login.authToken,
+    messages: state.chats.messages,
+    fetching: state.chats.fetchingOne,
+    done: state.chats.done,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getChat: id => dispatch(ChatActions.chatRequest(id)),
-    getAllChats: options => dispatch(ChatActions.chatAllRequest(options)),
-    deleteChat: id => dispatch(ChatActions.chatDeleteRequest(id)),
+    getChat: (chatId, options) => dispatch(ChatActions.chatMessagesRequest(chatId,options)),
+    getInitChat: (chatId, options) => dispatch(ChatActions.chatInitMessagesRequest(chatId, options)),
+    newMessage: (message) => dispatch(ChatActions.chatNewMessage(message)),
+    clearMessages: () => dispatch(ChatActions.clearMessages()),
   }
 }
 

@@ -1,16 +1,20 @@
 package io.service;
 
 import io.domain.Chat;
+import io.domain.Message;
+import io.domain.User;
 import io.repository.ChatRepository;
+import io.repository.MessageRepository;
+import io.service.errors.UserNotLoggedIn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.ZonedDateTime;
 
 /**
  * Service Implementation for managing {@link Chat}.
@@ -22,8 +26,14 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
-    public ChatService(ChatRepository chatRepository) {
+    private final MessageRepository messageRepository;
+
+    @Autowired
+    private UserService userService;
+
+    public ChatService(ChatRepository chatRepository, MessageRepository messageRepository) {
         this.chatRepository = chatRepository;
+        this.messageRepository = messageRepository;
     }
 
     /**
@@ -38,34 +48,57 @@ public class ChatService {
     }
 
     /**
-     * Get all the chats.
+     * save a message.
      *
-     * @return the list of entities.
+     * @param message message to save.
+     * @return saved message.
      */
-    public List<Chat> findAll() {
-        log.debug("Request to get all Chats");
-        return chatRepository.findAllWithEagerRelationships();
+    public Message save(Message message){
+        log.debug("Request to save Message : {}", message);
+        return messageRepository.save(message);
     }
 
     /**
-     * Get all the chats with eager load of many-to-many relationships.
+     * get a page of messages from given chat.
      *
-     * @return the list of entities.
+     * @param pageable pagination information.
+     * @param chatId id of the chat.
+     * @return page of messages
      */
-    public Page<Chat> findAllWithEagerRelationships(Pageable pageable) {
-        return chatRepository.findAllWithEagerRelationships(pageable);
+    public Page<Message> getMessagesFromChat(Pageable pageable, String chatId){
+        return messageRepository.findByChat(chatId,pageable);
     }
-    
 
     /**
-     * Get one chat by id.
+     * submit message to save.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param channelId id of chat.
+     * @param message content of message.
+     * @return created message.
      */
-    public Optional<Chat> findOne(String id) {
-        log.debug("Request to get Chat : {}", id);
-        return chatRepository.findOneWithEagerRelationships(id);
+    public Message submitMessage(String channelId, String message){
+        User logged = userService.getUserWithAuthorities().orElseThrow(UserNotLoggedIn::new);
+        // Todo check if user is member of chat
+        // Todo improve exception if chat does not exist
+        Chat chat = chatRepository.findOneById(channelId).orElseThrow(RuntimeException::new);
+        Message newMessage = new Message()
+            .user(logged)
+            .createdAt(ZonedDateTime.now())
+            .text(message)
+            .chat(chat);
+        return save(newMessage);
+    }
+
+
+    /**
+     * get logged user chats.
+     *
+     * @param pageable pagination information.
+     * @return page of user chats.
+     */
+    public Page<Chat> getUserChats(Pageable pageable){
+        User logged = userService.getUserWithAuthorities().orElseThrow(UserNotLoggedIn::new);
+        return chatRepository.findAllByChatters(logged.getId(), pageable);
     }
 
     /**

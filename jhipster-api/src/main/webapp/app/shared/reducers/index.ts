@@ -20,10 +20,6 @@ import favourites, {
   FavouritesState
 } from 'app/entities/favourites/favourites.reducer';
 // prettier-ignore
-import message, {
-  MessageState
-} from 'app/entities/message/message.reducer';
-// prettier-ignore
 import review, {
   ReviewState
 } from 'app/entities/review/review.reducer';
@@ -45,7 +41,6 @@ export interface IRootState {
   readonly settings: SettingsState;
   readonly chat: ChatState;
   readonly favourites: FavouritesState;
-  readonly message: MessageState;
   readonly review: ReviewState;
   readonly event: EventState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
@@ -64,7 +59,6 @@ const rootReducer = combineReducers<IRootState>({
   settings,
   chat,
   favourites,
-  message,
   review,
   event,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */

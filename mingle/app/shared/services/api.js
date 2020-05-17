@@ -60,8 +60,8 @@ const create = (baseURL = AppConfig.apiUrl) => {
   const updateUser = user => api.put('api/users', user)
   const deleteUser = userId => api.delete('api/users/' + userId)
 
-  const getChat = chatId => api.get('api/chats/' + chatId)
-  const getChats = options => api.get('api/chats', options)
+  const getChat = (chatId, options) => api.get('api/chat/' + chatId, options)
+  const getChats = options => api.get('api/chat', options)
   const createChat = chat => api.post('api/chats', chat)
   const updateChat = chat => api.put('api/chats', chat)
   const deleteChat = chatId => api.delete('api/chats/' + chatId)

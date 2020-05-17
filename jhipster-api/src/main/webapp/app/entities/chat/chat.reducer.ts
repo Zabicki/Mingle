@@ -6,8 +6,11 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 
 import { IChat, defaultValue } from 'app/shared/model/chat.model';
 
+import { IMessage } from 'app/shared/model/message.model';
+
 export const ACTION_TYPES = {
   FETCH_CHAT_LIST: 'chat/FETCH_CHAT_LIST',
+  FETCH_MESSAGE: 'chat/FETCH_MESSAGE',
   FETCH_CHAT: 'chat/FETCH_CHAT',
   CREATE_CHAT: 'chat/CREATE_CHAT',
   UPDATE_CHAT: 'chat/UPDATE_CHAT',
@@ -19,6 +22,7 @@ const initialState = {
   loading: false,
   errorMessage: null,
   entities: [] as ReadonlyArray<IChat>,
+  messages: [] as ReadonlyArray<IMessage>,
   entity: defaultValue,
   updating: false,
   updateSuccess: false
@@ -32,6 +36,7 @@ export default (state: ChatState = initialState, action): ChatState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_CHAT_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CHAT):
+    case REQUEST(ACTION_TYPES.FETCH_MESSAGE):
       return {
         ...state,
         errorMessage: null,
@@ -52,6 +57,7 @@ export default (state: ChatState = initialState, action): ChatState => {
     case FAILURE(ACTION_TYPES.CREATE_CHAT):
     case FAILURE(ACTION_TYPES.UPDATE_CHAT):
     case FAILURE(ACTION_TYPES.DELETE_CHAT):
+    case FAILURE(ACTION_TYPES.FETCH_MESSAGE):
       return {
         ...state,
         loading: false,
@@ -64,6 +70,12 @@ export default (state: ChatState = initialState, action): ChatState => {
         ...state,
         loading: false,
         entities: action.payload.data
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_MESSAGE):
+      return{
+        ...state,
+        loading: false,
+        messages: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.FETCH_CHAT):
       return {
@@ -95,13 +107,18 @@ export default (state: ChatState = initialState, action): ChatState => {
   }
 };
 
-const apiUrl = 'api/chats';
+const apiUrl = 'api/chat';
 
 // Actions
 
 export const getEntities: ICrudGetAllAction<IChat> = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_CHAT_LIST,
   payload: axios.get<IChat>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
+});
+
+export const getMessages: ICrudGetAllAction<IMessage> = (channelId, page, size, sort) => ({
+  type: ACTION_TYPES.FETCH_MESSAGE,
+  payload: axios.get<IChat>(`${apiUrl}/${channelId}?cacheBuster=${new Date().getTime()}`)
 });
 
 export const getEntity: ICrudGetAction<IChat> = id => {

@@ -20,12 +20,8 @@ public class Chat implements Serializable {
     private String id;
 
     @DBRef
-    @Field("messages")
-    private Set<Message> messages = new HashSet<>();
-
-    @DBRef
-    @Field("chats")
-    private Set<User> chats = new HashSet<>();
+    @Field("chatters")
+    private Set<User> chatters = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -36,50 +32,27 @@ public class Chat implements Serializable {
         this.id = id;
     }
 
-    public Set<Message> getMessages() {
-        return messages;
+    public Set<User> getChatters() {
+        return chatters;
     }
 
-    public Chat messages(Set<Message> messages) {
-        this.messages = messages;
+    public Chat chatters(Set<User> users) {
+        this.chatters = users;
         return this;
     }
 
-    public Chat addMessages(Message message) {
-        this.messages.add(message);
+    public Chat addChatters(User user) {
+        this.chatters.add(user);
         return this;
     }
 
-    public Chat removeMessages(Message message) {
-        this.messages.remove(message);
+    public Chat removeChatters(User user) {
+        this.chatters.remove(user);
         return this;
     }
 
-    public void setMessages(Set<Message> messages) {
-        this.messages = messages;
-    }
-
-    public Set<User> getChats() {
-        return chats;
-    }
-
-    public Chat chats(Set<User> users) {
-        this.chats = users;
-        return this;
-    }
-
-    public Chat addChats(User user) {
-        this.chats.add(user);
-        return this;
-    }
-
-    public Chat removeChats(User user) {
-        this.chats.remove(user);
-        return this;
-    }
-
-    public void setChats(Set<User> users) {
-        this.chats = users;
+    public void setChatters(Set<User> users) {
+        this.chatters = users;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

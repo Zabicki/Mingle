@@ -6,56 +6,59 @@ import { ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './chat.reducer';
+import { getMessages } from './chat.reducer';
 import { IChat } from 'app/shared/model/chat.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+
+import { AvForm, AvInput } from 'availity-reactstrap-validation';
 
 export interface IChatDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export class ChatDetail extends React.Component<IChatDetailProps> {
+  constructor(props) {
+    super(props);
+  }
   componentDidMount() {
-    this.props.getEntity(this.props.match.params.id);
+    this.props.getMessages(this.props.match.params.id);
+  }
+
+  sendMessage = (event, errors, values)=>{
+    const message = values.message;
+
   }
 
   render() {
-    const { chatEntity } = this.props;
+    const { messages } = this.props;
     return (
-      <Row>
-        <Col md="8">
-          <h2>
-            Chat [<b>{chatEntity.id}</b>]
-          </h2>
-          <dl className="jh-entity-details">
-            <dt>Chats</dt>
-            <dd>
-              {chatEntity.chats
-                ? chatEntity.chats.map((val, i) => (
-                    <span key={val.id}>
-                      <a>{val.id}</a>
-                      {i === chatEntity.chats.length - 1 ? '' : ', '}
-                    </span>
-                  ))
-                : null}{' '}
-            </dd>
-          </dl>
-          <Button tag={Link} to="/chat" replace color="info">
-            <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
-          </Button>
-          &nbsp;
-          <Button tag={Link} to={`/chat/${chatEntity.id}/edit`} replace color="primary">
-            <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-          </Button>
-        </Col>
-      </Row>
+      <div>
+        <table>
+            {messages && messages.map( (message, i) =>
+              <tr key={i}>
+                <td>{message.author.login}</td>
+                <td>{message.date}</td>
+                <td>{message.text}</td>
+              </tr>
+            )}
+        </table>
+        <AvForm id="form-control" name="send" onSubmit={this.sendMessage}>
+            <div className="form-group">
+              <AvInput className="form-control" type="text" name="message"/>
+            </div>
+            <Button color="primary" id="save-entity" type="submit">
+              <FontAwesomeIcon icon="save"/>
+              &nbsp; Send
+            </Button>
+        </AvForm>
+      </div>
     );
   }
 }
 
 const mapStateToProps = ({ chat }: IRootState) => ({
-  chatEntity: chat.entity
+  messages: chat.messages
 });
 
-const mapDispatchToProps = { getEntity };
+const mapDispatchToProps = { getMessages };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

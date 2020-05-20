@@ -3,11 +3,13 @@ package io.service;
 import io.config.Constants;
 import io.domain.Authority;
 import io.domain.User;
+import io.domain.enumeration.Category;
 import io.repository.AuthorityRepository;
 import io.repository.UserRepository;
 import io.security.AuthoritiesConstants;
 import io.security.SecurityUtils;
 import io.service.dto.UserDTO;
+import io.service.errors.UserNotLoggedIn;
 import io.service.util.RandomUtil;
 
 import org.slf4j.Logger;
@@ -276,6 +278,19 @@ public class UserService {
 
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
+    }
+
+    /**
+     * setting logged user favourites.
+     *
+     * @param set
+     */
+    public void setUserFavourites(Set<Category> set){
+        User user = getUserWithAuthorities().orElseThrow(
+            UserNotLoggedIn::new
+        );
+        user.setFavourites(set);
+        userRepository.save(user);
     }
 
     /**

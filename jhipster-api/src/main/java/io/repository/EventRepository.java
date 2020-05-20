@@ -2,12 +2,12 @@ package io.repository;
 import io.domain.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +26,23 @@ public interface EventRepository extends MongoRepository<Event, String> {
     @Query("{'id': ?0}")
     Optional<Event> findOneWithEagerRelationships(String id);
 
-    Page<Event> findByLocationNear(Pageable pageable, Point point, Distance distance);
+    @Query("{'location': { $nearSphere: { $geometry: {type: 'Point', coordinates: ?0 } , $maxDistance: ?1 } }, " +
+        "'category': { $regex: ?2 }, " +
+        "'date': {$gte: ?4}, " +
+        "'host': {$ne: ?3}, " +
+        "'participants': {$ne: ?3 } }")
+    Page<Event> findByLocationNear(Point point, double distance, String favourites, String userId, LocalDate date, Pageable pageable);
 
-    Page<Event> findByCity(Pageable pageable, String city);
 
+    @Query("{'city' : ?0, " +
+        "'category': { $regex: ?1 }, " +
+        "'date': {$gte: ?3}, " +
+        "'host': { $ne: ?2 }, " +
+        "'participants': { $ne: ?2} }")
+    Page<Event> findByCity( String city, String favourites, String userId, LocalDate date, Pageable pageable);
+
+
+    Page<Event> findByHost(String host,Pageable pageable);
+
+    Page<Event> findByParticipants(String user, Pageable pageable);
 }

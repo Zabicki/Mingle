@@ -192,6 +192,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.langKey = langKey;
     }
 
+    public Set<Category> getFavourites(){return this.favourites;}
+
     public User favourites(Set<Category> favourites) {
         this.favourites = favourites;
         return this;

@@ -31,7 +31,7 @@ import { getUser, getUsers, updateUser, deleteUser } from '../../shared/sagas/us
 import { getChat, getChats, updateChat, deleteChat } from '../../modules/entities/chat/chat.sagas'
 import { getFavourite, getFavourites, updateFavourite, deleteFavourite } from '../../modules/entities/favourites/favourites.sagas'
 import { getReview, getReviews, updateReview, deleteReview } from '../../modules/entities/review/review.sagas'
-import { getEvent, getEvents, updateEvent, deleteEvent, acceptEvent } from '../../modules/entities/event/event.sagas'
+import { getEvent, getEvents, updateEvent, deleteEvent, acceptEvent, getNearby, getFromCity, getHosted, getAccepted } from '../../modules/entities/event/event.sagas'
 import { getMessage, getMessages, updateMessage, deleteMessage } from '../../modules/entities/message/message.sagas'
 // ignite-jhipster-saga-method-import-needle
 
@@ -76,6 +76,10 @@ export default function* root() {
     takeLatest(EventTypes.EVENT_UPDATE_REQUEST, updateEvent, api),
     takeLatest(EventTypes.EVENT_DELETE_REQUEST, deleteEvent, api),
     takeLatest(EventTypes.EVENT_ACCEPT_REQUEST, acceptEvent, api),
+    takeLatest(EventTypes.EVENT_ALL_NEARBY_REQUEST,getNearby,api),
+    takeLatest(EventTypes.EVENT_ALL_FROM_CITY_REQUEST,getFromCity,api),
+    takeLatest(EventTypes.EVENT_ALL_HOSTED_REQUEST,getHosted,api),
+    takeLatest(EventTypes.EVENT_ALL_ACCEPTED_REQUEST,getAccepted,api),
 
     takeLatest(MessageTypes.MESSAGE_REQUEST, getMessage, api),
     takeLatest(MessageTypes.MESSAGE_ALL_REQUEST, getMessages, api),

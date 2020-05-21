@@ -3,6 +3,7 @@ package io.config;
 import io.github.jhipster.config.JHipsterProperties;
 import io.security.AuthoritiesConstants;
 import io.security.jwt.TokenProvider;
+import io.service.ChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -40,9 +41,12 @@ public class SocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
 
     private final TokenProvider tokenProvider;
 
-    public SocketBrokerConfig(JHipsterProperties jHipsterProperties, TokenProvider tokenProvider){
+    private ChatService chatService;
+
+    public SocketBrokerConfig(JHipsterProperties jHipsterProperties, TokenProvider tokenProvider, ChatService chatService){
         this.jHipsterProperties = jHipsterProperties;
         this.tokenProvider = tokenProvider;
+        this.chatService = chatService;
     }
 
     @Override
@@ -102,15 +106,25 @@ public class SocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message,StompHeaderAccessor.class);
 
-                if(StompCommand.CONNECT.equals(accessor.getCommand())){
+                if(StompCommand.CONNECT.equals(accessor.getCommand())) {
                     List<String> authorization = accessor.getNativeHeader("Authorization");
                     log.debug("Authorization: {}",authorization);
-                    if(authorization != null){
+                    if (authorization != null) {
                         String token = authorization.get(0).split(" ")[1];
                         Principal principal = tokenProvider.getAuthentication(token);
                         accessor.setUser(principal);
+                    } else {
+                        return null;
                     }
                 }
+                if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())){
+                    String destination= accessor.getDestination();
+                    log.debug("Destination: {}",destination);
+                    String chatId = destination.split("/")[3];
+                    log.debug("Chat ID: {}",chatId);
+                    chatService.checkIfCurrentUserHasAccessToChat(chatId);
+                }
+
                 return message;
             }
         });

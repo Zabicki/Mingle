@@ -5,6 +5,8 @@ import io.domain.Message;
 import io.domain.User;
 import io.repository.ChatRepository;
 import io.repository.MessageRepository;
+import io.service.errors.InvalidId;
+import io.service.errors.UserHaveNoAccess;
 import io.service.errors.UserNotLoggedIn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,15 +80,33 @@ public class ChatService {
      */
     public Message submitMessage(String channelId, String message){
         User logged = userService.getUserWithAuthorities().orElseThrow(UserNotLoggedIn::new);
-        // Todo check if user is member of chat
-        // Todo improve exception if chat does not exist
-        Chat chat = chatRepository.findOneById(channelId).orElseThrow(RuntimeException::new);
+
+        Chat chat = chatRepository.findOneById(channelId).orElseThrow(InvalidId::new);
+
+        checkIfCurrentUserHasAccessToChat(channelId);
+
         Message newMessage = new Message()
             .user(logged)
             .createdAt(ZonedDateTime.now())
             .text(message)
             .chat(chat);
         return save(newMessage);
+    }
+
+    /**
+     * check if user has access to given chat.
+     *
+     * @param chatId chat id.
+     * @return boolean response.
+     */
+    public Boolean checkIfCurrentUserHasAccessToChat(String chatId){
+        Chat chat = chatRepository.findOneById(chatId).orElseThrow(InvalidId::new);
+        User logged = userService.getUserWithAuthorities().orElseThrow(UserNotLoggedIn::new);
+        log.debug("Chatters: {}",chat.getChatters());
+        if(!chat.getChatters().contains(logged)){
+            throw new UserHaveNoAccess();
+        }
+        return true;
     }
 
 

@@ -8,11 +8,11 @@ import io.repository.ChatRepository;
 import io.repository.MessageRepository;
 import io.repository.UserRepository;
 import io.service.ChatService;
+import io.service.UserService;
 import io.web.rest.errors.ExceptionTranslator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +20,7 @@ import org.springframework.data.web.PageableArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
@@ -33,8 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = MingleApp.class)
 public class SocketControllerIT {
 
-
-    private Chat chat;
 
     @Autowired
     private UserRepository userRepository;
@@ -55,6 +54,9 @@ public class SocketControllerIT {
     private Validator validator;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -62,7 +64,7 @@ public class SocketControllerIT {
 
     private User user;
 
-    private Message message;
+    private Chat chat;
 
     private MockMvc socketControllerMvc;
 
@@ -79,8 +81,6 @@ public class SocketControllerIT {
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator).build();
 
-
-
         userRepository.deleteAll();
         chatRepository.deleteAll();
         messageRepository.deleteAll();
@@ -92,16 +92,18 @@ public class SocketControllerIT {
         user.setEmail("some@mail.com");
         userRepository.save(user);
 
-        chat = new Chat().addChatters(user);
-        chatRepository.save(chat);
-
-        message = new Message().user(user).text("some message").chat(chat);
-        messageRepository.save(message);
+        chat = new Chat();
     }
 
     @Test
+    @DirtiesContext
+    @WithMockUser("user")
     public void testGetMessages() throws Exception{
+        chat.addChatters(userService.getUserWithAuthorities().get());
+        chatRepository.save(chat);
 
+        Message message = new Message().user(user).text("some message").chat(chat);
+        messageRepository.save(message);
 
         socketControllerMvc.perform(get("/api/chat/" + chat.getId()))
             .andExpect(status().isOk())
@@ -111,8 +113,12 @@ public class SocketControllerIT {
     }
 
     @Test
+    @DirtiesContext
     @WithMockUser("user")
     public void testGetChats() throws Exception{
+        chat.addChatters(userService.getUserWithAuthorities().get());
+        chatRepository.save(chat);
+
         Chat chat2 = new Chat();
         chatRepository.save(chat2);
 

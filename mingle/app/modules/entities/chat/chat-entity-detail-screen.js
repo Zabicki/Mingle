@@ -1,4 +1,5 @@
 import React from 'react'
+import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation'
 
@@ -91,12 +92,13 @@ class ChatEntityDetailScreen extends React.Component {
 
 
   render() {
+    const tok = jwt_decode(this.props.token);
     return (
       <GiftedChat
         messages = {this.props.messages}
         onSend = { message => this.sendMessage(message[0]) }
         //Todo add logged user login here
-        user = {{login: "admin"}}
+        user = {{login: tok.sub}}
         loadEarlier = {!this.props.done}
         onLoadEarlier = {this.loadMOAR}
       />

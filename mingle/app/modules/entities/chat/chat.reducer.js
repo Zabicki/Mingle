@@ -79,11 +79,15 @@ export const deleteRequest = state =>
 
 // successful api lookup for single entity
 export const success = (state, action) => {
-  const { messages } = action
+  const { messages } = action;
+  const array = [...state.messages, ...messages];
+  // delete non unique messages
+  const output = array.filter( (v,i,self) => self.findIndex(t=>(t._id === v._id)) ===i )
+
   return state.merge({
     fetchingOne: false,
     errorOne: null,
-    messages: [...state.messages, ...messages],
+    messages: output,
     done: messages.length < 20,
   })
 }

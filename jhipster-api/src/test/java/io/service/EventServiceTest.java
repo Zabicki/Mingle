@@ -1,10 +1,12 @@
 package io.service;
 
 import io.MingleApp;
+import io.domain.Chat;
 import io.domain.Event;
 import io.domain.User;
 import io.domain.enumeration.Category;
 import io.domain.enumeration.Privacy;
+import io.repository.ChatRepository;
 import io.repository.EventRepository;
 import io.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,6 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +37,9 @@ class EventServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ChatRepository chatRepository;
 
     @Autowired
     private UserService userService;
@@ -96,6 +102,8 @@ class EventServiceTest {
         user2.setFavourites(new HashSet<>());
         user2.setEmail("some2@mail.com");
         userRepository.save(user2);
+
+        chatRepository.deleteAll();
     }
 
     @Test
@@ -271,5 +279,58 @@ class EventServiceTest {
         assertThat(foundEvents.getContent().get(0).getName()).isEqualTo("skiing");
         assertThat(foundEvents.getContent().get(1).getName()).isEqualTo("basketball");
 
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void testAcceptWithAlreadyCreatedChat(){
+        event2.setHost(user2);
+        eventRepository.save(event2);
+
+        Chat chat = new Chat().event(event2).addChatters(user2);
+        chatRepository.save(chat);
+
+        assertThat(chatRepository.findAllByChatters(userService.getUserWithAuthorities().get().getId(), pageable)
+            .getTotalElements()).isEqualTo(0);
+
+        eventService.acceptEvent(event2.getId());
+
+        List<Chat> chats = chatRepository.findAllByChatters(userService.getUserWithAuthorities().get().getId(),pageable).getContent();
+
+        assertThat(chats.size()).isEqualTo(1);
+        assertThat(chats.get(0).getId()).isEqualTo(chat.getId());
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void testAcceptWithNotCreatedChat(){
+        event2.setHost(user2);
+        eventRepository.save(event2);
+
+        assertThat(chatRepository.findAllByChatters(userService.getUserWithAuthorities().get().getId(), pageable)
+            .getTotalElements()).isEqualTo(0);
+
+        eventService.acceptEvent(event2.getId());
+
+        List<Chat> chats = chatRepository.findAllByChatters(userService.getUserWithAuthorities().get().getId(),pageable).getContent();
+
+        assertThat(chats.size()).isEqualTo(1);
+    }
+
+    @Test
+    @WithMockUser("user")
+    public void testCreateEventCreatesChat(){
+        Event newEvent = createEvent("test","great description","Cracow","just address", cracowLocation,
+            LocalDate.now().plusMonths(25),false,Category.SPORT,Privacy.PUBLIC);
+
+        assertThat(chatRepository.findAll(pageable).getTotalElements()).isEqualTo(0);
+
+        eventService.createEvent(newEvent);
+
+        assertThat(chatRepository.findAll(pageable).getTotalElements()).isEqualTo(1);
+        assertThat(chatRepository.findAllByChatters(userService.getUserWithAuthorities().get().getId(), pageable)
+            .getTotalElements()).isEqualTo(1);
+
+        assertThat(chatRepository.findOneByEvent(newEvent.getId())).isPresent();
     }
 }

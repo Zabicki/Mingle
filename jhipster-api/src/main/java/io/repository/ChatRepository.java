@@ -2,11 +2,9 @@ package io.repository;
 import io.domain.Chat;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,13 +13,9 @@ import java.util.Optional;
 @Repository
 public interface ChatRepository extends MongoRepository<Chat, String> {
 
-    @Query("{}")
-    Page<Chat> findAllWithEagerRelationships(Pageable pageable);
+    Page<Chat> findAllByChatters(String id, Pageable pageable);
 
-    @Query("{}")
-    List<Chat> findAllWithEagerRelationships();
+    Optional<Chat> findOneById(String id);
 
-    @Query("{'id': ?0}")
-    Optional<Chat> findOneWithEagerRelationships(String id);
-
+    Optional<Chat> findOneByEvent(String id);
 }

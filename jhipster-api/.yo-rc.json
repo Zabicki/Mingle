@@ -12,7 +12,7 @@
     "authenticationType": "jwt",
     "cacheProvider": "ehcache",
     "enableHibernateCache": false,
-    "websocket": false,
+    "websocket": "spring-websocket",
     "databaseType": "mongodb",
     "devDatabaseType": "mongodb",
     "prodDatabaseType": "mongodb",

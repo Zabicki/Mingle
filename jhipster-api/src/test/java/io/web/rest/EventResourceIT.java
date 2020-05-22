@@ -21,6 +21,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Base64Utils;
@@ -132,6 +133,7 @@ public class EventResourceIT {
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator).build();
+
         userRepository.deleteAll();
         user = new User();
         user.setLogin("user");
@@ -195,6 +197,8 @@ public class EventResourceIT {
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
+    @WithMockUser("user")
     public void createEvent() throws Exception {
         int databaseSizeBeforeCreate = eventRepository.findAll().size();
 
@@ -221,9 +225,11 @@ public class EventResourceIT {
         assertThat(testEvent.getInterval()).isEqualTo(DEFAULT_INTERVAL);
         assertThat(testEvent.getCategory()).isEqualTo(DEFAULT_CATEGORY);
         assertThat(testEvent.getPrivacy()).isEqualTo(DEFAULT_PRIVACY);
+        assertThat(testEvent.getHost()).isEqualTo(userService.getUserWithAuthorities().get());
     }
 
     @Test
+    @WithMockUser("user")
     public void createEventWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = eventRepository.findAll().size();
 

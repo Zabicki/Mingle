@@ -2,6 +2,8 @@ package io.web.rest;
 
 import io.domain.Event;
 import io.service.EventService;
+import io.service.errors.EventIsFull;
+import io.service.errors.InvalidId;
 import io.service.errors.UserNotLoggedIn;
 import io.web.rest.errors.BadRequestAlertException;
 
@@ -61,7 +63,7 @@ public class EventResource {
         if (event.getId() != null) {
             throw new BadRequestAlertException("A new event cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Event result = eventService.save(event);
+        Event result = eventService.createEvent(event);
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
             .body(result);
@@ -101,7 +103,7 @@ public class EventResource {
         try {
             result = eventService.acceptEvent(id);
         }
-        catch (Exception e){
+        catch (InvalidId | UserNotLoggedIn | EventIsFull e){
             throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"accepterror");
         }
         return ResponseEntity.ok()

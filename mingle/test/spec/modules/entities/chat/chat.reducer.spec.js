@@ -1,10 +1,16 @@
 import Actions, { reducer, INITIAL_STATE } from '../../../../../app/modules/entities/chat/chat.reducer'
 
-test('attempt retrieving a single chat', () => {
-  const state = reducer(INITIAL_STATE, Actions.chatRequest({ id: 1 }))
+test('attempt retrieving a page of chat messages', () => {
+  const state = reducer(INITIAL_STATE, Actions.chatMessagesRequest({ id: 1 }))
 
   expect(state.fetchingOne).toBe(true)
-  expect(state.chat).toBe(null)
+  expect(state.messages).toEqual([])
+})
+
+test('attempt retrieving an initial page of chat', () => {
+  const state = reducer(INITIAL_STATE, Actions.chatInitMessagesRequest({ id: 1 }))
+
+  expect(state.fetchingOne).toBe(true)
 })
 
 test('attempt retrieving a list of chat', () => {
@@ -26,11 +32,11 @@ test('attempt to deleting a chat', () => {
 })
 
 test('success retrieving a chat', () => {
-  const state = reducer(INITIAL_STATE, Actions.chatSuccess({ id: 1 }))
+  const state = reducer(INITIAL_STATE, Actions.chatMessagesSuccess([{ id: 1 }]))
 
   expect(state.fetchingOne).toBe(false)
   expect(state.errorOne).toBe(null)
-  expect(state.chat).toEqual({ id: 1 })
+  expect(state.messages).toEqual([{ id: 1 }])
 })
 
 test('success retrieving a list of chat', () => {
@@ -57,11 +63,10 @@ test('success deleting a chat', () => {
 })
 
 test('failure retrieving a chat', () => {
-  const state = reducer(INITIAL_STATE, Actions.chatFailure({ error: 'Not found' }))
+  const state = reducer(INITIAL_STATE, Actions.chatMessagesFailure({ error: 'Not found' }))
 
   expect(state.fetchingOne).toBe(false)
   expect(state.errorOne).toEqual({ error: 'Not found' })
-  expect(state.chat).toEqual(null)
 })
 
 test('failure retrieving a list of chat', () => {
@@ -85,4 +90,16 @@ test('failure deleting a chat', () => {
   expect(state.deleting).toBe(false)
   expect(state.errorDeleting).toEqual({ error: 'Not found' })
   expect(state.chat).toEqual(INITIAL_STATE.chat)
+})
+
+test("attempt clearing messages", () => {
+  const state = reducer(INITIAL_STATE, Actions.clearMessages())
+
+  expect(state.messages).toEqual([])
+})
+
+test("attempt adding message", () => {
+  const state = reducer(INITIAL_STATE, Actions.chatNewMessage({id: 2}))
+
+  expect(state.messages).toEqual([{id: 2}])
 })

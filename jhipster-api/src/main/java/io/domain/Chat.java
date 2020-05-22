@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +24,10 @@ public class Chat implements Serializable {
     @Field("chatters")
     private Set<User> chatters = new HashSet<>();
 
+    @DBRef
+    @Field("event")
+    private Event event;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
         return id;
@@ -30,6 +35,19 @@ public class Chat implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Event getEvent(){
+        return event;
+    }
+
+    public void setEvent(Event event){
+        this.event = event;
+    }
+
+    public Chat event(Event event){
+        this.event = event;
+        return this;
     }
 
     public Set<User> getChatters() {

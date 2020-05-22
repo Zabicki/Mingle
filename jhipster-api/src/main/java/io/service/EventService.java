@@ -1,8 +1,10 @@
 package io.service;
 
+import io.domain.Chat;
 import io.domain.Event;
 import io.domain.User;
 import io.domain.enumeration.Category;
+import io.repository.ChatRepository;
 import io.repository.EventRepository;
 import io.service.errors.EventIsFull;
 import io.service.errors.InvalidId;
@@ -33,9 +35,12 @@ public class EventService {
 
     private final UserService userService;
 
-    public EventService(EventRepository eventRepository, UserService userService) {
+    private final ChatRepository chatRepository;
+
+    public EventService(EventRepository eventRepository, UserService userService, ChatRepository chatRepository) {
         this.eventRepository = eventRepository;
         this.userService = userService;
+        this.chatRepository = chatRepository;
     }
 
     /**
@@ -123,12 +128,8 @@ public class EventService {
      * @return returns updated event.
      */
     public Event acceptEvent(String id){
-        Event event = findOne(id).orElseThrow(
-            InvalidId::new
-        );
-        User logged = userService.getUserWithAuthorities().orElseThrow(
-            UserNotLoggedIn::new
-        );
+        Event event = findOne(id).orElseThrow(InvalidId::new);
+        User logged = userService.getUserWithAuthorities().orElseThrow(UserNotLoggedIn::new);
         if( event.getMaxParticipants() == null ||
         event.getParticipants().size() < event.getMaxParticipants()){
             event.addParticipants(logged);
@@ -137,6 +138,9 @@ public class EventService {
         else {
             throw new EventIsFull();
         }
+        Chat chat = chatRepository.findOneByEvent(id).orElse(new Chat().event(event).addChatters(event.getHost()));
+        chat = chat.addChatters(logged);
+        chatRepository.save(chat);
         return event;
     }
 
@@ -186,5 +190,19 @@ public class EventService {
             UserNotLoggedIn::new
         );
         return eventRepository.findByParticipants(logged.getId(),pageable);
+    }
+
+    /**
+     * creates event and chat.
+     *
+     * @param event event to create.
+     * @return created event.
+     */
+    public Event createEvent(Event event){
+        User logged = userService.getUserWithAuthorities().orElseThrow(UserNotLoggedIn::new);
+        event = save(event.host(logged));
+        Chat chat = new Chat().addChatters(logged).event(event);
+        chatRepository.save(chat);
+        return event;
     }
 }

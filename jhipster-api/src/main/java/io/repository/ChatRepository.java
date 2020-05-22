@@ -16,4 +16,6 @@ public interface ChatRepository extends MongoRepository<Chat, String> {
     Page<Chat> findAllByChatters(String id, Pageable pageable);
 
     Optional<Chat> findOneById(String id);
+
+    Optional<Chat> findOneByEvent(String id);
 }

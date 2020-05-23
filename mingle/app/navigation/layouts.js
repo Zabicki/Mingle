@@ -12,6 +12,7 @@ import LoginScreen from '../modules/login/login-screen'
 import LaunchScreen from '../modules/home/launch-screen'
 import DrawerContent from './drawer/drawer-content'
 import SettingsScreen from '../modules/account/settings/settings-screen'
+import PreferencesScreen from '../modules/account/preferences/preferences-screen'
 import RegisterScreen from '../modules/account/register/register-screen'
 import ForgotPasswordScreen from '../modules/account/password-reset/forgot-password-screen'
 import ChangePasswordScreen from '../modules/account/password/change-password-screen'
@@ -41,6 +42,7 @@ export const REGISTER_SCREEN = 'nav.RegisterScreen'
 export const FORGOT_PASSWORD_SCREEN = 'nav.ForgotPasswordScreen'
 export const CHANGE_PASSWORD_SCREEN = 'nav.ChangePasswordScreen'
 export const SETTINGS_SCREEN = 'nav.SettingsScreen'
+export const PREFERENCES_SCREEN = 'nav.PreferencesScreen'
 export const PROFILE_SCREEN = 'nav.ProfileScreen'
 export const EVENT_INFO_SCREEN = 'nav.EventInfoScreen'
 export const LAUNCH_SCREEN = 'nav.LaunchScreen'
@@ -154,6 +156,7 @@ export function registerScreensAndStartApp() {
   Navigation.registerComponentWithRedux(FORGOT_PASSWORD_SCREEN, () => ForgotPasswordScreen, Provider, store)
   Navigation.registerComponentWithRedux(CHANGE_PASSWORD_SCREEN, () => ChangePasswordScreen, Provider, store)
   Navigation.registerComponentWithRedux(SETTINGS_SCREEN, () => SettingsScreen, Provider, store)
+  Navigation.registerComponentWithRedux(PREFERENCES_SCREEN, () => PreferencesScreen, Provider, store)
   Navigation.registerComponentWithRedux(PROFILE_SCREEN, () => ProfileScreen, Provider, store)
   Navigation.registerComponentWithRedux(EVENT_INFO_SCREEN, () => EventInfoScreen, Provider, store)
   Navigation.registerComponentWithRedux(DRAWER_CONTENT, () => DrawerContent, Provider, store)
@@ -287,6 +290,20 @@ export const settingsScreen = () =>
       },
     },
   })
+export const preferencesScreen = () =>
+  Navigation.push('center', {
+    component: {
+      name: PREFERENCES_SCREEN,
+      options: {
+        topBar: {
+          title: {
+            text: 'Preferences',
+            color: Colors.snow,
+          },
+        },
+      },
+    },
+  })
 export const profileScreen = () =>
   Navigation.push('center', {
     component: {
@@ -295,20 +312,6 @@ export const profileScreen = () =>
         topBar: {
           title: {
             text: 'Profile',
-            color: Colors.snow,
-          },
-        },
-      },
-    },
-  })
-export const eventInfoScreen = () =>
-  Navigation.push('center', {
-    component: {
-      name: EVENT_INFO_SCREEN,
-      options: {
-        topBar: {
-          title: {
-            text: 'Event Info',
             color: Colors.snow,
           },
         },

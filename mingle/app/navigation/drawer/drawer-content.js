@@ -9,7 +9,6 @@ import {
   forgotPasswordScreen,
   changePasswordScreen,
   settingsScreen,
-  preferencesScreen,
   profileScreen,
   eventInfoScreen,
   entitiesScreen,
@@ -61,10 +60,6 @@ class DrawerContent extends Component {
     this.hideSideMenu()
     settingsScreen()
   }
-  handlePressPreferences = () => {
-    this.hideSideMenu()
-    preferencesScreen()
-  }
   handlePressProfile = () => {
     this.hideSideMenu()
     profileScreen()
@@ -103,7 +98,6 @@ class DrawerContent extends Component {
         {this.props.loggedIn && <DrawerButton testID="eventInfoDrawerButton" text="Event Info" onPress={this.handlePressEventInfo} />}
         {this.props.loggedIn && <DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
         {this.props.loggedIn && <DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}
-        {this.props.loggedIn && <DrawerButton testID="preferencesDrawerButton" text="Preferences" onPress={this.handlePressPreferences} />}
         {this.props.loggedIn && (
           <DrawerButton testID="changePasswordDrawerButton" text="Change Password" onPress={this.handlePressChangePassword} />
         )}

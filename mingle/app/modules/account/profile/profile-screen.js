@@ -86,7 +86,7 @@ class ProfileScreen extends React.Component {
                   </TextInput>
                   <TextInput
                     style={styles.textAge}
-                    type="text" value={this.props.account.age.toString()}
+                    type="text" value={this.props.account.age.toString()} //something is not working here 
                     onChange={e => this.handleChange(e, "age")}
                     editable={this.state.editable}>
                   </TextInput>

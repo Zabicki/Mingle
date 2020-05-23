@@ -8,20 +8,20 @@ const stepper = fn => mock => fn.next(mock).value
 
 test('get success path', () => {
   const response = FixtureAPI.getChat(1)
-  const step = stepper(getChat(FixtureAPI, { chatId: { id: 1 } }))
+  const step = stepper(getChat(FixtureAPI, { chatId: { id: 1 }, options: { page: 0, sort: 'id,asc', size: 20 } }))
   // Step 1: Hit the api
   step()
   // Step 2: Successful return and data!
-  expect(step(response)).toEqual(put(ChatActions.chatSuccess({ id: 1 })))
+  expect(step(response)).toEqual(put(ChatActions.chatMessagesSuccess({ id: 1 })))
 })
 
 test('get failure path', () => {
   const response = { ok: false }
-  const step = stepper(getChat(FixtureAPI, { chatId: { id: 1 } }))
+  const step = stepper(getChat(FixtureAPI, { chatId: { id: 1 }, options: { page: 0, sort: 'id,asc', size: 20 } }))
   // Step 1: Hit the api
   step()
   // Step 2: Failed response.
-  expect(step(response)).toEqual(put(ChatActions.chatFailure()))
+  expect(step(response)).toEqual(put(ChatActions.chatMessagesFailure()))
 })
 
 test('getAll success path', () => {

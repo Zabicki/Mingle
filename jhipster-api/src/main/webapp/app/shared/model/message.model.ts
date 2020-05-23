@@ -4,10 +4,10 @@ import { IChat } from 'app/shared/model/chat.model';
 
 export interface IMessage {
   id?: string;
-  message?: string;
+  text?: string;
   date?: Moment;
-  user?: IUser;
-  messages?: IChat;
+  author?: IUser;
+  chat?: IChat;
 }
 
 export const defaultValue: Readonly<IMessage> = {};

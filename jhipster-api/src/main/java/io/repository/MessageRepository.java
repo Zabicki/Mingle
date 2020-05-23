@@ -1,10 +1,10 @@
 package io.repository;
 import io.domain.Message;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 /**
  * Spring Data MongoDB repository for the Message entity.
@@ -12,5 +12,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 @Repository
 public interface MessageRepository extends MongoRepository<Message, String> {
+
+    Page<Message> findByChat(String chat, Pageable pageable);
 
 }

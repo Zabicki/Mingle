@@ -3,16 +3,16 @@ import { callApi } from '../../../shared/sagas/call-api.saga'
 import ChatActions from './chat.reducer'
 
 export function* getChat(api, action) {
-  const { chatId } = action
+  const { chatId, options } = action
   // make the call to the api
-  const apiCall = call(api.getChat, chatId)
+  const apiCall = call(api.getChat, chatId, options)
   const response = yield call(callApi, apiCall)
 
   // success?
   if (response.ok) {
-    yield put(ChatActions.chatSuccess(response.data))
+    yield put(ChatActions.chatMessagesSuccess(response.data))
   } else {
-    yield put(ChatActions.chatFailure(response.data))
+    yield put(ChatActions.chatMessagesFailure(response.data))
   }
 }
 

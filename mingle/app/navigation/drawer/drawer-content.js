@@ -9,6 +9,7 @@ import {
   forgotPasswordScreen,
   changePasswordScreen,
   settingsScreen,
+  preferencesScreen,
   profileScreen,
   entitiesScreen,
   storybookScreen,
@@ -59,6 +60,10 @@ class DrawerContent extends Component {
     this.hideSideMenu()
     settingsScreen()
   }
+  handlePressPreferences = () => {
+    this.hideSideMenu()
+    preferencesScreen()
+  }
   handlePressProfile = () => {
     this.hideSideMenu()
     profileScreen()
@@ -93,6 +98,10 @@ class DrawerContent extends Component {
         {this.props.loggedIn && <DrawerButton testID="profileDrawerButton" text="Profile" onPress={this.handlePressProfile} />}
         {this.props.loggedIn && <DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
         {this.props.loggedIn && <DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}
+        {this.props.loggedIn && <DrawerButton testID="preferencesDrawerButton" text="Preferences" onPress={this.handlePressPreferences} />}
+        {this.props.loggedIn && (
+          <DrawerButton testID="changePasswordDrawerButton" text="Change Password" onPress={this.handlePressChangePassword} />
+        )}
         {this.props.loggedIn && <DrawerButton testID="logoutDrawerButton" text="Logout" onPress={this.handlePressLogout} />}
         {__DEV__ && <DrawerButton testID="storybookDrawerButton" text="Storybook" onPress={this.handlePressStorybook} />}
       </ScrollView>

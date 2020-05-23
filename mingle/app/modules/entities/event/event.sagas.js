@@ -76,6 +76,63 @@ export function* acceptEvent(api,action){
   }
 
 }
+
+export function* getNearby(api,action){
+  const { options, latitude, longitude, radius }  = action
+
+  const apiCall = call(api.getNearby, [options, latitude, longitude, radius])
+  const response = yield call(callApi,apiCall)
+
+  //success?
+  if(response.ok){
+    yield put(EventActions.eventAllNearbySuccess(response.data))
+  } else{
+    yield put(EventActions.eventAllNearbyFailure(response.data))
+  }
+}
+
+export function* getFromCity(api,action){
+  const { options, city }  = action
+
+  const apiCall = call(api.getFromCity, [options, city])
+  const response = yield call(callApi,apiCall)
+
+  //success?
+  if(response.ok){
+    yield put(EventActions.eventAllFromCitySuccess(response.data))
+  } else{
+    yield put(EventActions.eventAllFromCityFailure(response.data))
+  }
+}
+
+export function* getHosted(api,action){
+  const { options }  = action
+
+  const apiCall = call(api.getHosted, options)
+  const response = yield call(callApi,apiCall)
+
+  //success?
+  if(response.ok){
+    yield put(EventActions.eventAllHostedSuccess(response.data))
+  } else{
+    yield put(EventActions.eventAllHostedFailure(response.data))
+  }
+}
+
+export function* getAccepted(api,action){
+  const { options }  = action
+
+  const apiCall = call(api.getAccepted, options)
+  const response = yield call(callApi,apiCall)
+
+  //success?
+  if(response.ok){
+    yield put(EventActions.eventAllAcceptedSuccess(response.data))
+  } else{
+    yield put(EventActions.eventAllAcceptedFailure(response.data))
+  }
+}
+
 function mapDateFields(data) {
   if (data.date) {
     data.date = localDateToJsDate(data.date)

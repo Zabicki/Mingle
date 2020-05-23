@@ -1,12 +1,12 @@
 package io.domain;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 /**
  * A Message.
@@ -22,15 +22,20 @@ public class Message implements Serializable {
     @Field("text")
     private String text;
 
-    @Field("date")
-    private LocalDate date;
+    @Field("createdAt")
+    private ZonedDateTime createdAt;
 
     @DBRef
-    @Field("author")
-    private User author;
+    @Field("user")
+    private User user;
+
+    @DBRef
+    @Field("chat")
+    private Chat chat;
 
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    @JsonProperty("_id")
     public String getId() {
         return id;
     }
@@ -52,30 +57,43 @@ public class Message implements Serializable {
         this.text = text;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public Message date(LocalDate date) {
-        this.date = date;
+    public Message createdAt(ZonedDateTime date) {
+        this.createdAt = date;
         return this;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setCreatedAt(ZonedDateTime date) {
+        this.createdAt = date;
     }
 
-    public User getAuthor() {
-        return author;
+    public User getUser() {
+        return user;
     }
 
-    public Message author(User user) {
-        this.author = user;
+    public Message user(User user) {
+        this.user = user;
         return this;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public Message chat(Chat chat) {
+        this.chat = chat;
+        return this;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 
 
@@ -100,7 +118,7 @@ public class Message implements Serializable {
         return "Message{" +
             "id=" + getId() +
             ", text='" + getText() + "'" +
-            ", date='" + getDate() + "'" +
+            ", date='" + getCreatedAt() + "'" +
             "}";
     }
 }

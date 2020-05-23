@@ -2,6 +2,9 @@ package io.web.rest;
 
 import io.domain.Event;
 import io.service.EventService;
+import io.service.errors.EventIsFull;
+import io.service.errors.InvalidId;
+import io.service.errors.UserNotLoggedIn;
 import io.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -12,11 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +38,8 @@ public class EventResource {
     private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
     private static final String ENTITY_NAME = "event";
+
+    private static final String NO_ONE_LOGGED_IN = "nooneloggedin";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -61,9 +63,9 @@ public class EventResource {
         if (event.getId() != null) {
             throw new BadRequestAlertException("A new event cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Event result = eventService.save(event);
+        Event result = eventService.createEvent(event);
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -84,7 +86,7 @@ public class EventResource {
         }
         Event result = eventService.save(event);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, event.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, event.getId()))
             .body(result);
     }
 
@@ -101,7 +103,7 @@ public class EventResource {
         try {
             result = eventService.acceptEvent(id);
         }
-        catch (Exception e){
+        catch (InvalidId | UserNotLoggedIn | EventIsFull e){
             throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,"accepterror");
         }
         return ResponseEntity.ok()
@@ -144,15 +146,19 @@ public class EventResource {
                                                           @PathVariable String longitude, @PathVariable String radius){
         log.debug("REST request to get all nearby events");
         Point point;
-        Distance distance;
+        double distance;
         try {
             point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
-            distance = new Distance(Double.parseDouble(radius), Metrics.KILOMETERS);
+            distance = Double.parseDouble(radius) * 1000;
         }catch (NumberFormatException e){
             throw new BadRequestAlertException("Parameters are not numbers ", latitude + ", " + longitude + "," + radius,"invalidParameters");
         }
-
-        Page<Event> foundEvents = eventService.findAllByLocationNear(pageable, point, distance);
+        Page<Event> foundEvents;
+        try {
+            foundEvents = eventService.findAllByLocationNear(pageable, point, distance);
+        }catch (UserNotLoggedIn e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,NO_ONE_LOGGED_IN);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
         return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
     }
@@ -167,7 +173,12 @@ public class EventResource {
     @GetMapping("/events/city/{city}")
     public ResponseEntity<List<Event>> getAllEventsFromCity(Pageable pageable, @PathVariable String city){
         log.debug("REST request to get all events from city : {}",city);
-        Page<Event> foundEvents = eventService.findAllFromCity(pageable,city);
+        Page<Event> foundEvents;
+        try {
+            foundEvents = eventService.findAllFromCity(pageable, city);
+        }catch (UserNotLoggedIn e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,NO_ONE_LOGGED_IN);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
         return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
     }
@@ -196,5 +207,43 @@ public class EventResource {
         log.debug("REST request to delete Event : {}", id);
         eventService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
+    }
+
+    /**
+     * {@code GET /events/user/hosted} : get events hosted by logged user.
+     *
+     * @param pageable pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200(ok)} and the list of events in body.
+     */
+    @GetMapping("/events/user/hosted")
+    public ResponseEntity<List<Event>> getUserEvents(Pageable pageable){
+        log.debug("REST request to get all events hosted by logged user ");
+        Page<Event> foundEvents;
+        try {
+            foundEvents = eventService.findUserEvents(pageable);
+        }catch (UserNotLoggedIn e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,NO_ONE_LOGGED_IN);
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
+        return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
+    }
+
+    /**
+     * {@code GET /events/user/accepted} : get events accepted by logged user.
+     *
+     * @param pageable pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200(ok)} and the list of events in body.
+     */
+    @GetMapping("/events/user/accepted")
+    public ResponseEntity<List<Event>> getUserAcceptedEvents(Pageable pageable){
+        log.debug("REST request to get all events accepted by logged user ");
+        Page<Event> foundEvents;
+        try {
+            foundEvents = eventService.findEventsAcceptedByUser(pageable);
+        }catch (UserNotLoggedIn e){
+            throw new BadRequestAlertException(e.getMessage(),ENTITY_NAME,NO_ONE_LOGGED_IN);
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),foundEvents);
+        return ResponseEntity.ok().headers(headers).body(foundEvents.getContent());
     }
 }

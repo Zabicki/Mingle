@@ -10,6 +10,7 @@ import {
   changePasswordScreen,
   settingsScreen,
   profileScreen,
+  eventInfoScreen,
   entitiesScreen,
   storybookScreen,
 } from '../layouts'
@@ -63,6 +64,10 @@ class DrawerContent extends Component {
     this.hideSideMenu()
     profileScreen()
   }
+  handlePressEventInfo = () => {
+    this.hideSideMenu()
+    eventInfoScreen()
+  }
   handlePressChangePassword = () => {
     this.hideSideMenu()
     changePasswordScreen()
@@ -90,6 +95,7 @@ class DrawerContent extends Component {
           <DrawerButton testID="forgotPasswordDrawerButton" text="Forgot Password" onPress={this.handlePressForgotPassword} />
         )}
         {this.props.loggedIn && <DrawerButton testID="profileDrawerButton" text="Profile" onPress={this.handlePressProfile} />}
+        {this.props.loggedIn && <DrawerButton testID="eventInfoDrawerButton" text="Event Info" onPress={this.handlePressEventInfo} />}
         {this.props.loggedIn && <DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
         {this.props.loggedIn && <DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}
         {this.props.loggedIn && (

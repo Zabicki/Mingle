@@ -13,7 +13,7 @@ import {
   profileScreen,
   eventInfoScreen,
   entitiesScreen,
-  storybookScreen,
+  storybookScreen, goToAuth,
 } from '../layouts'
 import { connect } from 'react-redux'
 
@@ -84,7 +84,7 @@ class DrawerContent extends Component {
   handlePressLogout = () => {
     this.hideSideMenu()
     this.props.logout()
-    loginScreen()
+    goToAuth()
   }
   handlePressStorybook = () => {
     this.hideSideMenu()
@@ -95,20 +95,12 @@ class DrawerContent extends Component {
     return (
       <ScrollView style={styles.container}>
         <Image testID="drawerLogo" source={Images.logoLogin} style={styles.logo} />
-        {!this.props.loggedIn && <DrawerButton testID="loginDrawerButton" text="Login" onPress={this.handlePressLogin} />}
-        {!this.props.loggedIn && <DrawerButton testID="registerDrawerButton" text="Register" onPress={this.handlePressRegister} />}
-        {!this.props.loggedIn && (
-          <DrawerButton testID="forgotPasswordDrawerButton" text="Forgot Password" onPress={this.handlePressForgotPassword} />
-        )}
-        {this.props.loggedIn && <DrawerButton testID="profileDrawerButton" text="Profile" onPress={this.handlePressProfile} />}
-        {this.props.loggedIn && <DrawerButton testID="eventInfoDrawerButton" text="Event Info" onPress={this.handlePressEventInfo} />}
-        {this.props.loggedIn && <DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
-        {this.props.loggedIn && <DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}
-        {this.props.loggedIn && <DrawerButton testID="preferencesDrawerButton" text="Preferences" onPress={this.handlePressPreferences} />}
-        {this.props.loggedIn && (
-          <DrawerButton testID="changePasswordDrawerButton" text="Change Password" onPress={this.handlePressChangePassword} />
-        )}
-        {this.props.loggedIn && <DrawerButton testID="logoutDrawerButton" text="Logout" onPress={this.handlePressLogout} />}
+        {<DrawerButton testID="profileDrawerButton" text="Profile" onPress={this.handlePressProfile} />}
+        {<DrawerButton testID="eventInfoDrawerButton" text="Event Info" onPress={this.handlePressEventInfo} />}
+        {<DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
+        {<DrawerButton testID="preferencesDrawerButton" text="Preferences" onPress={this.handlePressPreferences} />}
+        {<DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}
+        {<DrawerButton testID="logoutDrawerButton" text="Logout" onPress={this.handlePressLogout} />}
         {__DEV__ && <DrawerButton testID="storybookDrawerButton" text="Storybook" onPress={this.handlePressStorybook} />}
       </ScrollView>
     )

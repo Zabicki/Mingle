@@ -35,6 +35,7 @@ import EventEntityEditScreen from '../modules/entities/event/event-entity-edit-s
 import MessageEntityScreen from '../modules/entities/message/message-entity-screen'
 import MessageEntityDetailScreen from '../modules/entities/message/message-entity-detail-screen'
 import MessageEntityEditScreen from '../modules/entities/message/message-entity-edit-screen'
+import Initializing from '../modules/initialize/Initializing'
 // ignite-jhipster-navigation-import-needle
 
 export const LOGIN_SCREEN = 'nav.LoginScreen'
@@ -64,6 +65,7 @@ export const EVENT_ENTITY_EDIT_SCREEN = 'nav.EventEntityEditScreen'
 export const MESSAGE_ENTITY_SCREEN = 'nav.MessageEntityScreen'
 export const MESSAGE_ENTITY_DETAIL_SCREEN = 'nav.MessageEntityDetailScreen'
 export const MESSAGE_ENTITY_EDIT_SCREEN = 'nav.MessageEntityEditScreen'
+export const INITIALIZING = 'nav.Initializing'
 // ignite-jhipster-navigation-declaration-needle
 
 const store = createStore()
@@ -77,7 +79,37 @@ function LogoTitle() {
   );
 }
 
-export const appStack = {
+export const authStack = {
+  root: {
+    sideMenu: {
+      left: {
+        component: {
+          name: DRAWER_CONTENT,
+        },
+      },
+      center: {
+        stack: {
+          id: 'center',
+          children: [
+            {
+              component: {
+                name: LOGIN_SCREEN,
+                options: {
+                  topBar: {
+                    visible: false,
+                    drawBehind: true,
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+}
+
+const homeStack = {
   root: {
     sideMenu: {
       left: {
@@ -116,6 +148,15 @@ export const appStack = {
     },
   },
 }
+
+export function goHome() {
+  Navigation.setRoot(homeStack)
+}
+
+export function goToAuth() {
+  Navigation.setRoot(authStack)
+}
+
 
 let lastAppState = 'active'
 function handleAppStateChange(nextAppState) {
@@ -178,6 +219,7 @@ export function registerScreensAndStartApp() {
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_SCREEN, () => MessageEntityScreen, Provider, store)
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_DETAIL_SCREEN, () => MessageEntityDetailScreen, Provider, store)
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_EDIT_SCREEN, () => MessageEntityEditScreen, Provider, store)
+  Navigation.registerComponentWithRedux(INITIALIZING, () => Initializing, Provider, store)
   // ignite-jhipster-navigation-registration-needle
 
   Navigation.events().registerAppLaunchedListener(() => {
@@ -205,8 +247,6 @@ export function registerScreensAndStartApp() {
         },
       },
     })
-
-    Navigation.setRoot(appStack)
 
     // handle app state and deep links
     AppState.addEventListener('change', handleAppStateChange)
@@ -258,10 +298,8 @@ export const registerScreen = () =>
       name: REGISTER_SCREEN,
       options: {
         topBar: {
-          title: {
-            text: 'Sign Up',
-            color: Colors.snow,
-          },
+          visible: false,
+          drawBehind: true,
         },
       },
     },
@@ -273,10 +311,8 @@ export const forgotPasswordScreen = () =>
       name: FORGOT_PASSWORD_SCREEN,
       options: {
         topBar: {
-          title: {
-            text: 'Forgot Password',
-            color: Colors.snow,
-          },
+          visible: false,
+          drawBehind: true,
         },
       },
     },
@@ -670,4 +706,24 @@ export const messageEntityDetailScreen = data =>
       },
     },
   })
+
+export const initializing = () =>
+  Navigation.showModal({
+    stack: {
+      children: [
+        {
+          component: {
+            name: INITIALIZING,
+            options: {
+              topBar: {
+                visible: false,
+                drawBehind: true,
+              },
+            },
+          },
+        },
+      ],
+    },
+  })
+
 // ignite-jhipster-navigation-method-needle

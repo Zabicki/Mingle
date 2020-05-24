@@ -8,7 +8,7 @@ import styles from './login-screen.styles'
 import { Images, Metrics } from '../../shared/themes'
 import LoginActions from './login.reducer'
 
-import {appStack, forgotPasswordScreen, launchScreen, registerScreen} from '../../navigation/layouts'
+import {forgotPasswordScreen, goHome, registerScreen} from '../../navigation/layouts'
 
 class LoginScreen extends React.Component {
   static propTypes = {
@@ -33,9 +33,6 @@ class LoginScreen extends React.Component {
       if (prevProps.fetching && this.props.error) {
         Alert.alert('Error', this.props.error, [{ text: 'OK' }])
       }
-      if (!prevProps.account && this.props.account) {
-        Navigation.dismissModal(this.props.componentId)
-      }
     }
   }
 
@@ -46,12 +43,10 @@ class LoginScreen extends React.Component {
   }
 
   handlePressRegister = () => {
-    Navigation.dismissModal(this.props.componentId)
     registerScreen()
   }
 
   handlePressForgotPassword = () => {
-    Navigation.dismissModal(this.props.componentId)
     forgotPasswordScreen()
   }
 

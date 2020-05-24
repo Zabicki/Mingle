@@ -79,7 +79,7 @@ class ForgotPasswordScreen extends React.Component {
   }
 
   handlePressCancel = () => {
-    loginScreen()
+    Navigation.pop(this.props.componentId)
   }
 
   render() {

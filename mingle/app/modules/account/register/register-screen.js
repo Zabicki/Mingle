@@ -8,7 +8,6 @@ import t from 'tcomb-form-native'
 import RegisterActions from '../register/register.reducer'
 // Styles
 import styles from './register-screen.styles'
-import {loginScreen, registerScreen} from '../../../navigation/layouts'
 
 let Form = t.form.Form
 
@@ -95,7 +94,7 @@ class RegisterScreen extends React.Component {
   }
 
   handlePressCancel = () => {
-    loginScreen()
+    Navigation.pop(this.props.componentId)
   }
 
   submitUpdate() {

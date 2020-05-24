@@ -15,7 +15,6 @@ export class LaunchScreen extends React.Component {
   constructor(props) {
     super(props)
     Navigation.events().bindComponent(this)
-    Navigation.events().bindComponent(this)
 
     this.state = {
         page: 0,

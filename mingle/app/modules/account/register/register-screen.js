@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Navigation } from 'react-native-navigation'
 import t from 'tcomb-form-native'
+import { format } from "date-fns"
 
 import RegisterActions from '../register/register.reducer'
 // Styles
@@ -30,6 +31,12 @@ stylesheet.textboxView.error.marginBottom = 5;
 stylesheet.textboxView.normal.marginTop = 8;
 stylesheet.textboxView.error.marginTop = 8;
 
+//stylesheet.dateValue.normal.borderColor = 'grey';
+stylesheet.dateValue.normal.color = 'grey';
+stylesheet.dateValue.normal.borderWidth = 1;
+
+
+
 class RegisterScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -41,6 +48,7 @@ class RegisterScreen extends React.Component {
         password: t.String,
         confirmPassword: t.String,
         email: t.String,
+        city: t.String,
         birthDate: t.Date,
         langKey: t.String,
       }),
@@ -69,17 +77,31 @@ class RegisterScreen extends React.Component {
             secureTextEntry: true,
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('email').refs.input.focus(),
-          },      
+          },
           email: {
             error: 'Enter e-mail address',
             returnKeyType: 'done',
           },
+          city: {
+            error: 'Enter your city',
+            returnKeyType: 'done',
+          },
           birthDate: {
-            defaultValueText: 'Enter birth date',
+            normal: {
+              color: '#EDEDED',
+              fontSize: 16,
+              padding: 7,
+              marginBottom: 5,
+              marginTop: 20,
+            },
             mode: 'date',
             dialogMode: 'calendar',
             error: 'Enter birth date',
             returnKeyType: 'next',
+            config: {
+              defaultValueText: 'Birth date', // Allows you to format the PlaceHolders !!
+              format: (date) => format(date, 'DD.MM.YYYY'),
+            },
             onSubmitEditing: () => this.submitUpdate(),
           },
           langKey: {

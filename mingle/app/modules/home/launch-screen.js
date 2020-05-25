@@ -9,6 +9,7 @@ import { Images } from '../../shared/themes'
 import styles from './launch-screen.styles'
 import RoundedButton from '../../shared/components/rounded-button/rounded-button'
 import EventAction from '../entities/event/event.reducer'
+import {launchScreen} from '../../navigation/layouts'
 
 export class LaunchScreen extends React.Component {
   constructor(props) {

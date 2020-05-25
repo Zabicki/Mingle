@@ -2,6 +2,7 @@ import { call, put, select } from 'redux-saga/effects'
 
 import LoginActions from './login.reducer'
 import AccountActions from '../../shared/reducers/account.reducer'
+import {goHome} from '../../navigation/layouts'
 
 export const selectAuthToken = state => state.login.authToken
 // attempts to login
@@ -20,6 +21,7 @@ export function* login(api, { username, password }) {
     yield put(LoginActions.loginSuccess(response.data.id_token))
     yield put(AccountActions.accountRequest())
     yield put({ type: 'RELOGIN_OK' })
+    goHome() //if login successful, change navigation stack root to app
   } else {
     yield put(LoginActions.loginFailure((response.data && response.data.detail) || 'Bad credentials'))
   }

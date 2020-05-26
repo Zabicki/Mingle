@@ -25,29 +25,6 @@ export default {
       ok: true,
     }
   },
-  updateFavourite: favourite => {
-    return {
-      ok: true,
-      data: require('../../shared/fixtures/update-favourite.json'),
-    }
-  },
-  getFavourites: () => {
-    return {
-      ok: true,
-      data: require('../../shared/fixtures/get-favourites.json'),
-    }
-  },
-  getFavourite: favouriteId => {
-    return {
-      ok: true,
-      data: require('../../shared/fixtures/get-favourite.json'),
-    }
-  },
-  deleteFavourite: favouriteId => {
-    return {
-      ok: true,
-    }
-  },
   updateReview: review => {
     return {
       ok: true,
@@ -69,6 +46,18 @@ export default {
   deleteReview: reviewId => {
     return {
       ok: true,
+    }
+  },
+  getFavourites: () => {
+    return {
+      ok: true,
+      data: require('../../shared/fixtures/get-favourites.json'),
+    }
+  },
+  updateFavourites: favourites => {
+    return {
+      ok: true,
+      data: require('../../shared/fixtures/get-favourites.json'),
     }
   },
   updateEvent: event => {

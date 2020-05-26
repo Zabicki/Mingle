@@ -86,3 +86,45 @@ test('failure deleting a user', () => {
   expect(state.errorDeleting).toEqual({ error: 'Not found' })
   expect(state.user).toEqual(INITIAL_STATE.user)
 })
+
+test('attempt retrieving user favourites', () => {
+  const state = reducer(INITIAL_STATE, Actions.userFavouritesRequest())
+
+  expect(state.favourites).toEqual([])
+})
+
+test('attempt updating user favourites', () => {
+  const state = reducer(INITIAL_STATE, Actions.userFavouritesUpdateRequest(["SPORT"]))
+
+  expect(state.updating).toBe(true)
+})
+
+test('success retrieving user favourites', () => {
+  const state = reducer(INITIAL_STATE, Actions.userFavouritesSuccess(["SPORT"] ))
+
+  expect(state.errorOne).toBe(null)
+  expect(state.favourites).toEqual(["SPORT"])
+})
+
+test('success updating user favourites', () => {
+  const state = reducer(INITIAL_STATE, Actions.userFavouritesUpdateSuccess(["FOOD"]))
+
+  expect(state.updating).toBe(false)
+  expect(state.errorUpdating).toBe(null)
+  expect(state.favourites).toEqual(["FOOD"])
+})
+
+test('failure retrieving user favourites', () => {
+  const state = reducer(INITIAL_STATE, Actions.userFavouritesFailure({ error: 'Not found' }))
+
+  expect(state.errorOne).toEqual({ error: 'Not found' })
+  expect(state.favourites).toEqual([])
+})
+
+test('failure updating user favourites', () => {
+  const state = reducer(INITIAL_STATE, Actions.userFavouritesUpdateFailure({ error: 'Not found' }))
+
+  expect(state.updating).toBe(false)
+  expect(state.errorUpdating).toEqual({ error: 'Not found' })
+  expect(state.favourites).toEqual(INITIAL_STATE.favourites)
+})

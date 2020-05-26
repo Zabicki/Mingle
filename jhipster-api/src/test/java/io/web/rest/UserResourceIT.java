@@ -3,6 +3,7 @@ package io.web.rest;
 import io.MingleApp;
 import io.domain.Authority;
 import io.domain.User;
+import io.domain.enumeration.Category;
 import io.repository.UserRepository;
 import io.security.AuthoritiesConstants;
 import io.service.MailService;
@@ -20,6 +21,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -27,8 +29,7 @@ import java.time.Instant;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -125,6 +126,7 @@ public class UserResourceIT {
     public void initTest() {
         userRepository.deleteAll();
         user = createEntity();
+        userRepository.save(user);
     }
 
     @Test
@@ -133,11 +135,11 @@ public class UserResourceIT {
 
         // Create the User
         ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin(DEFAULT_LOGIN);
+        managedUserVM.setLogin(UPDATED_LOGIN);
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
+        managedUserVM.setEmail(UPDATED_EMAIL);
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
@@ -152,10 +154,10 @@ public class UserResourceIT {
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeCreate + 1);
         User testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
         assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
@@ -579,5 +581,41 @@ public class UserResourceIT {
         authorityB.setName(AuthoritiesConstants.USER);
         assertThat(authorityA).isEqualTo(authorityB);
         assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
+    }
+
+    @Test
+    @WithMockUser("johndoe")
+    public void testGetFavourites() throws Exception{
+        Set<Category> favourite = new HashSet<>();
+        favourite.add(Category.SPORT);
+        favourite.add(Category.FOOD);
+        User user = userService.getUserWithAuthorities().get();
+        user.setFavourites(favourite);
+        userRepository.save(user);
+
+        restUserMockMvc.perform(get("/api/users/favourites"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*]").value(hasSize(2)))
+            .andExpect(jsonPath("$.[*]").value(hasItem("FOOD")))
+            .andExpect(jsonPath("$.[*]").value(hasItem("SPORT")));
+    }
+
+    @Test
+    @WithMockUser("johndoe")
+    public void testSetFavourites() throws Exception{
+
+        List<Category> newFavourites = Arrays.asList(Category.SPORT, Category.FOOD );
+
+        restUserMockMvc.perform(put("/api/users/favourites")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(newFavourites)))
+            .andExpect(status().isOk());
+
+        User logged = userService.getUserWithAuthorities().get();
+        assertThat(logged.getFavourites().size()).isEqualTo(2);
+        assertThat(logged.getFavourites()).contains(Category.SPORT);
+        assertThat(logged.getFavourites()).contains(Category.FOOD);
+
     }
 }

@@ -8,16 +8,22 @@ const { Types, Creators } = createActions({
   userAllRequest: ['options'],
   userUpdateRequest: ['user'],
   userDeleteRequest: ['userId'],
+  userFavouritesRequest: [],
+  userFavouritesUpdateRequest: ['favourites'],
 
   userSuccess: ['user'],
   userAllSuccess: ['users'],
   userUpdateSuccess: ['user'],
   userDeleteSuccess: [],
+  userFavouritesSuccess: ['favourites'],
+  userFavouritesUpdateSuccess: ['favourites'],
 
   userFailure: ['error'],
   userAllFailure: ['error'],
   userUpdateFailure: ['error'],
   userDeleteFailure: ['error'],
+  userFavouritesFailure: ['error'],
+  userFavouritesUpdateFailure: ['error'],
 })
 
 export const UserTypes = Types
@@ -36,6 +42,7 @@ export const INITIAL_STATE = Immutable({
   errorAll: null,
   errorUpdating: null,
   errorDeleting: null,
+  favourites: [],
 })
 
 /* ------------- Reducers ------------- */
@@ -63,6 +70,11 @@ export const updateRequest = state =>
 export const deleteRequest = state =>
   state.merge({
     deleting: true,
+  })
+
+export const favouritesRequest = state =>
+  state.merge({
+    favourites: [],
   })
 
 // successful api lookup for single entity
@@ -98,6 +110,21 @@ export const deleteSuccess = state => {
     deleting: false,
     errorDeleting: null,
     user: null,
+  })
+}
+
+export const favouriteSuccess = (state, action) =>{
+  const {favourites} = action
+  return state.merge({
+    favourites: favourites,
+  })
+}
+
+export const favouritesUpdateSuccess = (state, action) =>{
+  const {favourites} = action
+  return state.merge({
+    favourites: favourites,
+    updating: false,
   })
 }
 
@@ -138,6 +165,24 @@ export const deleteFailure = (state, action) => {
   })
 }
 
+export const favouritesUpdateFailure = (state, action) => {
+  const { error } = action
+  return state.merge({
+    updating: false,
+    errorUpdating: error,
+    favourites: state.favourites,
+  })
+}
+
+export const favouritesFailure = (state, action) => {
+  const { error } = action
+  return state.merge({
+    errorOne: error,
+    favourites: [],
+  })
+}
+
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -145,14 +190,20 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.USER_ALL_REQUEST]: allRequest,
   [Types.USER_UPDATE_REQUEST]: updateRequest,
   [Types.USER_DELETE_REQUEST]: deleteRequest,
+  [Types.USER_FAVOURITES_REQUEST]: favouritesRequest,
+  [Types.USER_FAVOURITES_UPDATE_REQUEST]: updateRequest,
 
   [Types.USER_SUCCESS]: success,
   [Types.USER_ALL_SUCCESS]: allSuccess,
   [Types.USER_UPDATE_SUCCESS]: updateSuccess,
   [Types.USER_DELETE_SUCCESS]: deleteSuccess,
+  [Types.USER_FAVOURITES_SUCCESS]: favouriteSuccess,
+  [Types.USER_FAVOURITES_UPDATE_SUCCESS]: favouritesUpdateSuccess,
 
   [Types.USER_FAILURE]: failure,
   [Types.USER_ALL_FAILURE]: allFailure,
   [Types.USER_UPDATE_FAILURE]: updateFailure,
   [Types.USER_DELETE_FAILURE]: deleteFailure,
+  [Types.USER_FAVOURITES_FAILURE]: favouritesFailure,
+  [Types.USER_FAVOURITES_UPDATE_FAILURE]: favouritesUpdateFailure,
 })

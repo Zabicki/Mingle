@@ -2,6 +2,7 @@ package io.web.rest;
 
 import io.config.Constants;
 import io.domain.User;
+import io.domain.enumeration.Category;
 import io.repository.UserRepository;
 import io.security.AuthoritiesConstants;
 import io.service.MailService;
@@ -186,5 +187,36 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "A user is deleted with identifier " + login, login)).build();
+    }
+
+    /**
+     * get user favourites.
+     *
+     * @return list of favourite categories.
+     */
+    @GetMapping("/users/favourites")
+    public ResponseEntity<List<Category>> getFavourites(){
+        log.debug("REST request to get user favourites");
+        User logged = userService.getUserWithAuthorities().orElseThrow(()->
+            new BadRequestAlertException("User not logged in!","userManagement","nooneloggedin")
+        );
+        return ResponseEntity.ok().body(new ArrayList<>(logged.getFavourites()));
+    }
+
+    /**
+     * set user favourites.
+     *
+     * @param newList list of new favourite categories.
+     * @return list of favourite categories.
+     */
+    @PutMapping("/users/favourites")
+    public ResponseEntity<List<Category>> setFavourites(@Valid @RequestBody List<Category> newList){
+        log.debug("REST request to set favourites");
+        User logged = userService.getUserWithAuthorities().orElseThrow(()->
+            new BadRequestAlertException("User not logged in!","userManagement","nooneloggedin")
+        );
+        logged.setFavourites(new HashSet<>(newList));
+        userRepository.save(logged);
+        return ResponseEntity.ok().body(new ArrayList<>(logged.getFavourites()));
     }
 }

@@ -18,6 +18,7 @@ const Category = t.enums({
   FOOD: 'FOOD',
   MUSIC: 'MUSIC',
   PARTY: 'PARTY',
+  EDUCATION: 'EDUCATION',
   OTHER: 'OTHER',
 })
 const Privacy = t.enums({
@@ -31,35 +32,24 @@ class EventEntityEditScreen extends React.Component {
     Navigation.events().bindComponent(this)
     this.state = {
       formModel: t.struct({
-        id: t.maybe(t.Number),
         name: t.String,
         description: t.String,
         picture: t.maybe(t.String),
         city: t.String,
         address: t.String,
-        maxParticpants: t.maybe(t.Number),
+        maxParticipants: t.maybe(t.Number),
+        location: t.struct({
+          latitude: t.Number,
+          longitude: t.Number,
+        }),
         date: t.Date,
-        recurent: t.Boolean,
+        recurrent: t.Boolean,
         interval: t.maybe(t.Number),
         category: Category,
         privacy: Privacy,
-        userId: this.getUsers(),
-        events: t.list(this.getUsers()),
       }),
-      formValue: { id: null },
       formOptions: {
         fields: {
-          id: {
-            hidden: true,
-          },
-          userId: {
-            testID: 'userIdInput',
-            label: 'Event',
-          },
-          userId: {
-            testID: 'userIdInput',
-            label: 'Events',
-          },
           name: {
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('description').refs.input.focus(),
@@ -82,13 +72,18 @@ class EventEntityEditScreen extends React.Component {
           },
           address: {
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('maxParticpants').refs.input.focus(),
+            onSubmitEditing: () => this.form.getComponent('maxParticipants').refs.input.focus(),
             testID: 'addressInput',
           },
-          maxParticpants: {
+          maxParticipants: {
+            returnKeyType: 'next',
+            onSubmitEditing: () => this.form.getComponent('location').refs.input.focus(),
+            testID: 'maxParticipantsInput',
+          },
+          location: {
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('date').refs.input.focus(),
-            testID: 'maxParticpantsInput',
+            testID: 'locationInput',
           },
           date: {
             mode: 'date',
@@ -96,13 +91,13 @@ class EventEntityEditScreen extends React.Component {
               format: date => jsDateToLocalDate(date),
             },
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('recurent').refs.input.focus(),
+            onSubmitEditing: () => this.form.getComponent('recurrent').refs.input.focus(),
             testID: 'dateInput',
           },
-          recurent: {
+          recurrent: {
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('interval').refs.input.focus(),
-            testID: 'recurentInput',
+            testID: 'recurrentInput',
           },
           interval: {
             returnKeyType: 'next',
@@ -222,49 +217,38 @@ const entityToFormValue = value => {
     return {}
   }
   return {
-    id: value.id || null,
     name: value.name || null,
     description: value.description || null,
     picture: value.picture || null,
     city: value.city || null,
     address: value.address || null,
-    maxParticpants: value.maxParticpants || null,
+    maxParticipants: value.maxParticipants || null,
+    location: {
+      latitude: value.location[0],
+      longitude: value.location[1],
+    },
     date: value.date || null,
-    recurent: value.recurent || null,
+    recurrent: value.recurrent || null,
     interval: value.interval || null,
     category: value.category || null,
     privacy: value.privacy || null,
-    userId: value.user && value.user.id ? value.user.id : null,
-    events: [].concat(
-      value.events.map(events => {
-        return events.id
-      }),
-    ),
   }
 }
 const formValueToEntity = value => {
   const entity = {
-    id: value.id || null,
     name: value.name || null,
     description: value.description || null,
     picture: value.picture || null,
     city: value.city || null,
     address: value.address || null,
-    maxParticpants: value.maxParticpants || null,
+    maxParticipants: value.maxParticipants || null,
+    location: [value.location.latitude, value.location.longitude],
     date: value.date || null,
-    recurent: value.recurent || null,
+    recurrent: value.recurrent || false,
     interval: value.interval || null,
     category: value.category || null,
     privacy: value.privacy || null,
   }
-  if (value.userId) {
-    entity.user = { id: value.userId }
-  }
-  entity.events = [].concat(
-    value.events.map(events => {
-      return { id: events }
-    }),
-  )
   return entity
 }
 

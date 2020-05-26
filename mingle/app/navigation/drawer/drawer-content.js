@@ -13,6 +13,7 @@ import {
   profileScreen,
   eventInfoScreen,
   entitiesScreen,
+  eventEntityEditScreen,
   storybookScreen, goToAuth,
 } from '../layouts'
 import { connect } from 'react-redux'
@@ -90,6 +91,10 @@ class DrawerContent extends Component {
     this.hideSideMenu()
     storybookScreen()
   }
+  handlePressNewEvent = () =>{
+    this.hideSideMenu()
+    eventEntityEditScreen({ entityId: null })
+  }
 
   render() {
     return (
@@ -97,6 +102,7 @@ class DrawerContent extends Component {
         <Image testID="drawerLogo" source={Images.logoLogin} style={styles.logo} />
         {<DrawerButton testID="profileDrawerButton" text="Profile" onPress={this.handlePressProfile} />}
         {<DrawerButton testID="eventInfoDrawerButton" text="Event Info" onPress={this.handlePressEventInfo} />}
+        {<DrawerButton testID="newEventDrawerButton" text="New Event" onPress={this.handlePressNewEvent} />}
         {<DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
         {<DrawerButton testID="preferencesDrawerButton" text="Preferences" onPress={this.handlePressPreferences} />}
         {<DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}

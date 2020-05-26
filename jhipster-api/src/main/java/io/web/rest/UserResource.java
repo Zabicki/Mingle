@@ -63,6 +63,8 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
+    private static final String ENTITY_NAME = "userManagement";
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -97,7 +99,7 @@ public class UserResource {
         log.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
-            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
+            throw new BadRequestAlertException("A new user cannot already have an ID", ENTITY_NAME, "idexists");
             // Lowercase the user login before comparing with database
         } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
@@ -198,7 +200,7 @@ public class UserResource {
     public ResponseEntity<List<Category>> getFavourites(){
         log.debug("REST request to get user favourites");
         User logged = userService.getUserWithAuthorities().orElseThrow(()->
-            new BadRequestAlertException("User not logged in!","userManagement","nooneloggedin")
+            new BadRequestAlertException("User not logged in!",ENTITY_NAME,"nooneloggedin")
         );
         return ResponseEntity.ok().body(new ArrayList<>(logged.getFavourites()));
     }
@@ -213,7 +215,7 @@ public class UserResource {
     public ResponseEntity<List<Category>> setFavourites(@Valid @RequestBody List<Category> newList){
         log.debug("REST request to set favourites");
         User logged = userService.getUserWithAuthorities().orElseThrow(()->
-            new BadRequestAlertException("User not logged in!","userManagement","nooneloggedin")
+            new BadRequestAlertException("User not logged in!",ENTITY_NAME,"nooneloggedin")
         );
         logged.setFavourites(new HashSet<>(newList));
         userRepository.save(logged);

@@ -6,7 +6,7 @@ export default StyleSheet.create({
   ...ApplicationStyles.screen,
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.snow,
   },
   row: {
     flex: 1,

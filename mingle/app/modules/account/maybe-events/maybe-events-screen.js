@@ -3,26 +3,28 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation'
 import { eventEntityDetailScreen, eventEntityEditScreen } from '../../../navigation/layouts'
-import EventActions from './event.reducer'
-import styles from './events-screen-style'
+import EventActions from '../../entities/event/event.reducer'
+import styles from './maybe-events-screen.styles'
 import AlertMessage from '../../../shared/components/alert-message/alert-message'
 
 // More info here: https://facebook.github.io/react-native/docs/flatlist.html
 
-class EventsScreen extends React.PureComponent {
+class MaybeEventsScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     Navigation.events().bindComponent(this)
 
-    this.props.getAccount()
-
+    /* ***********************************************************
+     * STEP 1
+     * This is an array of objects with the properties you desire
+     * Usually this should come from Redux mapStateToProps
+     *************************************************************/
     this.state = {
       page: 0,
       sort: 'id,asc',
       size: 20,
       done: false,
       dataObjects: [],
-      
     }
     this.fetchEvents()
   }
@@ -30,21 +32,43 @@ class EventsScreen extends React.PureComponent {
   navigationButtonPressed({ buttonId }) {
     eventEntityEditScreen({ entityId: null })
   }
- 
+  /* ***********************************************************
+  * STEP 2
+  * `renderRow` function. How each cell/row should be rendered
+  * It's our best practice to place a single component here:
+  *
+  * e.g.
+    return <MyCustomCell title={item.title} description={item.description} />
+  *************************************************************/
   renderRow({ item }) {
     return (
       <TouchableOpacity onPress={eventEntityDetailScreen.bind(this, { entityId: item.id })}>
         <View style={styles.row}>
-          <Text style={styles.boldLabel}>{item.id}</Text>
+          <Text style={styles.boldLabel}>{item.name}</Text>
           {/* <Text style={styles.label}>{item.description}</Text> */}
         </View>
       </TouchableOpacity>
     )
   }
 
+  /* ***********************************************************
+   * STEP 3
+   * Consider the configurations we've set below.  Customize them
+   * to your liking!  Each with some friendly advice.
+   *************************************************************/
+  // Render a header?
+  // renderHeader = () =>
+  //   <Text style={[styles.label, styles.sectionHeader]}> - Header - </Text>
+
+  // Render a footer?
+  // renderFooter = () =>
+  //  <Text style={[styles.label, styles.sectionHeader]}> - Footer - </Text>
 
   // Show this when data is empty
   renderEmpty = () => <AlertMessage title="No Events Found" show={!this.props.fetching} />
+
+  // renderSeparator = () =>
+  //  <Text style={styles.label}> - ~~~~~ - </Text>
 
   // The default function if no Key is provided is index
   // an identifiable key is important if you plan on
@@ -54,8 +78,22 @@ class EventsScreen extends React.PureComponent {
   // How many items should be kept im memory as we scroll?
   oneScreensWorth = 20
 
+  // extraData is for anything that is not indicated in data
+  // for instance, if you kept "favorites" in `this.state.favs`
+  // pass that in, so changes in favorites will cause a re-render
+  // and your renderItem will have access to change depending on state
+  // e.g. `extraData`={this.state.favs}
+
+  // Optimize your list if the height of each item can be calculated
+  // by supplying a constant height, there is no need to measure each
+  // item after it renders.  This can save significant time for lists
+  // of a size 100+
+  // e.g. itemLayout={(data, index) => (
+  //   {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
+  // )}
+
   fetchEvents = () => {
-    this.props.findEventsAcceptedByUser({ page: this.state.page, sort: this.state.sort, size: this.state.size })
+    this.props.userMaybeEvents
   }
 
   handleLoadMore = () => {
@@ -108,16 +146,17 @@ const mapStateToProps = state => {
     events: state.events.events,
     fetching: state.events.fetchingAll,
     error: state.events.errorAll,
+    userMaybeEvents: state.maybeEvents
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllEvents: options => dispatch(EventActions.eventMaybeRequest(options)),
+    getAllEvents: options => dispatch(EventActions.eventAllRequest(options)),
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(EventEntityScreen)
+)(MaybeEventsScreen)

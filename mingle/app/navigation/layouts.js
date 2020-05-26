@@ -35,6 +35,7 @@ import EventEntityEditScreen from '../modules/entities/event/event-entity-edit-s
 import MessageEntityScreen from '../modules/entities/message/message-entity-screen'
 import MessageEntityDetailScreen from '../modules/entities/message/message-entity-detail-screen'
 import MessageEntityEditScreen from '../modules/entities/message/message-entity-edit-screen'
+import MaybeEventsScreen from '../modules/account/maybe-events/maybe-events-screen'
 import Initializing from '../modules/initialize/Initializing'
 // ignite-jhipster-navigation-import-needle
 
@@ -66,6 +67,7 @@ export const MESSAGE_ENTITY_SCREEN = 'nav.MessageEntityScreen'
 export const MESSAGE_ENTITY_DETAIL_SCREEN = 'nav.MessageEntityDetailScreen'
 export const MESSAGE_ENTITY_EDIT_SCREEN = 'nav.MessageEntityEditScreen'
 export const INITIALIZING = 'nav.Initializing'
+export const MAYBE_EVENTS_SCREEN = 'nav.MaybeEventsScreen'
 // ignite-jhipster-navigation-declaration-needle
 
 const store = createStore()
@@ -219,6 +221,7 @@ export function registerScreensAndStartApp() {
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_SCREEN, () => MessageEntityScreen, Provider, store)
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_DETAIL_SCREEN, () => MessageEntityDetailScreen, Provider, store)
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_EDIT_SCREEN, () => MessageEntityEditScreen, Provider, store)
+  Navigation.registerComponentWithRedux(MAYBE_EVENTS_SCREEN, () => MaybeEventsScreen, Provider, store)
   Navigation.registerComponentWithRedux(INITIALIZING, () => Initializing, Provider, store)
   // ignite-jhipster-navigation-registration-needle
 
@@ -253,6 +256,21 @@ export function registerScreensAndStartApp() {
     Linking.addEventListener('url', handleOpenURL)
   })
 }
+
+export const maybeScreen = () =>
+  Navigation.push('center', {
+    component: {
+      name: MAYBE_EVENTS_SCREEN,
+      options: {
+        topBar: {
+          title: {
+            text: 'Maybe events',
+            color: Colors.snow,
+          },
+        },
+      },
+    },
+  })
 
 export const loginScreen = () =>
   Navigation.showModal({

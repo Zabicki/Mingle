@@ -28,9 +28,9 @@ import java.util.List;
 @Controller
 public class SocketController {
 
-    private static String ENTITY_NAME = "socket";
+    private static final String ENTITY_NAME = "socket";
 
-    private static String INVALID_REQUEST = "invalidrequest";
+    private static final String INVALID_REQUEST = "invalidrequest";
 
     private final Logger log = LoggerFactory.getLogger(SocketController.class);
 

@@ -97,7 +97,6 @@ class ChatEntityDetailScreen extends React.Component {
       <GiftedChat
         messages = {this.props.messages}
         onSend = { message => this.sendMessage(message[0]) }
-        //Todo add logged user login here
         user = {{login: tok.sub}}
         loadEarlier = {!this.props.done}
         onLoadEarlier = {this.loadMOAR}

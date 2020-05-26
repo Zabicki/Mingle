@@ -59,18 +59,14 @@ const create = (baseURL = AppConfig.apiUrl) => {
   const createUser = user => api.post('api/users', user)
   const updateUser = user => api.put('api/users', user)
   const deleteUser = userId => api.delete('api/users/' + userId)
+  const getFavourites = () => api.get('api/users/favourites')
+  const updateFavourites = favourites => api.put('api/users/favourites',favourites)
 
   const getChat = (chatId, options) => api.get('api/chat/' + chatId, options)
   const getChats = options => api.get('api/chat', options)
   const createChat = chat => api.post('api/chats', chat)
   const updateChat = chat => api.put('api/chats', chat)
   const deleteChat = chatId => api.delete('api/chats/' + chatId)
-
-  const getFavourite = favouriteId => api.get('api/favourites/' + favouriteId)
-  const getFavourites = options => api.get('api/favourites', options)
-  const createFavourite = favourite => api.post('api/favourites', favourite)
-  const updateFavourite = favourite => api.put('api/favourites', favourite)
-  const deleteFavourite = favouriteId => api.delete('api/favourites/' + favouriteId)
 
   const getReview = reviewId => api.get('api/reviews/' + reviewId)
   const getReviews = options => api.get('api/reviews', options)
@@ -115,18 +111,14 @@ const create = (baseURL = AppConfig.apiUrl) => {
     getUsers,
     getUser,
     deleteUser,
+    getFavourites,
+    updateFavourites,
 
     createChat,
     updateChat,
     getChats,
     getChat,
     deleteChat,
-
-    createFavourite,
-    updateFavourite,
-    getFavourites,
-    getFavourite,
-    deleteFavourite,
 
     createReview,
     updateReview,

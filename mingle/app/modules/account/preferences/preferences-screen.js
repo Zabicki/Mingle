@@ -5,9 +5,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import t from 'tcomb-form-native'
 import {changePasswordScreen} from '../../../navigation/layouts'
 import {loginScreen} from '../../../navigation/layouts'
-import AccountActions from '../../../shared/reducers/account.reducer'
+import UserActions from '../../../shared/reducers/user.reducer'
 import Dialog from "react-native-dialog";
-import LoginActions from '../../../modules/login/login.reducer'
+import RoundedButton from '../../../shared/components/rounded-button/rounded-button'
 
 
 // Styles
@@ -26,6 +26,42 @@ class PreferencesScreen extends React.Component {
         educationCheckBox: false,
         otherCheckBox: false
       }
+      this.props.getFavourites();
+  }
+  componentDidMount(){
+    this.setState(
+      (state)=> {
+        return{
+          sportCheckBox: this.props.favourites.includes("SPORT"),
+          foodCheckBox: this.props.favourites.includes("FOOD"),
+          musicCheckBox: this.props.favourites.includes("MUSIC"),
+          partyCheckBox: this.props.favourites.includes("PARTY"),
+          educationCheckBox: this.props.favourites.includes("EDUCATION"),
+          otherCheckBox: this.props.favourites.includes("OTHER"),
+        };
+      });
+  }
+  setFavourites = () => {
+    let newFavourites = [];
+    if(this.state.sportCheckBox){
+      newFavourites.push("SPORT");
+    }
+    if(this.state.foodCheckBox){
+      newFavourites.push("FOOD");
+    }
+    if(this.state.musicCheckBox){
+      newFavourites.push("MUSIC");
+    }
+    if(this.state.partyCheckBox){
+      newFavourites.push("PARTY");
+    }
+    if(this.state.educationCheckBox){
+      newFavourites.push("EDUCATION");
+    }
+    if(this.state.otherCheckBox){
+      newFavourites.push("OTHER");
+    }
+    this.props.updateFavourites(newFavourites);
   }
   toggleChangeSport = () => {
     this.setState({
@@ -110,10 +146,26 @@ class PreferencesScreen extends React.Component {
           <Text style={styles.label}>Other</Text>
         </View>
 
+        <RoundedButton text="Save" onPress={this.setFavourites} />
+
       </View>
     )
   }
 }
+const mapStateToProps = state => {
+  return {
+    favourites: state.users.favourites,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getFavourites: () => dispatch(UserActions.userFavouritesRequest()),
+    updateFavourites: (favourites) => dispatch(UserActions.userFavouritesUpdateRequest(favourites)),
+  }
+}
 
 export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
 )(PreferencesScreen)

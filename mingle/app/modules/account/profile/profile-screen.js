@@ -66,7 +66,7 @@ class ProfileScreen extends React.Component {
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.profileImage}>
-                    <Image source={require("../../../shared/images/photo.png")} style={styles.image} resizeMode="center"/>
+                    <Image source={require("../../../shared/images/default_profile.jpg")} style={styles.image} resizeMode="center"/>
                 </View>
                 <View style={styles.infoContainer}>
                   <TextInput

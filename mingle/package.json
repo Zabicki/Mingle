@@ -32,7 +32,8 @@
     "seamless-immutable": "7.1.4",
     "sockjs-client": "^1.4.0",
     "tcomb-form-native": "0.6.20",
-    "text-encoding": "^0.7.0"
+    "text-encoding": "^0.7.0",
+    "date-fns": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

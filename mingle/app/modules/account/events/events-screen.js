@@ -2,9 +2,10 @@ import React from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation'
-import { eventEntityDetailScreen, eventEntityEditScreen } from '../../../navigation/layouts'
-import EventActions from './event.reducer'
-import styles from './events-screen-style'
+import {eventEntityDetailScreen, eventEntityEditScreen, eventInfoScreen} from '../../../navigation/layouts'
+import EventActions from '../../entities/event/event.reducer'
+import AccountActions from '../../../shared/reducers/account.reducer'
+import styles from './events-screen.styles'
 import AlertMessage from '../../../shared/components/alert-message/alert-message'
 
 // More info here: https://facebook.github.io/react-native/docs/flatlist.html
@@ -22,7 +23,7 @@ class EventsScreen extends React.PureComponent {
       size: 20,
       done: false,
       dataObjects: [],
-      
+
     }
     this.fetchEvents()
   }
@@ -30,7 +31,7 @@ class EventsScreen extends React.PureComponent {
   navigationButtonPressed({ buttonId }) {
     eventEntityEditScreen({ entityId: null })
   }
- 
+
   renderRow({ item }) {
     return (
       <TouchableOpacity onPress={eventEntityDetailScreen.bind(this, { entityId: item.id })}>
@@ -55,7 +56,7 @@ class EventsScreen extends React.PureComponent {
   oneScreensWorth = 20
 
   fetchEvents = () => {
-    this.props.findEventsAcceptedByUser({ page: this.state.page, sort: this.state.sort, size: this.state.size })
+    this.props.getAllAcceptedEvents({ page: this.state.page, sort: this.state.sort, size: this.state.size })
   }
 
   handleLoadMore = () => {
@@ -113,11 +114,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getAccount: () => dispatch(AccountActions.accountRequest()),
     getAllEvents: options => dispatch(EventActions.eventAllRequest(options)),
+    getAllAcceptedEvents: options => dispatch(EventActions.eventAllAcceptedRequest(options))
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(EventEntityScreen)
+)(EventsScreen)

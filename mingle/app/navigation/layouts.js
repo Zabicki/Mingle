@@ -36,6 +36,7 @@ import MessageEntityScreen from '../modules/entities/message/message-entity-scre
 import MessageEntityDetailScreen from '../modules/entities/message/message-entity-detail-screen'
 import MessageEntityEditScreen from '../modules/entities/message/message-entity-edit-screen'
 import Initializing from '../modules/initialize/Initializing'
+import MyEventsScreen from '../modules/account/events/events-screen'
 // ignite-jhipster-navigation-import-needle
 
 export const LOGIN_SCREEN = 'nav.LoginScreen'
@@ -66,6 +67,7 @@ export const MESSAGE_ENTITY_SCREEN = 'nav.MessageEntityScreen'
 export const MESSAGE_ENTITY_DETAIL_SCREEN = 'nav.MessageEntityDetailScreen'
 export const MESSAGE_ENTITY_EDIT_SCREEN = 'nav.MessageEntityEditScreen'
 export const INITIALIZING = 'nav.Initializing'
+export const MY_EVENTS_SCREEN = 'nav.MyEventsScreen'
 // ignite-jhipster-navigation-declaration-needle
 
 const store = createStore()
@@ -220,6 +222,7 @@ export function registerScreensAndStartApp() {
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_DETAIL_SCREEN, () => MessageEntityDetailScreen, Provider, store)
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_EDIT_SCREEN, () => MessageEntityEditScreen, Provider, store)
   Navigation.registerComponentWithRedux(INITIALIZING, () => Initializing, Provider, store)
+  Navigation.registerComponentWithRedux(MY_EVENTS_SCREEN, () => MyEventsScreen, Provider, store)
   // ignite-jhipster-navigation-registration-needle
 
   Navigation.events().registerAppLaunchedListener(() => {
@@ -723,6 +726,21 @@ export const initializing = () =>
           },
         },
       ],
+    },
+  })
+
+export const myEventsScreen = () =>
+  Navigation.push('center', {
+    component: {
+      name: MY_EVENTS_SCREEN,
+      options: {
+        topBar: {
+          title: {
+            text: 'My events',
+            color: Colors.snow,
+          },
+        },
+      },
     },
   })
 

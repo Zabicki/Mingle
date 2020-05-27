@@ -1,121 +1,150 @@
 import React, { Component } from 'react'
 import { TextInput, Text, View, SafeAreaView, Image, ScrollView, TouchableHighlight, FlatList, List, ListItem, Alert} from "react-native";
 import styles from './event-info-screen.styles'
+import {Navigation} from 'react-native-navigation'
+import EventActions from './event/event.reducer'
+import UserActions from '../../shared/reducers/user.reducer'
+import {connect} from 'react-redux'
+import {jsDateToLocalDate} from '../../shared/util/date-transforms'
 
 //export default
 class EventInfoScreen extends React.Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      eventName: "Football match",
-      date: "25-05-2020",
-      location: "Cracow",
-      description: "Do you like playing football? Join us! We're going to organize a match on Monday.",
-      participants: [
-        {
-          name: 'Amy Farha',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-          age: '21',
-        },
-        {
-          name: 'Chris Jackson',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-          age: '29',
-        },
-        {
-          name: 'Patrick Wilson',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-          age: '22',
-        },
-        {
-          name: 'Ann Rikke',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-          age: '19',
-        },
-        {
-          name: 'Rick Mars',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-          age: '25',
-        },
-        
-      ]
-    }
+    Navigation.events().bindComponent(this)
+    console.log('Entity id is', this.props.data.entityId)
+    this.props.getEvent(this.props.data.entityId)
   }
 
-  renderSeparator = () => {  
-    return (  
-        <View  
-            style={{  
-                height: 1,  
-                width: "100%",  
-                backgroundColor: "#000",  
-            }}  
-        />  
-    );  
+  renderSeparator = () => {
+    return (
+        <View
+            style={{
+                height: 1,
+                width: "100%",
+                backgroundColor: "#000",
+            }}
+        />
+    );
 };
 
-renderItem(item) {
-  return (
-    <TouchableHighlight onPress={this.getListViewItem.bind(this, item)}>      
-      <View style={styles.row}>
-        <View style={styles.profileImage}>
-          <Image source={require("../../shared/images/photo.png")} style={styles.image} resizeMode="center"></Image>
-        </View>           
-        <Text style={styles.item} >{item.name}</Text>
-        <Text style={styles.item}>{item.age}</Text>
-      </View>
-  </TouchableHighlight> 
-  )
-}
+  renderItem(item) {
+    return (
+      <TouchableHighlight onPress={this.getListViewItem.bind(this, item)}>
+        <View style={styles.row}>
+          <View style={styles.profileImage}>
+            <Image source={require("../../shared/images/default_profile.jpg")} style={styles.image} resizeMode="center"/>
+          </View>
+          <Text style={styles.item} >{item.firstName}</Text>
+          <Text style={styles.item}>{item.age}</Text>
+        </View>
+    </TouchableHighlight>
+    )
+  }
 
-getListViewItem = (item) => {  
-    Alert.alert(item.name);  
-    //go to user profile
-}  
+  //accept event and remove from maybe
+  handleAcceptButton = () => {
+    this.props.acceptEvent(this.props.data.entityId)
+    this.props.setMaybe([])
+    Navigation.pop(this.props.componentId)
+  }
+
+  //remove from maybe
+  handleDeclineButton = () => {
+    console.log(this.props.maybe)
+    let entityId = this.props.data.entityId
+    let maybeWithoutCurrentEvent = this.props.maybe.filter(function(obj) {
+      return obj.id !== entityId;
+    });
+    console.log('Maybe events without current event:\n', maybeWithoutCurrentEvent)
+    this.props.setMaybe(maybeWithoutCurrentEvent)
+    Navigation.pop(this.props.componentId)
+  }
+
+  getListViewItem = (item) => {
+      Alert.alert(item.name);
+      //go to user profile
+  }
 
   render() {
+    if (!this.props.event) {
+      return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      )
+    }
     return (
       <View style={styles.mainContainer}>
         <View style={styles.title}>
           <Text style={styles.eventNameText}>
-            {this.state.eventName}
+            {this.props.event.name}
           </Text>
         </View>
         <View style={styles.row}>
           <View style={styles.wrapper}>
             <Text style={styles.text}>
-              {this.state.date}
+              {jsDateToLocalDate(this.props.event.date)}
             </Text>
           </View>
           <View style={styles.wrapper}>
             <Text style={styles.text}>
-              {this.state.location}
+              {this.props.event.address}
             </Text>
           </View>
         </View>
         <View style={styles.descriptionSection}>
           <Text multiline={true} style={styles.textDescription}>
-            {this.state.description}
+            {this.props.event.description}
           </Text>
+        </View>
+        <View style={styles.row}>
+          <TouchableHighlight testID="acceptButton" style={styles.wrapper} onPress={this.handleAcceptButton} underlayColor="#D59F4E">
+            <View style={styles.button}>
+              <Text style={styles.textButton}>Accept</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight testID="declineButton" style={styles.wrapper} onPress={this.handleDeclineButton} underlayColor="#D59F4E">
+            <View style={styles.button}>
+              <Text style={styles.textButton}>Decline</Text>
+            </View>
+          </TouchableHighlight>
         </View>
         <View style={styles.title}>
           <Text style={styles.text}>
             {'Participants'}
           </Text>
         </View>
-        <View style={styles.list}>
-          <FlatList  
-                    data={this.state.participants}  
-                    renderItem={({ item }) => this.renderItem(item)} 
-                    ItemSeparatorComponent={this.renderSeparator}  
-                />  
-        </View>   
+        {<View style={styles.list}>
+          <FlatList
+                    data={this.props.event.participants}
+                    renderItem={({ item }) => this.renderItem(item)}
+                    ItemSeparatorComponent={this.renderSeparator}
+                />
+        </View>}
       </View>
+
     );
   }
 }
 
 
+const mapStateToProps = state => {
+  return {
+    event: state.events.event,
+    maybe: state.events.maybeEvents,
+  }
+}
 
-export default EventInfoScreen
+const mapDispatchToProps = dispatch => {
+  return {
+    getEvent: id => dispatch(EventActions.eventRequest(id)),
+    acceptEvent: eventId => dispatch(EventActions.eventAcceptRequest(eventId)),
+    setMaybe: maybeEvents => dispatch(EventActions.eventSetMaybe(maybeEvents)),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EventInfoScreen)

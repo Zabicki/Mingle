@@ -391,10 +391,13 @@ export const profileScreen = () =>
       },
     },
   })
-export const eventInfoScreen = () =>
+export const eventInfoScreen = data =>
   Navigation.push('center', {
     component: {
       name: EVENT_INFO_SCREEN,
+      passProps: {
+        data,
+      },
       options: {
         topBar: {
           title: {

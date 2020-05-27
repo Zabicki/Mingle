@@ -1,8 +1,8 @@
 import React from 'react'
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation'
-import { eventEntityDetailScreen, eventEntityEditScreen } from '../../../navigation/layouts'
+import {eventEntityDetailScreen, eventEntityEditScreen, eventInfoScreen} from '../../../navigation/layouts'
 import EventActions from '../../entities/event/event.reducer'
 import styles from './maybe-events-screen.styles'
 import AlertMessage from '../../../shared/components/alert-message/alert-message'
@@ -26,12 +26,8 @@ class MaybeEventsScreen extends React.PureComponent {
       done: false,
       dataObjects: [],
     }
-    this.fetchEvents()
   }
 
-  navigationButtonPressed({ buttonId }) {
-    eventEntityEditScreen({ entityId: null })
-  }
   /* ***********************************************************
   * STEP 2
   * `renderRow` function. How each cell/row should be rendered
@@ -42,10 +38,10 @@ class MaybeEventsScreen extends React.PureComponent {
   *************************************************************/
   renderRow({ item }) {
     return (
-      <TouchableOpacity onPress={eventEntityDetailScreen.bind(this, { entityId: item.id })}>
+      <TouchableOpacity onPress={eventInfoScreen.bind(this, { entityId: item.id })}>
         <View style={styles.row}>
-          <Text style={styles.boldLabel}>{item.name}</Text>
-          {/* <Text style={styles.label}>{item.description}</Text> */}
+          <Text style={styles.itemName} >{item.name}</Text>
+          <Text style={styles.item}>{item.host.firstName}</Text>
         </View>
       </TouchableOpacity>
     )
@@ -92,11 +88,7 @@ class MaybeEventsScreen extends React.PureComponent {
   //   {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
   // )}
 
-  fetchEvents = () => {
-    this.props.userMaybeEvents
-  }
-
-  handleLoadMore = () => {
+/*  handleLoadMore = () => {
     if (this.state.done || this.props.fetching) {
       return
     }
@@ -108,7 +100,7 @@ class MaybeEventsScreen extends React.PureComponent {
         this.fetchEvents()
       },
     )
-  }
+  }*/
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.events) {
@@ -146,13 +138,12 @@ const mapStateToProps = state => {
     events: state.events.events,
     fetching: state.events.fetchingAll,
     error: state.events.errorAll,
-    userMaybeEvents: state.maybeEvents
+    userMaybeEvents: state.events.maybeEvents
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllEvents: options => dispatch(EventActions.eventAllRequest(options)),
   }
 }
 

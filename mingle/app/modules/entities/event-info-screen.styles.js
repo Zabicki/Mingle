@@ -28,6 +28,21 @@ export default StyleSheet.create({
     fontWeight: '400',
     color: Colors.snow,
   },
+  button: {
+    height: 40,
+    width: 190,
+    padding: 6,
+    backgroundColor: Colors.sun,
+    borderColor: Colors.sun,
+    borderWidth: 1,
+    borderRadius: 3,
+    justifyContent: 'center',
+  },
+  textButton: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '600',
+  },
   row: {
     paddingBottom: Metrics.doubleBaseMargin,
     paddingHorizontal: Metrics.doubleBaseMargin,
@@ -62,20 +77,20 @@ export default StyleSheet.create({
     color: Colors.sun,
     marginTop: 15,
   },
-  item: {  
-    padding: 10,  
-    fontSize: 18,  
+  item: {
+    padding: 10,
+    fontSize: 18,
     height: 44,
     fontWeight: '400',
-    color: Colors.greyDark,  
-},  
+    color: Colors.greyDark,
+},
 image: {
   alignSelf: "center",
   width: 60,
   height: 60,
   borderRadius: 30,
   overflow: "hidden"
-  
+
 },
 list: {
   margin: 15,

@@ -12,19 +12,10 @@ class ProfileScreen extends React.Component {
   constructor(props) {
     super(props)
     Navigation.events().bindComponent(this)
-
     this.props.getAccount()
-
     this.state = {
       editable: false,
-      name: this.props.account.firstName+" "+this.props.account.lastName,
-      age : "25",
-      location: "Cracow",
-      description: "I love playing sports, especially football and basketball. I'd love to join some sport events.",
-      show_saving_button: false
     }
-
-
   }
 
   componentDidAppear() {
@@ -75,12 +66,12 @@ class ProfileScreen extends React.Component {
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.profileImage}>
-                    <Image source={require("../../../shared/images/photo.png")} style={styles.image} resizeMode="center"></Image>
+                    <Image source={require("../../../shared/images/photo.png")} style={styles.image} resizeMode="center"/>
                 </View>
                 <View style={styles.infoContainer}>
                   <TextInput
                     style={styles.textName}
-                    type="text" value={this.state.name}
+                    type="text" value={this.props.account.firstName}
                     onChange={e => this.handleChange(e, "name")}
                     editable={this.state.editable}>
                   </TextInput>

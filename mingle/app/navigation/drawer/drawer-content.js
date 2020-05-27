@@ -96,7 +96,6 @@ class DrawerContent extends Component {
       <ScrollView style={styles.container}>
         <Image testID="drawerLogo" source={Images.logoLogin} style={styles.logo} />
         {<DrawerButton testID="profileDrawerButton" text="Profile" onPress={this.handlePressProfile} />}
-        {<DrawerButton testID="eventInfoDrawerButton" text="Event Info" onPress={this.handlePressEventInfo} />}
         {<DrawerButton testID="maybeDrawerButton" text="Maybe events" onPress={this.handlePressMaybe} />}
         {<DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
         {<DrawerButton testID="preferencesDrawerButton" text="Preferences" onPress={this.handlePressPreferences} />}

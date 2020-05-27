@@ -79,7 +79,7 @@ public class SocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
 
             @Override
             public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
-
+                // It is intentionally left empty
             }
         };
     }

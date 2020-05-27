@@ -1,6 +1,6 @@
 import FixtureAPI from '../../../../app/shared/services/fixture-api'
 import { put } from 'redux-saga/effects'
-import { getUser, getUsers, updateUser, deleteUser } from '../../../../app/shared/sagas/user.sagas'
+import { getUser, getUsers, updateUser, deleteUser, getFavourites, updateFavourites } from '../../../../app/shared/sagas/user.sagas'
 import UserActions from '../../../../app/shared/reducers/user.reducer'
 
 const stepper = fn => mock => fn.next(mock).value
@@ -75,4 +75,41 @@ test('delete failure path', () => {
   step()
   // Step 2: Failed response.
   expect(step(response)).toEqual(put(UserActions.userDeleteFailure()))
+})
+
+
+test('get favourites success path', () => {
+  const response = FixtureAPI.getFavourites()
+  const step = stepper(getFavourites(FixtureAPI))
+  // Step 1: Hit the api
+  step()
+  // Step 2: Successful return and data!
+  expect(step(response)).toEqual(put(UserActions.userFavouritesSuccess(["SPORT", "FOOD"])))
+})
+
+test('get favourites failure path', () => {
+  const response = { ok: false }
+  const step = stepper(getFavourites(FixtureAPI))
+  // Step 1: Hit the api
+  step()
+  // Step 2: Failed response.
+  expect(step(response)).toEqual(put(UserActions.userFavouritesFailure()))
+})
+
+test('update favourites success path', () => {
+  const response = FixtureAPI.updateFavourites(["SPORT", "FOOD"])
+  const step = stepper(updateFavourites(FixtureAPI, {favourites: ["SPORT","FOOD"]} ))
+  // Step 1: Hit the api
+  step()
+  // Step 2: Successful return and data!
+  expect(step(response)).toEqual(put(UserActions.userFavouritesUpdateSuccess(["SPORT","FOOD"])))
+})
+
+test('update favourites failure path', () => {
+  const response = { ok: false }
+  const step = stepper(updateFavourites(FixtureAPI, {favourites: ["SPORT","FOOD"]}))
+  // Step 1: Hit the api
+  step()
+  // Step 2: Failed response.
+  expect(step(response)).toEqual(put(UserActions.userFavouritesUpdateFailure()))
 })

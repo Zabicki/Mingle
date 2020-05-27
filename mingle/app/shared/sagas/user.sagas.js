@@ -58,3 +58,30 @@ export function* deleteUser(api, action) {
     yield put(UserActions.userDeleteFailure(response.data))
   }
 }
+
+export function* getFavourites(api, action) {
+  // make the call to the api
+  const apiCall = call(api.getFavourites)
+  const response = yield call(callApi, apiCall)
+
+  // success?
+  if (response.ok) {
+    yield put(UserActions.userFavouritesSuccess(response.data))
+  } else {
+    yield put(UserActions.userFavouritesFailure(response.data))
+  }
+}
+
+export function* updateFavourites(api, action) {
+  const { favourites } = action
+  // make the call to the api
+  const apiCall = call(api.updateFavourites, favourites)
+  const response = yield call(callApi, apiCall)
+
+  // success?
+  if (response.ok) {
+    yield put(UserActions.userFavouritesUpdateSuccess(response.data))
+  } else {
+    yield put(UserActions.userFavouritesUpdateFailure(response.data))
+  }
+}

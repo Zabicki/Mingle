@@ -13,7 +13,6 @@ import { ForgotPasswordTypes } from '../../modules/account/password-reset/forgot
 import { ChangePasswordTypes } from '../../modules/account/password/change-password.reducer'
 import { UserTypes } from '../../shared/reducers/user.reducer'
 import { ChatTypes } from '../../modules/entities/chat/chat.reducer'
-import { FavouriteTypes } from '../../modules/entities/favourites/favourites.reducer'
 import { ReviewTypes } from '../../modules/entities/review/review.reducer'
 import { EventTypes } from '../../modules/entities/event/event.reducer'
 import { MessageTypes } from '../../modules/entities/message/message.reducer'
@@ -27,9 +26,8 @@ import { register } from '../../modules/account/register/register.sagas'
 import { forgotPassword } from '../../modules/account/password-reset/forgot-password.sagas'
 import { changePassword } from '../../modules/account/password/change-password.sagas'
 import { getAccount, updateAccount } from '../../shared/sagas/account.sagas'
-import { getUser, getUsers, updateUser, deleteUser } from '../../shared/sagas/user.sagas'
+import { getUser, getUsers, updateUser, deleteUser, getFavourites, updateFavourites} from '../../shared/sagas/user.sagas'
 import { getChat, getChats, updateChat, deleteChat } from '../../modules/entities/chat/chat.sagas'
-import { getFavourite, getFavourites, updateFavourite, deleteFavourite } from '../../modules/entities/favourites/favourites.sagas'
 import { getReview, getReviews, updateReview, deleteReview } from '../../modules/entities/review/review.sagas'
 import { getEvent, getEvents, updateEvent, deleteEvent, acceptEvent, getNearby, getFromCity, getHosted, getAccepted } from '../../modules/entities/event/event.sagas'
 import { getMessage, getMessages, updateMessage, deleteMessage } from '../../modules/entities/message/message.sagas'
@@ -62,11 +60,6 @@ export default function* root() {
     takeLatest(ChatTypes.CHAT_UPDATE_REQUEST, updateChat, api),
     takeLatest(ChatTypes.CHAT_DELETE_REQUEST, deleteChat, api),
 
-    takeLatest(FavouriteTypes.FAVOURITE_REQUEST, getFavourite, api),
-    takeLatest(FavouriteTypes.FAVOURITE_ALL_REQUEST, getFavourites, api),
-    takeLatest(FavouriteTypes.FAVOURITE_UPDATE_REQUEST, updateFavourite, api),
-    takeLatest(FavouriteTypes.FAVOURITE_DELETE_REQUEST, deleteFavourite, api),
-
     takeLatest(ReviewTypes.REVIEW_REQUEST, getReview, api),
     takeLatest(ReviewTypes.REVIEW_ALL_REQUEST, getReviews, api),
     takeLatest(ReviewTypes.REVIEW_UPDATE_REQUEST, updateReview, api),
@@ -92,6 +85,8 @@ export default function* root() {
     takeLatest(UserTypes.USER_ALL_REQUEST, getUsers, api),
     takeLatest(UserTypes.USER_UPDATE_REQUEST, updateUser, api),
     takeLatest(UserTypes.USER_DELETE_REQUEST, deleteUser, api),
+    takeLatest(UserTypes.USER_FAVOURITES_REQUEST, getFavourites, api),
+    takeLatest(UserTypes.USER_FAVOURITES_UPDATE_REQUEST, updateFavourites, api),
 
     takeLatest(AccountTypes.ACCOUNT_REQUEST, getAccount, api),
     takeLatest(AccountTypes.ACCOUNT_UPDATE_REQUEST, updateAccount, api),

@@ -19,13 +19,6 @@ class MaybeEventsScreen extends React.PureComponent {
      * This is an array of objects with the properties you desire
      * Usually this should come from Redux mapStateToProps
      *************************************************************/
-    this.state = {
-      page: 0,
-      sort: 'id,asc',
-      size: 20,
-      done: false,
-      dataObjects: [],
-    }
   }
 
   /* ***********************************************************
@@ -102,26 +95,15 @@ class MaybeEventsScreen extends React.PureComponent {
     )
   }*/
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.events) {
-      return {
-        done: nextProps.events.length < prevState.size,
-        dataObjects: [...prevState.dataObjects, ...nextProps.events],
-      }
-    }
-    return null
-  }
-
   render() {
     return (
       <View style={styles.container} testID="eventScreen">
         <FlatList
           contentContainerStyle={styles.listContent}
-          data={this.state.dataObjects}
+          data={this.props.userMaybeEvents}
           renderItem={this.renderRow}
           keyExtractor={this.keyExtractor}
           initialNumToRender={this.oneScreensWorth}
-          onEndReached={this.handleLoadMore}
           /* ListHeaderComponent={this.renderHeader} */
           /* ListFooterComponent={this.renderFooter} */
           ListEmptyComponent={this.renderEmpty}
@@ -135,9 +117,6 @@ class MaybeEventsScreen extends React.PureComponent {
 const mapStateToProps = state => {
   return {
     // ...redux state to props here
-    events: state.events.events,
-    fetching: state.events.fetchingAll,
-    error: state.events.errorAll,
     userMaybeEvents: state.events.maybeEvents
   }
 }

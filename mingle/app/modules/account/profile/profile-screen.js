@@ -108,8 +108,6 @@ class ProfileScreen extends React.Component {
                   <TouchableHighlight testID="saveChanges" style={styles.button} onPress={this.handleSaveClik.bind(this)} underlayColor="#FDB813">
                     <Text style={styles.buttonText}>Save</Text>
                   </TouchableHighlight>}
-
-
                 </View>
             </ScrollView>
         </SafeAreaView>

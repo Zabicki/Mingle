@@ -14,9 +14,9 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   button: {
-    height: 36,
-    backgroundColor: Colors.jhipsterBlue,
-    borderColor: Colors.jhipsterBlue,
+    height: 40,
+    backgroundColor: Colors.sun,
+    borderColor: Colors.sun,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 10,

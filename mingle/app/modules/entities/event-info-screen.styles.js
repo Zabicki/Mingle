@@ -30,7 +30,7 @@ export default StyleSheet.create({
   },
   button: {
     height: 40,
-    width: 190,
+    width: 170,
     padding: 6,
     backgroundColor: Colors.sun,
     borderColor: Colors.sun,

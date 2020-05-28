@@ -13,6 +13,35 @@ import t from 'tcomb-form-native'
 import styles from './event-entity-edit-screen-style'
 
 let Form = t.form.Form
+
+var _ = require('lodash');
+const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
+
+stylesheet.textbox.normal.borderTopWidth = 0;
+stylesheet.textbox.error.borderTopWidth = 0;
+stylesheet.textbox.normal.borderLeftWidth = 0;
+stylesheet.textbox.error.borderLeftWidth = 0;
+stylesheet.textbox.normal.borderRightWidth = 0;
+stylesheet.textbox.error.borderRightWidth = 0;
+stylesheet.textbox.normal.marginBottom = 0;
+stylesheet.textbox.error.marginBottom = 0;
+stylesheet.textbox.normal.fontSize = 16;
+stylesheet.textbox.error.fontSize = 16;
+
+stylesheet.textboxView.normal.marginBottom = 5;
+stylesheet.textboxView.error.marginBottom = 5;
+stylesheet.textboxView.normal.marginTop = 8;
+stylesheet.textboxView.error.marginTop = 8;
+
+stylesheet.dateValue.normal.borderColor = 'grey';
+stylesheet.dateValue.normal.color = 'grey';
+stylesheet.dateValue.normal.borderBottomWidth = 1;
+stylesheet.dateValue.normal.borderLeftWidth = 0;
+stylesheet.dateValue.normal.borderRightWidth = 0;
+stylesheet.dateValue.normal.borderTopWidth = 0;
+
+stylesheet.controlLabel.normal.color = 'grey';
+
 const Category = t.enums({
   SPORT: 'SPORT',
   FOOD: 'FOOD',
@@ -49,6 +78,7 @@ class EventEntityEditScreen extends React.Component {
         privacy: Privacy,
       }),
       formOptions: {
+        
         fields: {
           name: {
             returnKeyType: 'next',
@@ -81,13 +111,26 @@ class EventEntityEditScreen extends React.Component {
             testID: 'maxParticipantsInput',
           },
           location: {
+            auto: 'placeholders',
+            label: 'Location',
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('date').refs.input.focus(),
             testID: 'locationInput',
           },
           date: {
+            normal: {
+              color: '#EDEDED',
+              fontSize: 16,
+              padding: 7,
+              marginBottom: 5,
+              marginTop: 20,
+            },
             mode: 'date',
+            dialogMode: 'calendar',
+            error: 'Enter date',
+            returnKeyType: 'next',
             config: {
+              defaultValueText: 'Tap to pick date', // Allows you to format the PlaceHolders !!
               format: date => jsDateToLocalDate(date),
             },
             returnKeyType: 'next',
@@ -113,6 +156,7 @@ class EventEntityEditScreen extends React.Component {
             testID: 'privacyInput',
           },
         },
+        stylesheet: stylesheet,
       },
       event: {},
       isNewEntity: true,

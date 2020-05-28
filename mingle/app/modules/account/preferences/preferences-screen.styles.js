@@ -7,6 +7,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
+    padding: 20,
   },
   title: {
     marginBottom: 20,
@@ -25,6 +26,26 @@ export default StyleSheet.create({
   },
   label: {
     color: Colors.greyDark,
+    fontSize: 16,
     margin: 8,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: 'white',
+    alignSelf: 'center',
+  },
+  button: {
+    height: 45,
+    backgroundColor: Colors.sun,
+    borderColor: Colors.sun,
+    borderWidth: 1,
+    borderRadius: 3,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignSelf: 'stretch',
+  },
+  buttonSection: {
+    marginTop: 10,
   },
 })

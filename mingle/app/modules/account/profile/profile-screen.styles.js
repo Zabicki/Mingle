@@ -17,17 +17,17 @@ export default StyleSheet.create({
   },
   textAge: {
     fontWeight: "bold",
-    color: "#AEB5BC", 
-    fontSize: 18,
+    color: Colors.greyDark, 
+    fontSize: 20,
     padding: 0  
   },
   textLocation: {
-    color: "#AEB5BC", 
-    fontSize: 18,
+    color: Colors.greyDark, 
+    fontSize: 20,
     padding: 0  
   },
   buttonSection: {
-    marginTop: 10,
+    padding: 20,
     alignItems: 'center',
   },
   scrollView: {
@@ -52,10 +52,10 @@ export default StyleSheet.create({
     borderRadius: 100,
     overflow: "hidden"
   },
- 
   scrollView: {
-    paddingBottom: Metrics.baseMargin,
+    paddingBottom: Metrics.doubleBaseMargin,
     backgroundColor: 'white',
+    marginBottom: 10,
   },
   body: {
     backgroundColor: 'white',
@@ -63,13 +63,13 @@ export default StyleSheet.create({
   button: {
     flex: 1,
     height: 40,
-    width: 115,
     padding: 6,
     backgroundColor: Colors.sun,
     borderColor: Colors.sun,
     borderWidth: 1,
     borderRadius: 3,
     justifyContent: 'center',
+    alignSelf: 'stretch',
   },
   buttonText: {
     fontSize: 18,
@@ -78,13 +78,25 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   textDescription: {
-    width: 350,
-    height: 110,
-    fontSize: 18,
-    color: "#AEB5BC",
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: Colors.snow,
   },
   description: {
-    height: 150,
+    height: 100,
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 5,
+    marginTop: 15,
+    padding: 10,
+    borderRadius: 10,
+    elevation: 5,
+    borderRadius: 5,
+    shadowColor: 'black',
+    flexDirection: 'row',
+    backgroundColor: Colors.greyDark,
     alignItems: 'center',
+    justifyContent: 'center',
   },
+
 })

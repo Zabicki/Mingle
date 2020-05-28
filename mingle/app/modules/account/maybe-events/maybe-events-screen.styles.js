@@ -4,8 +4,8 @@ import { Metrics, ApplicationStyles, Colors } from '../../../shared/themes/'
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
-  mainContainer:{
-    padding: 10
+  container:{
+    padding: 20
   },
   eventNameText: {
     textAlign: 'center',
@@ -35,7 +35,7 @@ export default StyleSheet.create({
     height: 70,
     alignItems: 'center',
     flex: 1,
-    backgroundColor: "#D59F4E",
+    backgroundColor: Colors.sun,
     marginVertical: Metrics.baseMargin,
   },
   itemName: {
@@ -90,6 +90,16 @@ export default StyleSheet.create({
   list: {
     margin: 15,
     height: 180,
-  }
+  },
 
+  button: {
+    height: 45,
+    backgroundColor: Colors.sun,
+    borderColor: Colors.sun,
+    borderWidth: 1,
+    borderRadius: 3,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignSelf: 'stretch',
+  },
 })

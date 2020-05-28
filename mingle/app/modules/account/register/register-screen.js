@@ -35,6 +35,8 @@ stylesheet.textboxView.error.marginTop = 8;
 stylesheet.dateValue.normal.color = 'grey';
 stylesheet.dateValue.normal.borderWidth = 1;
 
+stylesheet.controlLabel.normal.color = 'grey';
+
 
 class RegisterScreen extends React.Component {
   constructor(props) {

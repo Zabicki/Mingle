@@ -18,7 +18,7 @@ import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,6 +51,7 @@ public class EventService {
      */
     public Event save(Event event) {
         log.debug("Request to save Event : {}", event);
+        event = event.city(event.getCity().toLowerCase());
         return eventRepository.save(event);
     }
 
@@ -79,7 +80,7 @@ public class EventService {
             UserNotLoggedIn::new
         );
         String regex = createRegexFavourites(logged);
-        return eventRepository.findByLocationNear(point, distance,regex,logged.getId(), LocalDate.now(),pageable);
+        return eventRepository.findByLocationNear(point, distance,regex,logged.getId(), ZonedDateTime.now(),pageable);
     }
 
     /**
@@ -95,7 +96,19 @@ public class EventService {
             UserNotLoggedIn::new
         );
         String regex = createRegexFavourites(logged);
-        return eventRepository.findByCity(city,regex,logged.getId(),LocalDate.now(),pageable);
+        String searchCity;
+        if(city.equals("null")){
+            log.debug("city is undefined");
+            if(logged.getCity() == null){
+                searchCity = ".*";
+            }else{
+                searchCity = logged.getCity().toLowerCase();
+            }
+        }else{
+            searchCity = city.toLowerCase();
+        }
+        log.debug("searching for city: {}",searchCity);
+        return eventRepository.findByCity(searchCity ,regex,logged.getId(),ZonedDateTime.now(),pageable);
     }
 
     /**

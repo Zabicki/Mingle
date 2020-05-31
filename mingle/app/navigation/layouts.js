@@ -140,6 +140,18 @@ const homeStack = {
                         color: Colors.snow,
                       },
                     ],
+                    rightButtons: [
+                      {
+                        id: 'byCity',
+                        text: 'search',
+                        color: Colors.snow,
+                      },
+                      {
+                        id: 'reload',
+                        text: 'reload',
+                        color: Colors.snow,
+                      },
+                    ],
                   },
                 },
               },

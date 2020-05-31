@@ -94,7 +94,7 @@ export function* getNearby(api,action){
 export function* getFromCity(api,action){
   const { options, city }  = action
 
-  const apiCall = call(api.getFromCity, [options, city])
+  const apiCall = call(api.getFromCity, options, city)
   const response = yield call(callApi,apiCall)
 
   //success?

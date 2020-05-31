@@ -78,7 +78,7 @@ class EventEntityEditScreen extends React.Component {
         privacy: Privacy,
       }),
       formOptions: {
-        
+
         fields: {
           name: {
             returnKeyType: 'next',
@@ -268,8 +268,8 @@ const entityToFormValue = value => {
     address: value.address || null,
     maxParticipants: value.maxParticipants || null,
     location: {
-      latitude: value.location[0],
-      longitude: value.location[1],
+      latitude: value.location[1],
+      longitude: value.location[0],
     },
     date: value.date || null,
     recurrent: value.recurrent || null,
@@ -286,7 +286,7 @@ const formValueToEntity = value => {
     city: value.city || null,
     address: value.address || null,
     maxParticipants: value.maxParticipants || null,
-    location: [value.location.latitude, value.location.longitude],
+    location: [value.location.longitude, value.location.latitude],
     date: value.date || null,
     recurrent: value.recurrent || false,
     interval: value.interval || null,

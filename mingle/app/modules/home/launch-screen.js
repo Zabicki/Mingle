@@ -4,6 +4,7 @@ import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/Ne
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
 import Geolocation from '@react-native-community/geolocation';
+import Dialog from 'react-native-dialog';
 
 import LearnMoreLinks from './learn-more-links.component.js'
 import { Images } from '../../shared/themes'
@@ -26,7 +27,10 @@ export class LaunchScreen extends React.Component {
         position: 0,
         location: null,
         permission: null,
-        city: null,
+        city: 'null',
+        cityInput: '',
+        byCity: false,
+        showDialog: false,
     }
     this.handlePermissions();
   }
@@ -36,7 +40,7 @@ export class LaunchScreen extends React.Component {
       sort: this.state.sort,
       size: this.state.size,
     };
-    if(this.state.permission){
+    if(this.state.permission && !this.state.byCity){
       this.props.getNearbyEvents(options, this.state.location.latitude, this.state.location.longitude, 15);
     }
     else{
@@ -127,7 +131,24 @@ export class LaunchScreen extends React.Component {
   }
 
   navigationButtonPressed({ buttonId }) {
-    this.showSideMenu()
+    if(buttonId == 'menuButton'){
+      this.showSideMenu()
+    }else if(buttonId == 'byCity'){
+      this.setState({showDialog: true})
+    }else if(buttonId == 'reload'){
+      this.setState({
+        page: 0,
+        position: 0,
+        location: null,
+        permission: null,
+        city: 'null',
+        cityInput: '',
+        byCity: false,
+        showDialog: false,
+      },
+      ()=> this.handlePermissions()
+      )
+    }
   }
 
   handleAcceptButton = () => {
@@ -150,12 +171,37 @@ export class LaunchScreen extends React.Component {
   handleDeclineButton = () => {
     this.showNext()
   }
+  handleCitySearch = () =>{
+    this.setState((prev,state) => {
+
+    return {
+      city: prev.cityInput,
+      showDialog: false,
+      byCity: true,
+      position: 0,
+      page: 0,
+    }},
+    ()=> this.fetchEvents()
+    )
+  }
+  handleCancel = () =>{
+    this.setState({
+      showDialog: false,
+      cityInput: '',
+    })
+  }
 
   render() {
    const {events} = this.props
    const {position} =this.state
     return (
       <View style={styles.mainContainer} testID="launchScreen">
+        <Dialog.Container visible={this.state.showDialog}>
+          <Dialog.Title>Search by city</Dialog.Title>
+           <Dialog.Input style = {styles.textInput}  placeholder="Enter city..." onChangeText={(city) => this.setState({cityInput: city})}></Dialog.Input>
+           <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+           <Dialog.Button label="Ok" onPress={this.handleCitySearch} />
+        </Dialog.Container>
       { events && events[position] ? (
         <View style={styles.scrollView}>
           <View style={styles.form}>

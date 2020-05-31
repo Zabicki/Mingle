@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,7 +60,7 @@ public class Event implements Serializable {
 
     @NotNull
     @Field("date")
-    private LocalDate date;
+    private ZonedDateTime date;
 
     @NotNull
     @Field("recurrent")
@@ -199,16 +199,16 @@ public class Event implements Serializable {
         this.maxParticipants = maxParticipants;
     }
 
-    public LocalDate getDate() {
+    public ZonedDateTime getDate() {
         return date;
     }
 
-    public Event date(LocalDate date) {
+    public Event date(ZonedDateTime date) {
         this.date = date;
         return this;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(ZonedDateTime date) {
         this.date = date;
     }
 

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,15 +31,15 @@ public interface EventRepository extends MongoRepository<Event, String> {
         "'date': {$gte: ?4}, " +
         "'host': {$ne: ?3}, " +
         "'participants': {$ne: ?3 } }")
-    Page<Event> findByLocationNear(Point point, double distance, String favourites, String userId, LocalDate date, Pageable pageable);
+    Page<Event> findByLocationNear(Point point, double distance, String favourites, String userId, ZonedDateTime date, Pageable pageable);
 
 
-    @Query("{'city' : ?0, " +
+    @Query("{'city': { $regex: ?0 }, " +
         "'category': { $regex: ?1 }, " +
         "'date': {$gte: ?3}, " +
         "'host': { $ne: ?2 }, " +
         "'participants': { $ne: ?2} }")
-    Page<Event> findByCity( String city, String favourites, String userId, LocalDate date, Pageable pageable);
+    Page<Event> findByCity(String city, String favourites, String userId, ZonedDateTime date, Pageable pageable);
 
 
     Page<Event> findByHost(String host,Pageable pageable);

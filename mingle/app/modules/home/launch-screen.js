@@ -1,8 +1,9 @@
 import React from 'react'
-import { ScrollView, Text, Image, View, Platform, TouchableHighlight } from 'react-native'
+import { ScrollView, Text, Image, View, Platform, TouchableHighlight, PermissionsAndroid } from 'react-native'
 import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
+import Geolocation from '@react-native-community/geolocation';
 
 import LearnMoreLinks from './learn-more-links.component.js'
 import { Images } from '../../shared/themes'
@@ -10,6 +11,8 @@ import styles from './launch-screen.styles'
 import RoundedButton from '../../shared/components/rounded-button/rounded-button'
 import EventAction from '../entities/event/event.reducer'
 import {launchScreen} from '../../navigation/layouts'
+
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions'
 
 export class LaunchScreen extends React.Component {
   constructor(props) {
@@ -21,11 +24,65 @@ export class LaunchScreen extends React.Component {
         sort: 'id,asc',
         size: 5,
         position: 0,
+        location: null,
+        permission: null,
+        city: null,
+    }
+    this.handlePermissions();
+  }
+  fetchEvents = () =>{
+    const options = {
+      page: this.state.page,
+      sort: this.state.sort,
+      size: this.state.size,
+    };
+    if(this.state.permission){
+      this.props.getNearbyEvents(options, this.state.location.latitude, this.state.location.longitude, 15);
+    }
+    else{
+      this.props.getFromCity(options, this.state.city);
     }
   }
 
-  fetchEvents = () =>{
-    this.props.getAllEvents(this.state.page,this.state.sort, this.state.size)
+  getLocation = () =>{
+    Geolocation.getCurrentPosition(
+      position => {
+        this.setState({
+        location: position.coords,
+        },
+        ()=> this.fetchEvents())
+      }
+    );
+  }
+
+  handlePermissions = () =>{
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(
+      (result) => {
+        switch (result){
+          case RESULTS.GRANTED:
+            this.setState({
+            permission: true,
+            },
+            ()=> this.getLocation());
+            break;
+          case RESULTS.DENIED:
+            request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(
+              (result) =>{
+                if (result == RESULTS.GRANTED){
+                  this.setState({permission: true}, ()=> this.getLocation());
+                }
+                else{
+                  this.setState({permission: false}, ()=> this.fetchEvents());
+                }
+              }
+            );
+            break;
+          default :
+            this.setState({permission: false}, ()=> this.fetchEvents());
+            break;
+        }
+      }
+    );
   }
 
   showNext = () =>{
@@ -46,10 +103,6 @@ export class LaunchScreen extends React.Component {
         },
       )
     }
-  }
-
-  componentDidMount() {
-    this.fetchEvents()
   }
 
   componentDidAppear() {
@@ -183,6 +236,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>{
   return{
     getAllEvents: options => dispatch(EventAction.eventAllRequest(options)),
+    getNearbyEvents: (options, latitude, longitude, radius) => dispatch(EventAction.eventAllNearbyRequest(options, latitude, longitude, radius)),
+    getFromCity: (options, city) => dispatch(EventAction.eventAllFromCityRequest(options, city)),
     acceptEvent: eventId => dispatch(EventAction.eventAcceptRequest(eventId)),
     setMaybe: maybeEvents => dispatch(EventAction.eventSetMaybe(maybeEvents)),
     }

@@ -80,7 +80,7 @@ export function* acceptEvent(api,action){
 export function* getNearby(api,action){
   const { options, latitude, longitude, radius }  = action
 
-  const apiCall = call(api.getNearby, [options, latitude, longitude, radius])
+  const apiCall = call(api.getNearby, options, latitude, longitude, radius)
   const response = yield call(callApi,apiCall)
 
   //success?

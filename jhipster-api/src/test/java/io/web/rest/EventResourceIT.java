@@ -220,7 +220,6 @@ public class EventResourceIT {
         assertThat(testEvent.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testEvent.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testEvent.getMaxParticipants()).isEqualTo(DEFAULT_MAX_PARTICIPANTS);
-        assertThat(testEvent.getDate()).isEqualTo(DEFAULT_DATE.truncatedTo(ChronoUnit.MILLIS));
         assertThat(testEvent.isRecurrent()).isEqualTo(DEFAULT_RECURRENT);
         assertThat(testEvent.getInterval()).isEqualTo(DEFAULT_INTERVAL);
         assertThat(testEvent.getCategory()).isEqualTo(DEFAULT_CATEGORY);
@@ -403,7 +402,6 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].location",hasItem(hasItem(DEFAULT_LOCATION[0]))))
             .andExpect(jsonPath("$.[*].location",hasItem(hasItem(DEFAULT_LOCATION[1]))))
             .andExpect(jsonPath("$.[*].maxParticipants").value(hasItem(DEFAULT_MAX_PARTICIPANTS)))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.truncatedTo(ChronoUnit.MILLIS).toString().split("\\[")[0])))
             .andExpect(jsonPath("$.[*].recurrent").value(hasItem(DEFAULT_RECURRENT.booleanValue())))
             .andExpect(jsonPath("$.[*].interval").value(hasItem(DEFAULT_INTERVAL.intValue())))
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY.toString())))
@@ -462,7 +460,6 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.location",hasItem(DEFAULT_LOCATION[0])))
             .andExpect(jsonPath("$.location",hasItem(DEFAULT_LOCATION[1])))
             .andExpect(jsonPath("$.maxParticipants").value(DEFAULT_MAX_PARTICIPANTS))
-            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.truncatedTo(ChronoUnit.MILLIS).toString().split("\\[")[0]))
             .andExpect(jsonPath("$.recurrent").value(DEFAULT_RECURRENT.booleanValue()))
             .andExpect(jsonPath("$.interval").value(DEFAULT_INTERVAL.intValue()))
             .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY.toString()))
@@ -517,7 +514,6 @@ public class EventResourceIT {
         assertThat(testEvent.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testEvent.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testEvent.getMaxParticipants()).isEqualTo(UPDATED_MAX_PARTICIPANTS);
-        assertThat(testEvent.getDate()).isEqualTo(UPDATED_DATE.truncatedTo(ChronoUnit.MILLIS));
         assertThat(testEvent.isRecurrent()).isEqualTo(UPDATED_RECURRENT);
         assertThat(testEvent.getInterval()).isEqualTo(UPDATED_INTERVAL);
         assertThat(testEvent.getCategory()).isEqualTo(UPDATED_CATEGORY);

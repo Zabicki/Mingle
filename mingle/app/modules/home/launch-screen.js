@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Text, Image, View, Platform, TouchableHighlight, PermissionsAndroid } from 'react-native'
+import { ScrollView, Text, Image, View, Platform, TouchableHighlight } from 'react-native'
 import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
@@ -71,8 +71,8 @@ export class LaunchScreen extends React.Component {
             break;
           case RESULTS.DENIED:
             request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(
-              (result) =>{
-                if (result == RESULTS.GRANTED){
+              (res) =>{
+                if (res == RESULTS.GRANTED){
                   this.setState({permission: true}, ()=> this.getLocation());
                 }
                 else{

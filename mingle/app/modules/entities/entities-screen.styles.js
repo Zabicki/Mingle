@@ -11,19 +11,25 @@ export default StyleSheet.create({
   centerText: {
     textAlign: 'center',
   },
-  buttonText: {
-    fontSize: 18,
-    color: 'white',
-    alignSelf: 'center',
-  },
   button: {
-    height: 36,
-    backgroundColor: Colors.jhipsterBlue,
-    borderColor: Colors.jhipsterBlue,
+    height: 45,
+    backgroundColor: Colors.sun,
+    borderColor: Colors.sun,
     borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 10,
+    borderRadius: 3,
+    margin: 15,
     alignSelf: 'stretch',
     justifyContent: 'center',
+  },
+  wrapper: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  textButton: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '600',
   },
 })

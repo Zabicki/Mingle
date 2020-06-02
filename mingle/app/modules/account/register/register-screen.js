@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Navigation } from 'react-native-navigation'
 import t from 'tcomb-form-native'
+import { format } from 'date-fns'
 
 import RegisterActions from '../register/register.reducer'
 // Styles
@@ -30,25 +31,34 @@ stylesheet.textboxView.error.marginBottom = 5;
 stylesheet.textboxView.normal.marginTop = 8;
 stylesheet.textboxView.error.marginTop = 8;
 
+//stylesheet.dateValue.normal.borderColor = 'grey';
+stylesheet.dateValue.normal.color = 'grey';
+stylesheet.dateValue.normal.borderWidth = 1;
+
+stylesheet.controlLabel.normal.color = 'grey';
+
+
 class RegisterScreen extends React.Component {
   constructor(props) {
     super(props)
     Navigation.events().bindComponent(this)
     this.state = {
       accountModel: t.struct({
-        name: t.String,
+        firstName: t.String,
         login: t.String,
         password: t.String,
         confirmPassword: t.String,
         email: t.String,
-        birthDate: t.Date,
+        city: t.String,
+        age: t.Number,
+        description: t.String,
         langKey: t.String,
       }),
-      accountValue: { name: null, login: null, password: null, confirmPassword: null, email: null, birthDate: null, langKey: 'en' },
+      accountValue: { firstName: null, login: null, password: null, confirmPassword: null, email: null, city: null, age: null, description: null, langKey: 'en' },
       options: {
         auto: 'placeholders',
         fields: {
-          name: {
+          firstName: {
             error: 'Enter name',
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('login').refs.input.focus(),
@@ -74,13 +84,17 @@ class RegisterScreen extends React.Component {
             error: 'Enter e-mail address',
             returnKeyType: 'done',
           },
-          birthDate: {
-            defaultValueText: 'Enter birth date',
-            mode: 'date',
-            dialogMode: 'calendar',
-            error: 'Enter birth date',
-            returnKeyType: 'next',
-            onSubmitEditing: () => this.submitUpdate(),
+          city: {
+            error: 'Enter your city',
+            returnKeyType: 'done',
+          },
+          age: {
+            error: 'Enter your age',
+            returnKeyType: 'done'
+          },
+          description: {
+            error: 'Enter your description',
+            returnKeyType: 'done'
           },
           langKey: {
             hidden: true,

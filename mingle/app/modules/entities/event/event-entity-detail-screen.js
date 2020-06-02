@@ -13,6 +13,8 @@ class EventEntityDetailScreen extends React.Component {
   constructor(props) {
     super(props)
     Navigation.events().bindComponent(this)
+    console.log('Entity id is', this.props.data.entityId)
+
     this.props.getEvent(this.props.data.entityId)
   }
 

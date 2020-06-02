@@ -13,11 +13,41 @@ import t from 'tcomb-form-native'
 import styles from './event-entity-edit-screen-style'
 
 let Form = t.form.Form
+
+var _ = require('lodash');
+const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
+
+stylesheet.textbox.normal.borderTopWidth = 0;
+stylesheet.textbox.error.borderTopWidth = 0;
+stylesheet.textbox.normal.borderLeftWidth = 0;
+stylesheet.textbox.error.borderLeftWidth = 0;
+stylesheet.textbox.normal.borderRightWidth = 0;
+stylesheet.textbox.error.borderRightWidth = 0;
+stylesheet.textbox.normal.marginBottom = 0;
+stylesheet.textbox.error.marginBottom = 0;
+stylesheet.textbox.normal.fontSize = 16;
+stylesheet.textbox.error.fontSize = 16;
+
+stylesheet.textboxView.normal.marginBottom = 5;
+stylesheet.textboxView.error.marginBottom = 5;
+stylesheet.textboxView.normal.marginTop = 8;
+stylesheet.textboxView.error.marginTop = 8;
+
+stylesheet.dateValue.normal.borderColor = 'grey';
+stylesheet.dateValue.normal.color = 'grey';
+stylesheet.dateValue.normal.borderBottomWidth = 1;
+stylesheet.dateValue.normal.borderLeftWidth = 0;
+stylesheet.dateValue.normal.borderRightWidth = 0;
+stylesheet.dateValue.normal.borderTopWidth = 0;
+
+stylesheet.controlLabel.normal.color = 'grey';
+
 const Category = t.enums({
   SPORT: 'SPORT',
   FOOD: 'FOOD',
   MUSIC: 'MUSIC',
   PARTY: 'PARTY',
+  EDUCATION: 'EDUCATION',
   OTHER: 'OTHER',
 })
 const Privacy = t.enums({
@@ -31,35 +61,25 @@ class EventEntityEditScreen extends React.Component {
     Navigation.events().bindComponent(this)
     this.state = {
       formModel: t.struct({
-        id: t.maybe(t.Number),
         name: t.String,
         description: t.String,
         picture: t.maybe(t.String),
         city: t.String,
         address: t.String,
-        maxParticpants: t.maybe(t.Number),
+        maxParticipants: t.maybe(t.Number),
+        location: t.struct({
+          latitude: t.Number,
+          longitude: t.Number,
+        }),
         date: t.Date,
-        recurent: t.Boolean,
+        recurrent: t.Boolean,
         interval: t.maybe(t.Number),
         category: Category,
         privacy: Privacy,
-        userId: this.getUsers(),
-        events: t.list(this.getUsers()),
       }),
-      formValue: { id: null },
       formOptions: {
+        
         fields: {
-          id: {
-            hidden: true,
-          },
-          userId: {
-            testID: 'userIdInput',
-            label: 'Event',
-          },
-          userId: {
-            testID: 'userIdInput',
-            label: 'Events',
-          },
           name: {
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('description').refs.input.focus(),
@@ -82,27 +102,45 @@ class EventEntityEditScreen extends React.Component {
           },
           address: {
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('maxParticpants').refs.input.focus(),
+            onSubmitEditing: () => this.form.getComponent('maxParticipants').refs.input.focus(),
             testID: 'addressInput',
           },
-          maxParticpants: {
+          maxParticipants: {
+            returnKeyType: 'next',
+            onSubmitEditing: () => this.form.getComponent('location').refs.input.focus(),
+            testID: 'maxParticipantsInput',
+          },
+          location: {
+            auto: 'placeholders',
+            label: 'Location',
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('date').refs.input.focus(),
-            testID: 'maxParticpantsInput',
+            testID: 'locationInput',
           },
           date: {
+            normal: {
+              color: '#EDEDED',
+              fontSize: 16,
+              padding: 7,
+              marginBottom: 5,
+              marginTop: 20,
+            },
             mode: 'date',
+            dialogMode: 'calendar',
+            error: 'Enter date',
+            returnKeyType: 'next',
             config: {
+              defaultValueText: 'Tap to pick date', // Allows you to format the PlaceHolders !!
               format: date => jsDateToLocalDate(date),
             },
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('recurent').refs.input.focus(),
+            onSubmitEditing: () => this.form.getComponent('recurrent').refs.input.focus(),
             testID: 'dateInput',
           },
-          recurent: {
+          recurrent: {
             returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('interval').refs.input.focus(),
-            testID: 'recurentInput',
+            testID: 'recurrentInput',
           },
           interval: {
             returnKeyType: 'next',
@@ -118,6 +156,7 @@ class EventEntityEditScreen extends React.Component {
             testID: 'privacyInput',
           },
         },
+        stylesheet: stylesheet,
       },
       event: {},
       isNewEntity: true,
@@ -222,49 +261,38 @@ const entityToFormValue = value => {
     return {}
   }
   return {
-    id: value.id || null,
     name: value.name || null,
     description: value.description || null,
     picture: value.picture || null,
     city: value.city || null,
     address: value.address || null,
-    maxParticpants: value.maxParticpants || null,
+    maxParticipants: value.maxParticipants || null,
+    location: {
+      latitude: value.location[0],
+      longitude: value.location[1],
+    },
     date: value.date || null,
-    recurent: value.recurent || null,
+    recurrent: value.recurrent || null,
     interval: value.interval || null,
     category: value.category || null,
     privacy: value.privacy || null,
-    userId: value.user && value.user.id ? value.user.id : null,
-    events: [].concat(
-      value.events.map(events => {
-        return events.id
-      }),
-    ),
   }
 }
 const formValueToEntity = value => {
   const entity = {
-    id: value.id || null,
     name: value.name || null,
     description: value.description || null,
     picture: value.picture || null,
     city: value.city || null,
     address: value.address || null,
-    maxParticpants: value.maxParticpants || null,
+    maxParticipants: value.maxParticipants || null,
+    location: [value.location.latitude, value.location.longitude],
     date: value.date || null,
-    recurent: value.recurent || null,
+    recurrent: value.recurrent || false,
     interval: value.interval || null,
     category: value.category || null,
     privacy: value.privacy || null,
   }
-  if (value.userId) {
-    entity.user = { id: value.userId }
-  }
-  entity.events = [].concat(
-    value.events.map(events => {
-      return { id: events }
-    }),
-  )
   return entity
 }
 

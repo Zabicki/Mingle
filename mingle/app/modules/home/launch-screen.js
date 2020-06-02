@@ -83,12 +83,14 @@ export class LaunchScreen extends React.Component {
   }
 
   handleMaybeButton = () => {
+    console.log(this.props.maybe)
   if(this.props.maybe){
     this.props.setMaybe(this.props.maybe.concat(this.props.events[this.state.position]))
   }
   else{
     this.props.setMaybe([this.props.events[this.state.position]])
   }
+    console.log(this.props.maybe)
     this.showNext()
   }
 
@@ -124,9 +126,9 @@ export class LaunchScreen extends React.Component {
               <View style={styles.wrapper}>
                 <View>
                   <Text style={styles.textHost}>
-                    {events[position] ?  events[position].host.firstName + " " + events[position].host.lastName : 'Host Name'}
+                    {events[position] ?  events[position].host.firstName : 'Host Name'}
                   </Text>
-                  <Text style={styles.textHost}>Age</Text>
+                  <Text style={styles.textHost}>{events[position].host.age}</Text>
                 </View>
               </View>
             </View>

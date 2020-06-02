@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native'
 
-import { Metrics, ApplicationStyles, Colors } from '../../shared/themes/'
+import { Metrics, ApplicationStyles, Colors } from '../../../shared/themes/'
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
-  mainContainer:{
-    padding: 10
+  container:{
+    padding: 20
   },
   eventNameText: {
     textAlign: 'center',
@@ -28,27 +28,22 @@ export default StyleSheet.create({
     fontWeight: '400',
     color: Colors.snow,
   },
-  button: {
-    height: 40,
-    width: 170,
-    padding: 6,
-    backgroundColor: Colors.sun,
-    borderColor: Colors.sun,
-    borderWidth: 1,
-    borderRadius: 3,
-    justifyContent: 'center',
-  },
-  textButton: {
-    textAlign: 'center',
-    color: 'white',
-    fontWeight: '600',
-  },
   row: {
     paddingBottom: Metrics.doubleBaseMargin,
     paddingHorizontal: Metrics.doubleBaseMargin,
     flexDirection: 'row',
     height: 70,
     alignItems: 'center',
+    flex: 1,
+    backgroundColor: Colors.sun,
+    marginVertical: Metrics.baseMargin,
+  },
+  itemName: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+    fontWeight: 'bold',
+    color: Colors.snow,
   },
   descriptionSection: {
     height: 200,
@@ -74,7 +69,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontSize: 24,
     fontWeight: '700',
-    color: Colors.sun,
+    color: Colors.snow,
     marginTop: 15,
   },
   item: {
@@ -82,19 +77,29 @@ export default StyleSheet.create({
     fontSize: 18,
     height: 44,
     fontWeight: '400',
-    color: Colors.greyDark,
-},
-image: {
-  alignSelf: "center",
-  width: 60,
-  height: 60,
-  borderRadius: 30,
-  overflow: "hidden"
+    color: Colors.snow,
+  },
+  image: {
+    alignSelf: "center",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    overflow: "hidden"
 
-},
-list: {
-  margin: 15,
-  height: 180,
-}
+  },
+  list: {
+    margin: 15,
+    height: 180,
+  },
 
+  button: {
+    height: 45,
+    backgroundColor: Colors.sun,
+    borderColor: Colors.sun,
+    borderWidth: 1,
+    borderRadius: 3,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignSelf: 'stretch',
+  },
 })

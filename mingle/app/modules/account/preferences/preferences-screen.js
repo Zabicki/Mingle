@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Alert, ScrollView, Text, TouchableHighlight, View, CheckBox} from 'react-native'
+import { Alert, ScrollView, Text, TouchableHighlight, View, CheckBox } from 'react-native'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import t from 'tcomb-form-native'
-import {changePasswordScreen} from '../../../navigation/layouts'
-import {loginScreen} from '../../../navigation/layouts'
+import { changePasswordScreen } from '../../../navigation/layouts'
+import { loginScreen } from '../../../navigation/layouts'
 import UserActions from '../../../shared/reducers/user.reducer'
 import Dialog from "react-native-dialog";
 import RoundedButton from '../../../shared/components/rounded-button/rounded-button'
@@ -19,19 +19,19 @@ class PreferencesScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        sportCheckBox: false,
-        foodCheckBox: false,
-        musicCheckBox: false,
-        partyCheckBox: false,
-        educationCheckBox: false,
-        otherCheckBox: false
-      }
-      this.props.getFavourites();
+      sportCheckBox: false,
+      foodCheckBox: false,
+      musicCheckBox: false,
+      partyCheckBox: false,
+      educationCheckBox: false,
+      otherCheckBox: false
+    }
+    this.props.getFavourites();
   }
-  componentDidMount(){
+  componentDidMount() {
     this.setState(
-      (state)=> {
-        return{
+      (state) => {
+        return {
           sportCheckBox: this.props.favourites.includes("SPORT"),
           foodCheckBox: this.props.favourites.includes("FOOD"),
           musicCheckBox: this.props.favourites.includes("MUSIC"),
@@ -43,22 +43,22 @@ class PreferencesScreen extends React.Component {
   }
   setFavourites = () => {
     let newFavourites = [];
-    if(this.state.sportCheckBox){
+    if (this.state.sportCheckBox) {
       newFavourites.push("SPORT");
     }
-    if(this.state.foodCheckBox){
+    if (this.state.foodCheckBox) {
       newFavourites.push("FOOD");
     }
-    if(this.state.musicCheckBox){
+    if (this.state.musicCheckBox) {
       newFavourites.push("MUSIC");
     }
-    if(this.state.partyCheckBox){
+    if (this.state.partyCheckBox) {
       newFavourites.push("PARTY");
     }
-    if(this.state.educationCheckBox){
+    if (this.state.educationCheckBox) {
       newFavourites.push("EDUCATION");
     }
-    if(this.state.otherCheckBox){
+    if (this.state.otherCheckBox) {
       newFavourites.push("OTHER");
     }
     this.props.updateFavourites(newFavourites);
@@ -95,8 +95,8 @@ class PreferencesScreen extends React.Component {
   }
   render() {
     return (
-        <View style={styles.container}>
-          <Text style={styles.title}>User preferences</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>User preferences</Text>
         <View style={styles.checkboxContainer}>
           <CheckBox
             value={this.state.sportCheckBox}
@@ -146,7 +146,11 @@ class PreferencesScreen extends React.Component {
           <Text style={styles.label}>Other</Text>
         </View>
 
-        <RoundedButton text="Save" onPress={this.setFavourites} />
+        <View style={styles.buttonSection}>
+          <TouchableHighlight style={styles.button} onPress={this.setFavourites} underlayColor="#D59F4E">
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableHighlight>
+        </View>
 
       </View>
     )

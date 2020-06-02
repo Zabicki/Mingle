@@ -13,7 +13,11 @@ import {
   profileScreen,
   eventInfoScreen,
   entitiesScreen,
-  storybookScreen, goToAuth, myEventsScreen
+  storybookScreen,
+  goToAuth,
+  maybeScreen,
+  eventEntityEditScreen,
+  myEventsScreen
 } from '../layouts'
 import { connect } from 'react-redux'
 
@@ -73,13 +77,17 @@ class DrawerContent extends Component {
     this.hideSideMenu()
     eventInfoScreen()
   }
-  handlePressMyEvents = () => {
-    this.hideSideMenu()
-    myEventsScreen()
-  }
   handlePressChangePassword = () => {
     this.hideSideMenu()
     changePasswordScreen()
+  }
+  handlePressMaybe = () => {
+    this.hideSideMenu()
+    maybeScreen()
+  }
+  handlePressMyEvents = () => {
+    this.hideSideMenu()
+    myEventsScreen()
   }
   handlePressEntities = () => {
     this.hideSideMenu()
@@ -94,14 +102,19 @@ class DrawerContent extends Component {
     this.hideSideMenu()
     storybookScreen()
   }
+  handlePressNewEvent = () =>{
+    this.hideSideMenu()
+    eventEntityEditScreen({ entityId: null })
+  }
 
   render() {
     return (
       <ScrollView style={styles.container}>
         <Image testID="drawerLogo" source={Images.logoLogin} style={styles.logo} />
         {<DrawerButton testID="profileDrawerButton" text="Profile" onPress={this.handlePressProfile} />}
+        {<DrawerButton testID="newEventDrawerButton" text="New Event" onPress={this.handlePressNewEvent} />}
         {<DrawerButton testID="myEventsDrawerButton" text="My Events" onPress={this.handlePressMyEvents} />}
-        {<DrawerButton testID="eventInfoDrawerButton" text="Event Info" onPress={this.handlePressEventInfo} />}
+        {<DrawerButton testID="maybeDrawerButton" text="Maybe events" onPress={this.handlePressMaybe} />}
         {<DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
         {<DrawerButton testID="preferencesDrawerButton" text="Preferences" onPress={this.handlePressPreferences} />}
         {<DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}

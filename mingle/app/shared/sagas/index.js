@@ -13,7 +13,6 @@ import { ForgotPasswordTypes } from '../../modules/account/password-reset/forgot
 import { ChangePasswordTypes } from '../../modules/account/password/change-password.reducer'
 import { UserTypes } from '../../shared/reducers/user.reducer'
 import { ChatTypes } from '../../modules/entities/chat/chat.reducer'
-import { FavouriteTypes } from '../../modules/entities/favourites/favourites.reducer'
 import { ReviewTypes } from '../../modules/entities/review/review.reducer'
 import { EventTypes } from '../../modules/entities/event/event.reducer'
 import { MessageTypes } from '../../modules/entities/message/message.reducer'

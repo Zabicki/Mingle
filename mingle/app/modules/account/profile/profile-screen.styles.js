@@ -26,6 +26,14 @@ export default StyleSheet.create({
     fontSize: 18,
     padding: 0  
   },
+  textLocationEdit: {
+    color: "#AEB5BC", 
+    fontSize: 18,
+    padding: 0,
+    borderColor: '#AEB5BC',
+    borderWidth: 1,
+    borderRadius: 10, 
+  },
   buttonSection: {
     marginTop: 10,
     alignItems: 'center',
@@ -81,7 +89,29 @@ export default StyleSheet.create({
     width: 350,
     height: 110,
     fontSize: 18,
+    color: "#AEB5BC",    
+  },
+  textDescriptionEdit: {
+    width: 350,
+    height: 110,
+    fontSize: 18,
     color: "#AEB5BC",
+    borderColor: '#AEB5BC',
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  editPhoto: {
+    alignItems: 'center',
+    marginTop: 20,
+    padding: 0,
+  },
+  profileImageEdit: {
+    marginTop: 10,
+    alignSelf: "center",
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    overflow: "hidden"
   },
   description: {
     height: 150,

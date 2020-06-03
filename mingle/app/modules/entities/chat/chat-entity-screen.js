@@ -44,7 +44,7 @@ class ChatEntityScreen extends React.PureComponent {
     return (
       <TouchableOpacity onPress={chatEntityDetailScreen.bind(this, { entityId: item.id })}>
         <View style={styles.row}>
-          <Text style={styles.boldLabel}>{item.id}</Text>
+          <Text style={styles.boldLabel}>{item.name}</Text>
           {/* <Text style={styles.label}>{item.description}</Text> */}
         </View>
       </TouchableOpacity>
@@ -93,7 +93,7 @@ class ChatEntityScreen extends React.PureComponent {
   // )}
 
   fetchChats = () => {
-    this.props.getAllChats({ page: this.state.page, sort: this.state.sort, size: this.state.size })
+    this.props.getUserChats({ page: this.state.page, sort: this.state.sort, size: this.state.size })
   }
 
   handleLoadMore = () => {

@@ -41,7 +41,7 @@ export class LaunchScreen extends React.Component {
       size: this.state.size,
     };
     if(this.state.permission && !this.state.byCity){
-      this.props.getNearbyEvents(options, this.state.location.latitude, this.state.location.longitude, 15);
+      this.props.getNearbyEvents(options, this.state.location.latitude, this.state.location.longitude, 20);
     }
     else{
       this.props.getFromCity(options, this.state.city);
@@ -55,7 +55,9 @@ export class LaunchScreen extends React.Component {
         location: position.coords,
         },
         ()=> this.fetchEvents())
-      }
+      },
+      (error) => {alert(error.message)},
+      { enableHighAccuracy: true, timeout: 2000, maximumAge: 3600000 }
     );
   }
 

@@ -30,6 +30,7 @@ import ReviewEntityScreen from '../modules/entities/review/review-entity-screen'
 import ReviewEntityDetailScreen from '../modules/entities/review/review-entity-detail-screen'
 import ReviewEntityEditScreen from '../modules/entities/review/review-entity-edit-screen'
 import EventEntityScreen from '../modules/entities/event/event-entity-screen'
+import MapPicker from '../modules/entities/event/map-picker'
 import EventEntityDetailScreen from '../modules/entities/event/event-entity-detail-screen'
 import EventEntityEditScreen from '../modules/entities/event/event-entity-edit-screen'
 import MessageEntityScreen from '../modules/entities/message/message-entity-screen'
@@ -68,6 +69,7 @@ export const MESSAGE_ENTITY_DETAIL_SCREEN = 'nav.MessageEntityDetailScreen'
 export const MESSAGE_ENTITY_EDIT_SCREEN = 'nav.MessageEntityEditScreen'
 export const INITIALIZING = 'nav.Initializing'
 export const MAYBE_EVENTS_SCREEN = 'nav.MaybeEventsScreen'
+export const MAP_PICKER = 'nav.MapPicker'
 // ignite-jhipster-navigation-declaration-needle
 
 const store = createStore()
@@ -235,6 +237,7 @@ export function registerScreensAndStartApp() {
   Navigation.registerComponentWithRedux(MESSAGE_ENTITY_EDIT_SCREEN, () => MessageEntityEditScreen, Provider, store)
   Navigation.registerComponentWithRedux(MAYBE_EVENTS_SCREEN, () => MaybeEventsScreen, Provider, store)
   Navigation.registerComponentWithRedux(INITIALIZING, () => Initializing, Provider, store)
+  Navigation.registerComponentWithRedux(MAP_PICKER, () => MapPicker, Provider, store)
   // ignite-jhipster-navigation-registration-needle
 
   Navigation.events().registerAppLaunchedListener(() => {
@@ -430,6 +433,30 @@ export const entitiesScreen = () =>
             text: 'Entities',
             color: Colors.snow,
           },
+        },
+      },
+    },
+  })
+export const mapPicker = data =>
+  Navigation.push('center', {
+    component: {
+      name: MAP_PICKER,
+      passProps: {
+        data,
+      },
+      options: {
+        topBar: {
+          title: {
+            text: 'Pick location',
+            color: Colors.snow,
+          },
+          rightButtons: [
+            {
+              id: 'search',
+              text: 'Search',
+              color: Colors.snow,
+            },
+          ],
         },
       },
     },

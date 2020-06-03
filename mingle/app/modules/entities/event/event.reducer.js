@@ -168,6 +168,8 @@ export const  setMaybe = (state,action) =>{
 export const allAccepted = (state,action) =>{
   const {events} = action
   return state.merge({
+    fetchingAll: false,
+    errorAll: null,
     myEvents: events,
   })
 }

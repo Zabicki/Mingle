@@ -153,7 +153,7 @@ class EventEntityEditScreen extends React.Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.event !== prevState.event && !prevState.isNewEntity) {
       const res = entityToFormValue(nextProps.event)
-      newForm = {
+      const newForm = {
         name: res.name,
         description: res.description,
         picture: res.picture,

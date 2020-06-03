@@ -15,29 +15,32 @@ class EventsScreen extends React.PureComponent {
     super(props)
     Navigation.events().bindComponent(this)
 
-    this.props.getAccount()
+
+      //this.props.getAccount()
 
     this.state = {
       page: 0,
       sort: 'id,asc',
       size: 20,
       done: false,
-      dataObjects: [],
+      myEvents: [],
 
     }
     this.fetchEvents()
   }
 
-  navigationButtonPressed({ buttonId }) {
-    eventEntityEditScreen({ entityId: null })
-  }
+  // navigationButtonPressed({ buttonId }) {
+  //   eventEntityEditScreen({ entityId: null })
+  // }
 
   renderRow({ item }) {
     return (
-      <TouchableOpacity onPress={eventEntityDetailScreen.bind(this, { entityId: item.id })}>
+      <TouchableOpacity style={styles.button} onPress={eventInfoScreen.bind(this, { entityId: item.id, visible: false})} underlayColor="#D59F4E">
         <View style={styles.row}>
-          <Text style={styles.boldLabel}>{item.id}</Text>
-          {/* <Text style={styles.label}>{item.description}</Text> */}
+          <Text style={styles.itemName} >{item.name}</Text>
+          <Text style={styles.item}>{item.host.firstName}</Text>
+          {/*<Text style={styles.boldLabel}>{item.id}</Text>*/}
+          {/*/!* <Text style={styles.label}>{item.description}</Text> *!/*/}
         </View>
       </TouchableOpacity>
     )
@@ -56,39 +59,40 @@ class EventsScreen extends React.PureComponent {
   oneScreensWorth = 20
 
   fetchEvents = () => {
+    //this.props.getAllAcceptedEvents({ page: this.state.page, sort: this.state.sort, size: this.state.size })
     this.props.getAllAcceptedEvents({ page: this.state.page, sort: this.state.sort, size: this.state.size })
   }
 
-  handleLoadMore = () => {
-    if (this.state.done || this.props.fetching) {
-      return
-    }
-    this.setState(
-      {
-        page: this.state.page + 1,
-      },
-      () => {
-        this.fetchEvents()
-      },
-    )
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.events) {
-      return {
-        done: nextProps.events.length < prevState.size,
-        dataObjects: [...prevState.dataObjects, ...nextProps.events],
-      }
-    }
-    return null
-  }
+  // handleLoadMore = () => {
+  //   if (this.state.done || this.props.fetching) {
+  //     return
+  //   }
+  //   this.setState(
+  //     {
+  //       page: this.state.page + 1,
+  //     },
+  //     () => {
+  //       this.fetchEvents()
+  //     },
+  //   )
+  // }
+  //
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   if (nextProps.events) {
+  //     return {
+  //       done: nextProps.events.length < prevState.size,
+  //       dataObjects: [...prevState.dataObjects, ...nextProps.events],
+  //     }
+  //   }
+  //   return null
+  // }
 
   render() {
     return (
       <View style={styles.container} testID="eventScreen">
         <FlatList
           contentContainerStyle={styles.listContent}
-          data={this.state.dataObjects}
+          data={this.props.myEvents}
           renderItem={this.renderRow}
           keyExtractor={this.keyExtractor}
           initialNumToRender={this.oneScreensWorth}
@@ -106,16 +110,17 @@ class EventsScreen extends React.PureComponent {
 const mapStateToProps = state => {
   return {
     // ...redux state to props here
-    events: state.events.events,
-    fetching: state.events.fetchingAll,
-    error: state.events.errorAll,
+    // events: state.events.events,
+    // fetching: state.events.fetchingAll,
+    // error: state.events.errorAll,
+    myEvents: state.events.myEvents
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAccount: () => dispatch(AccountActions.accountRequest()),
-    getAllEvents: options => dispatch(EventActions.eventAllRequest(options)),
+    // getAccount: () => dispatch(AccountActions.accountRequest()),
+    // getAllEvents: options => dispatch(EventActions.eventAllRequest(options)),
     getAllAcceptedEvents: options => dispatch(EventActions.eventAllAcceptedRequest(options))
   }
 }

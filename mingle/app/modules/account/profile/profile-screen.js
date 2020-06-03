@@ -4,10 +4,8 @@ import t from 'tcomb-form-native'
 import { Navigation, StackNavigator, createStackNavigator, createAppContainer  } from 'react-native-navigation'
 import styles from './profile-screen.styles'
 import AccountActions from '../../../shared/reducers/account.reducer'
-import EditProfileScreen, {App} from './edit-profile-screen'
 import RegisterActions from "../register/register.reducer";
 import {connect} from "react-redux";
-import { AppRegistry } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
 

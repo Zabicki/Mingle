@@ -6,7 +6,7 @@ import UserActions from '../../../shared/reducers/user.reducer'
 import { Navigation } from 'react-native-navigation'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { jsDateToLocalDate } from '../../../shared/util/date-transforms'
-import { eventEntityDetailScreen } from '../../../navigation/layouts'
+import { eventEntityDetailScreen, mapPicker } from '../../../navigation/layouts'
 
 import t from 'tcomb-form-native'
 
@@ -64,13 +64,7 @@ class EventEntityEditScreen extends React.Component {
         name: t.String,
         description: t.String,
         picture: t.maybe(t.String),
-        city: t.String,
-        address: t.String,
         maxParticipants: t.maybe(t.Number),
-        location: t.struct({
-          latitude: t.Number,
-          longitude: t.Number,
-        }),
         date: t.Date,
         recurrent: t.Boolean,
         interval: t.maybe(t.Number),
@@ -78,7 +72,7 @@ class EventEntityEditScreen extends React.Component {
         privacy: Privacy,
       }),
       formOptions: {
-        
+
         fields: {
           name: {
             returnKeyType: 'next',
@@ -92,30 +86,13 @@ class EventEntityEditScreen extends React.Component {
           },
           picture: {
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('city').refs.input.focus(),
-            testID: 'pictureInput',
-          },
-          city: {
-            returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('address').refs.input.focus(),
-            testID: 'cityInput',
-          },
-          address: {
-            returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('maxParticipants').refs.input.focus(),
-            testID: 'addressInput',
+            testID: 'pictureInput',
           },
           maxParticipants: {
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('location').refs.input.focus(),
-            testID: 'maxParticipantsInput',
-          },
-          location: {
-            auto: 'placeholders',
-            label: 'Location',
-            returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('date').refs.input.focus(),
-            testID: 'locationInput',
+            testID: 'maxParticipantsInput',
           },
           date: {
             normal: {
@@ -158,6 +135,7 @@ class EventEntityEditScreen extends React.Component {
         },
         stylesheet: stylesheet,
       },
+      location: null,
       event: {},
       isNewEntity: true,
     }
@@ -174,7 +152,26 @@ class EventEntityEditScreen extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.event !== prevState.event && !prevState.isNewEntity) {
-      return { formValue: entityToFormValue(nextProps.event), event: nextProps.event }
+      const res = entityToFormValue(nextProps.event)
+      const newForm = {
+        name: res.name,
+        description: res.description,
+        picture: res.picture,
+        maxParticipants: res.maxParticipants,
+        date: res.date,
+        recurrent: res.recurrent,
+        interval: res.interval,
+        category: res.category,
+        privacy: res.privacy,
+      }
+      return { formValue: newForm, event: nextProps.event,
+       location: {
+          address: res.address,
+          latitude: res.location.latitude,
+          longitude: res.location.longitude,
+          city: res.city,
+       }
+      }
     }
     return null
   }
@@ -217,13 +214,25 @@ class EventEntityEditScreen extends React.Component {
     const event = this.form.getValue()
     if (event) {
       // if validation fails, value will be null
-      this.props.updateEvent(formValueToEntity(event))
+      this.props.updateEvent(formValueToEntity(event, this.state.location))
     }
   }
 
   formChange(newValue) {
     this.setState({
       formValue: newValue,
+    })
+  }
+
+  processLocation = (geoArray) =>{
+    const {locality, position, formattedAddress} = geoArray;
+    this.setState({
+      location: {
+        address: formattedAddress,
+        latitude: position.lat,
+        longitude: position.lng,
+        city: locality,
+      }
     })
   }
 
@@ -247,9 +256,20 @@ class EventEntityEditScreen extends React.Component {
             value={this.state.formValue}
             onChange={this.formChange}
           />
+          <View>
+            <Text>Address: {this.state.location ? this.state.location.address : "not set"}</Text>
+            <Text>City: {this.state.location ? this.state.location.city : "not set"}</Text>
+            <Text>Latitude: {this.state.location ? this.state.location.latitude : "not set"}</Text>
+            <Text>Longitude: {this.state.location ? this.state.location.longitude : "not set"}</Text>
+          </View>
+          <TouchableHighlight style={styles.button} onPress={mapPicker.bind(this, {onSave: this.processLocation.bind(this)})} underlayColor="#99d9f4" testID="submitButton">
+             <Text style={styles.buttonText}>Pick location</Text>
+          </TouchableHighlight>
+          { this.state.location && (
           <TouchableHighlight style={styles.button} onPress={this.submitForm} underlayColor="#99d9f4" testID="submitButton">
             <Text style={styles.buttonText}>Save</Text>
           </TouchableHighlight>
+          )}
         </ScrollView>
       </KeyboardAwareScrollView>
     )
@@ -268,8 +288,8 @@ const entityToFormValue = value => {
     address: value.address || null,
     maxParticipants: value.maxParticipants || null,
     location: {
-      latitude: value.location[0],
-      longitude: value.location[1],
+      latitude: value.location[1],
+      longitude: value.location[0],
     },
     date: value.date || null,
     recurrent: value.recurrent || null,
@@ -278,15 +298,15 @@ const entityToFormValue = value => {
     privacy: value.privacy || null,
   }
 }
-const formValueToEntity = value => {
+const formValueToEntity = (value,location) => {
   const entity = {
     name: value.name || null,
     description: value.description || null,
     picture: value.picture || null,
-    city: value.city || null,
-    address: value.address || null,
+    city: location.city,
+    address: location.address,
     maxParticipants: value.maxParticipants || null,
-    location: [value.location.latitude, value.location.longitude],
+    location: [location.longitude, location.latitude],
     date: value.date || null,
     recurrent: value.recurrent || false,
     interval: value.interval || null,

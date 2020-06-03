@@ -3,6 +3,8 @@ import { ScrollView, Text, Image, View, Platform, TouchableHighlight } from 'rea
 import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
+import Geolocation from '@react-native-community/geolocation';
+import Dialog from 'react-native-dialog';
 
 import LearnMoreLinks from './learn-more-links.component.js'
 import { Images } from '../../shared/themes'
@@ -10,6 +12,8 @@ import styles from './launch-screen.styles'
 import RoundedButton from '../../shared/components/rounded-button/rounded-button'
 import EventAction from '../entities/event/event.reducer'
 import {launchScreen} from '../../navigation/layouts'
+
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions'
 
 export class LaunchScreen extends React.Component {
   constructor(props) {
@@ -21,11 +25,70 @@ export class LaunchScreen extends React.Component {
         sort: 'id,asc',
         size: 5,
         position: 0,
+        location: null,
+        permission: null,
+        city: 'null',
+        cityInput: '',
+        byCity: false,
+        showDialog: false,
+    }
+    this.handlePermissions();
+  }
+  fetchEvents = () =>{
+    const options = {
+      page: this.state.page,
+      sort: this.state.sort,
+      size: this.state.size,
+    };
+    if(this.state.permission && !this.state.byCity){
+      this.props.getNearbyEvents(options, this.state.location.latitude, this.state.location.longitude, 20);
+    }
+    else{
+      this.props.getFromCity(options, this.state.city);
     }
   }
 
-  fetchEvents = () =>{
-    this.props.getAllEvents(this.state.page,this.state.sort, this.state.size)
+  getLocation = () =>{
+    Geolocation.getCurrentPosition(
+      position => {
+        this.setState({
+        location: position.coords,
+        },
+        ()=> this.fetchEvents())
+      },
+      (error) => {alert(error.message)},
+      { enableHighAccuracy: true, timeout: 2000, maximumAge: 3600000 }
+    );
+  }
+
+  handlePermissions = () =>{
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(
+      (result) => {
+        switch (result){
+          case RESULTS.GRANTED:
+            this.setState({
+            permission: true,
+            },
+            ()=> this.getLocation());
+            break;
+          case RESULTS.DENIED:
+            request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(
+              (res) =>{
+                if (res == RESULTS.GRANTED){
+                  this.setState({permission: true}, ()=> this.getLocation());
+                }
+                else{
+                  this.setState({permission: false}, ()=> this.fetchEvents());
+                }
+              }
+            );
+            break;
+          default :
+            this.setState({permission: false}, ()=> this.fetchEvents());
+            break;
+        }
+      }
+    );
   }
 
   showNext = () =>{
@@ -46,10 +109,6 @@ export class LaunchScreen extends React.Component {
         },
       )
     }
-  }
-
-  componentDidMount() {
-    this.fetchEvents()
   }
 
   componentDidAppear() {
@@ -74,7 +133,24 @@ export class LaunchScreen extends React.Component {
   }
 
   navigationButtonPressed({ buttonId }) {
-    this.showSideMenu()
+    if(buttonId == 'menuButton'){
+      this.showSideMenu()
+    }else if(buttonId == 'byCity'){
+      this.setState({showDialog: true})
+    }else if(buttonId == 'reload'){
+      this.setState({
+        page: 0,
+        position: 0,
+        location: null,
+        permission: null,
+        city: 'null',
+        cityInput: '',
+        byCity: false,
+        showDialog: false,
+      },
+      ()=> this.handlePermissions()
+      )
+    }
   }
 
   handleAcceptButton = () => {
@@ -97,12 +173,37 @@ export class LaunchScreen extends React.Component {
   handleDeclineButton = () => {
     this.showNext()
   }
+  handleCitySearch = () =>{
+    this.setState((prev,state) => {
+
+    return {
+      city: prev.cityInput,
+      showDialog: false,
+      byCity: true,
+      position: 0,
+      page: 0,
+    }},
+    ()=> this.fetchEvents()
+    )
+  }
+  handleCancel = () =>{
+    this.setState({
+      showDialog: false,
+      cityInput: '',
+    })
+  }
 
   render() {
    const {events} = this.props
    const {position} =this.state
     return (
       <View style={styles.mainContainer} testID="launchScreen">
+        <Dialog.Container visible={this.state.showDialog}>
+          <Dialog.Title>Search by city</Dialog.Title>
+           <Dialog.Input style = {styles.textInput}  placeholder="Enter city..." onChangeText={(city) => this.setState({cityInput: city})}></Dialog.Input>
+           <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+           <Dialog.Button label="Ok" onPress={this.handleCitySearch} />
+        </Dialog.Container>
       { events && events[position] ? (
         <View style={styles.scrollView}>
           <View style={styles.form}>
@@ -183,6 +284,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>{
   return{
     getAllEvents: options => dispatch(EventAction.eventAllRequest(options)),
+    getNearbyEvents: (options, latitude, longitude, radius) => dispatch(EventAction.eventAllNearbyRequest(options, latitude, longitude, radius)),
+    getFromCity: (options, city) => dispatch(EventAction.eventAllFromCityRequest(options, city)),
     acceptEvent: eventId => dispatch(EventAction.eventAcceptRequest(eventId)),
     setMaybe: maybeEvents => dispatch(EventAction.eventSetMaybe(maybeEvents)),
     }

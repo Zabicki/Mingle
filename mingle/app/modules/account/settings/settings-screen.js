@@ -8,6 +8,7 @@ import {loginScreen} from '../../../navigation/layouts'
 import AccountActions from '../../../shared/reducers/account.reducer'
 import Dialog from "react-native-dialog";
 import LoginActions from '../../../modules/login/login.reducer'
+import { openSettings } from 'react-native-permissions'
 
 // Styles
 import styles from './settings-screen.styles'
@@ -130,6 +131,9 @@ class SettingsScreen extends React.Component {
     this.props.logout()
     loginScreen();
   }
+  handleLocalization = () =>{
+    openSettings().catch(() => console.warn('cannot open settings'));
+  }
   render() {
     return (
       <KeyboardAwareScrollView>
@@ -149,6 +153,9 @@ class SettingsScreen extends React.Component {
             </TouchableHighlight>
             <TouchableHighlight testID="changeDeleteAccount" style={styles.button} onPress={this.handleDeleteAccount} underlayColor="#FDB813">
               <Text style={styles.buttonText}>Delete account</Text>
+            </TouchableHighlight>
+            <TouchableHighlight testID="changeLocalizationSettings" style={styles.button} onPress={this.handleLocalization} underlayColor="#FDB813">
+              <Text style={styles.buttonText}>Change localization settings</Text>
             </TouchableHighlight>
             <Dialog.Container visible={this.state.dialogVisible}>
               <Dialog.Title>Delete Account</Dialog.Title>

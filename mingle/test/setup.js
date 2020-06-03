@@ -1,5 +1,6 @@
 import { configure } from 'enzyme'
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock'
+import {openSettings, check, request} from 'react-native-permissions/mock'
 import Adapter from 'enzyme-adapter-react-16'
 import Config from '../app/config/debug-config'
 
@@ -18,6 +19,12 @@ jest
       },
     }
   })
+  .mock('react-native-permissions', ()=> ({
+    openSettings: openSettings,
+    check: check,
+    request: request,
+    })
+  )
   .mock('react-native-vector-icons/FontAwesome', () => 'Icon')
   .mock('@storybook/react-native', () => {
     return { getStorybookUI: jest.fn(), configure: jest.fn() }

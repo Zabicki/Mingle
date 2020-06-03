@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Point;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,7 +62,7 @@ class EventServiceTest {
 
 
     public Event createEvent(String name, String description, String city, String address, double[] location,
-                             LocalDate date, Boolean recurrent, Category category, Privacy privacy){
+                             ZonedDateTime date, Boolean recurrent, Category category, Privacy privacy){
         return new Event().name(name).description(description).city(city).address(address).location(location)
             .date(date).recurrent(recurrent).category(category).privacy(privacy);
     }
@@ -71,20 +71,20 @@ class EventServiceTest {
     public void init(){
         eventRepository.deleteAll();
         event = createEvent("running","just run","Cracow","some address", cracowLocation,
-        LocalDate.now().plusMonths(5),false,Category.SPORT,Privacy.PUBLIC);
-        eventRepository.save(event);
+        ZonedDateTime.now().plusMonths(5),false,Category.SPORT,Privacy.PUBLIC);
+        eventService.save(event);
         event2 = createEvent("skiing","let's go skiing","Cracow","some other address", otherCracowLocation,
-            LocalDate.now().plusDays(28),false,Category.SPORT,Privacy.PUBLIC);
-        eventRepository.save(event2);
+            ZonedDateTime.now().plusDays(28),false,Category.SPORT,Privacy.PUBLIC);
+        eventService.save(event2);
         event3 = createEvent("basketball","some interesting description","Warsaw","some other other address", warsawLocation,
-            LocalDate.now().plusDays(89),false,Category.SPORT,Privacy.PUBLIC);
-        eventRepository.save(event3);
+            ZonedDateTime.now().plusDays(89),false,Category.SPORT,Privacy.PUBLIC);
+        eventService.save(event3);
         event4 = createEvent("football","fascinating description","Warsaw","unique address", otherWarsawLocation,
-            LocalDate.now().plusDays(123),false,Category.SPORT,Privacy.PUBLIC);
-        eventRepository.save(event4);
+            ZonedDateTime.now().plusDays(123),false,Category.SPORT,Privacy.PUBLIC);
+        eventService.save(event4);
         event5 = createEvent("eating","fascinating description","Cracow","other unique address",
-            cracowLocation, LocalDate.now().plusDays(5),false,Category.FOOD,Privacy.PUBLIC);
-        eventRepository.save(event5);
+            cracowLocation, ZonedDateTime.now().plusDays(5),false,Category.FOOD,Privacy.PUBLIC);
+        eventService.save(event5);
 
         userRepository.deleteAll();
         user = new User();
@@ -237,7 +237,7 @@ class EventServiceTest {
     @Test
     @WithMockUser("user")
     public void assertThatOnlyCurrentEventsAreShown(){
-        event4.setDate(LocalDate.now().minusDays(1));
+        event4.setDate(ZonedDateTime.now().minusDays(1));
         eventRepository.save(event4);
 
         Page<Event> foundEvents = eventService.findAllByLocationNear(pageable,userLocation2,50 * 1000);
@@ -321,7 +321,7 @@ class EventServiceTest {
     @WithMockUser("user")
     public void testCreateEventCreatesChat(){
         Event newEvent = createEvent("test","great description","Cracow","just address", cracowLocation,
-            LocalDate.now().plusMonths(25),false,Category.SPORT,Privacy.PUBLIC);
+            ZonedDateTime.now().plusMonths(25),false,Category.SPORT,Privacy.PUBLIC);
 
         assertThat(chatRepository.findAll(pageable).getTotalElements()).isEqualTo(0);
 

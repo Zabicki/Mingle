@@ -17,17 +17,25 @@ export default StyleSheet.create({
   },
   textAge: {
     fontWeight: "bold",
-    color: Colors.greyDark, 
-    fontSize: 20,
+    color: "#AEB5BC", 
+    fontSize: 18,
     padding: 0  
   },
   textLocation: {
-    color: Colors.greyDark, 
-    fontSize: 20,
+    color: "#AEB5BC", 
+    fontSize: 18,
     padding: 0  
   },
+  textLocationEdit: {
+    color: "#AEB5BC", 
+    fontSize: 18,
+    padding: 0,
+    borderColor: '#AEB5BC',
+    borderWidth: 1,
+    borderRadius: 10, 
+  },
   buttonSection: {
-    padding: 20,
+    marginTop: 10,
     alignItems: 'center',
   },
   scrollView: {
@@ -52,10 +60,10 @@ export default StyleSheet.create({
     borderRadius: 100,
     overflow: "hidden"
   },
+ 
   scrollView: {
-    paddingBottom: Metrics.doubleBaseMargin,
+    paddingBottom: Metrics.baseMargin,
     backgroundColor: 'white',
-    marginBottom: 10,
   },
   body: {
     backgroundColor: 'white',
@@ -63,13 +71,13 @@ export default StyleSheet.create({
   button: {
     flex: 1,
     height: 40,
+    width: 115,
     padding: 6,
     backgroundColor: Colors.sun,
     borderColor: Colors.sun,
     borderWidth: 1,
     borderRadius: 3,
     justifyContent: 'center',
-    alignSelf: 'stretch',
   },
   buttonText: {
     fontSize: 18,
@@ -78,25 +86,35 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   textDescription: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: Colors.snow,
+    width: 350,
+    height: 110,
+    fontSize: 18,
+    color: "#AEB5BC",    
+  },
+  textDescriptionEdit: {
+    width: 350,
+    height: 110,
+    fontSize: 18,
+    color: "#AEB5BC",
+    borderColor: '#AEB5BC',
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  editPhoto: {
+    alignItems: 'center',
+    marginTop: 20,
+    padding: 0,
+  },
+  profileImageEdit: {
+    marginTop: 10,
+    alignSelf: "center",
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    overflow: "hidden"
   },
   description: {
-    height: 100,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 5,
-    marginTop: 15,
-    padding: 10,
-    borderRadius: 10,
-    elevation: 5,
-    borderRadius: 5,
-    shadowColor: 'black',
-    flexDirection: 'row',
-    backgroundColor: Colors.greyDark,
+    height: 150,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-
 })

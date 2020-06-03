@@ -28,8 +28,8 @@ import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,14 +66,14 @@ public class EventResourceIT {
     private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
-    private static final double[] DEFAULT_LOCATION = {50,20};
-    private static final double[] UPDATED_LOCATION = {60,30};
+    private static final double[] DEFAULT_LOCATION = {20,50};
+    private static final double[] UPDATED_LOCATION = {30,60};
 
     private static final Integer DEFAULT_MAX_PARTICIPANTS = 1;
     private static final Integer UPDATED_MAX_PARTICIPANTS = 2;
 
-    private static final LocalDate DEFAULT_DATE = LocalDate.now().plusDays(78);
-    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault()).plusDays(10);
+    private static final ZonedDateTime DEFAULT_DATE = ZonedDateTime.now().plusDays(78);
+    private static final ZonedDateTime UPDATED_DATE = ZonedDateTime.now().plusDays(10);
 
     private static final Boolean DEFAULT_RECURRENT = false;
     private static final Boolean UPDATED_RECURRENT = true;
@@ -216,11 +216,10 @@ public class EventResourceIT {
         assertThat(testEvent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testEvent.getPicture()).isEqualTo(DEFAULT_PICTURE);
         assertThat(testEvent.getPictureContentType()).isEqualTo(DEFAULT_PICTURE_CONTENT_TYPE);
-        assertThat(testEvent.getCity()).isEqualTo(DEFAULT_CITY);
+        assertThat(testEvent.getCity()).isEqualTo(DEFAULT_CITY.toLowerCase());
         assertThat(testEvent.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testEvent.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testEvent.getMaxParticipants()).isEqualTo(DEFAULT_MAX_PARTICIPANTS);
-        assertThat(testEvent.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testEvent.isRecurrent()).isEqualTo(DEFAULT_RECURRENT);
         assertThat(testEvent.getInterval()).isEqualTo(DEFAULT_INTERVAL);
         assertThat(testEvent.getCategory()).isEqualTo(DEFAULT_CATEGORY);
@@ -387,7 +386,7 @@ public class EventResourceIT {
     @Test
     public void getAllEvents() throws Exception {
         // Initialize the database
-        eventRepository.save(event);
+        eventService.save(event);
 
         // Get all the eventList
         restEventMockMvc.perform(get("/api/events?sort=id,desc"))
@@ -398,12 +397,11 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].pictureContentType").value(hasItem(DEFAULT_PICTURE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].picture").value(hasItem(Base64Utils.encodeToString(DEFAULT_PICTURE))))
-            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
+            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toLowerCase())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].location",hasItem(hasItem(DEFAULT_LOCATION[0]))))
             .andExpect(jsonPath("$.[*].location",hasItem(hasItem(DEFAULT_LOCATION[1]))))
             .andExpect(jsonPath("$.[*].maxParticipants").value(hasItem(DEFAULT_MAX_PARTICIPANTS)))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].recurrent").value(hasItem(DEFAULT_RECURRENT.booleanValue())))
             .andExpect(jsonPath("$.[*].interval").value(hasItem(DEFAULT_INTERVAL.intValue())))
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY.toString())))
@@ -446,7 +444,7 @@ public class EventResourceIT {
     @Test
     public void getEvent() throws Exception {
         // Initialize the database
-        eventRepository.save(event);
+        eventService.save(event);
 
         // Get the event
         restEventMockMvc.perform(get("/api/events/{id}", event.getId()))
@@ -457,12 +455,11 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.pictureContentType").value(DEFAULT_PICTURE_CONTENT_TYPE))
             .andExpect(jsonPath("$.picture").value(Base64Utils.encodeToString(DEFAULT_PICTURE)))
-            .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
+            .andExpect(jsonPath("$.city").value(DEFAULT_CITY.toLowerCase()))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
             .andExpect(jsonPath("$.location",hasItem(DEFAULT_LOCATION[0])))
             .andExpect(jsonPath("$.location",hasItem(DEFAULT_LOCATION[1])))
             .andExpect(jsonPath("$.maxParticipants").value(DEFAULT_MAX_PARTICIPANTS))
-            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
             .andExpect(jsonPath("$.recurrent").value(DEFAULT_RECURRENT.booleanValue()))
             .andExpect(jsonPath("$.interval").value(DEFAULT_INTERVAL.intValue()))
             .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY.toString()))
@@ -513,11 +510,10 @@ public class EventResourceIT {
         assertThat(testEvent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testEvent.getPicture()).isEqualTo(UPDATED_PICTURE);
         assertThat(testEvent.getPictureContentType()).isEqualTo(UPDATED_PICTURE_CONTENT_TYPE);
-        assertThat(testEvent.getCity()).isEqualTo(UPDATED_CITY);
+        assertThat(testEvent.getCity()).isEqualTo(UPDATED_CITY.toLowerCase());
         assertThat(testEvent.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testEvent.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testEvent.getMaxParticipants()).isEqualTo(UPDATED_MAX_PARTICIPANTS);
-        assertThat(testEvent.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testEvent.isRecurrent()).isEqualTo(UPDATED_RECURRENT);
         assertThat(testEvent.getInterval()).isEqualTo(UPDATED_INTERVAL);
         assertThat(testEvent.getCategory()).isEqualTo(UPDATED_CATEGORY);

@@ -148,7 +148,7 @@ public class EventResource {
         Point point;
         double distance;
         try {
-            point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+            point = new Point(Double.parseDouble(longitude), Double.parseDouble(latitude));
             distance = Double.parseDouble(radius) * 1000;
         }catch (NumberFormatException e){
             throw new BadRequestAlertException("Parameters are not numbers ", latitude + ", " + longitude + "," + radius,"invalidParameters");

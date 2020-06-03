@@ -14,6 +14,8 @@ class EventInfoScreen extends React.Component {
     Navigation.events().bindComponent(this)
     console.log('Entity id is', this.props.data.entityId)
     this.props.getEvent(this.props.data.entityId)
+    console.log('Accept/decline buttons visible:', this.props.data.visible)
+
   }
 
   renderSeparator = () => {
@@ -98,18 +100,21 @@ class EventInfoScreen extends React.Component {
             {this.props.event.description}
           </Text>
         </View>
-        <View style={styles.row}>
-          <TouchableHighlight testID="acceptButton" style={styles.wrapper} onPress={this.handleAcceptButton} underlayColor="#D59F4E">
-            <View style={styles.button}>
-              <Text style={styles.textButton}>Accept</Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight testID="declineButton" style={styles.wrapper} onPress={this.handleDeclineButton} underlayColor="#D59F4E">
-            <View style={styles.button}>
-              <Text style={styles.textButton}>Decline</Text>
-            </View>
-          </TouchableHighlight>
-        </View>
+        {this.props.data.visible ? (
+          <View style={styles.row} >
+            <TouchableHighlight testID="acceptButton" style={styles.wrapper} onPress={this.handleAcceptButton} underlayColor="#D59F4E">
+              <View style={styles.button}>
+                <Text style={styles.textButton}>Accept</Text>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight testID="declineButton" style={styles.wrapper} onPress={this.handleDeclineButton} underlayColor="#D59F4E">
+              <View style={styles.button}>
+                <Text style={styles.textButton}>Decline</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+        ) : null}
+
         <View style={styles.title}>
           <Text style={styles.text}>
             {'Participants'}

@@ -55,7 +55,7 @@ export const INITIAL_STATE = Immutable({
   errorUpdating: null,
   errorDeleting: null,
   maybeEvents: [],
-  myEvents: []
+  //myEvents: []
 })
 
 /* ------------- Reducers ------------- */
@@ -165,14 +165,14 @@ export const  setMaybe = (state,action) =>{
   })
 }
 
-export const allAccepted = (state,action) =>{
-  const {events} = action
-  return state.merge({
-    fetchingAll: false,
-    errorAll: null,
-    myEvents: events,
-  })
-}
+// export const allAccepted = (state,action) =>{
+//   const {events} = action
+//   return state.merge({
+//     fetchingAll: false,
+//     errorAll: null,
+//     myEvents: events,
+//   })
+//}
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -196,8 +196,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.EVENT_ALL_NEARBY_SUCCESS]: allSuccess,
   [Types.EVENT_ALL_FROM_CITY_SUCCESS]: allSuccess,
   [Types.EVENT_ALL_HOSTED_SUCCESS]: allSuccess,
-  //[Types.EVENT_ALL_ACCEPTED_SUCCESS]: allSuccess,
-  [Types.EVENT_ALL_ACCEPTED_SUCCESS]: allAccepted,
+  [Types.EVENT_ALL_ACCEPTED_SUCCESS]: allSuccess,
+  //[Types.EVENT_ALL_ACCEPTED_SUCCESS]: allAccepted,
 
   [Types.EVENT_FAILURE]: failure,
   [Types.EVENT_ALL_FAILURE]: allFailure,

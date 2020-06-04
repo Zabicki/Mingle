@@ -113,7 +113,7 @@ const mapStateToProps = state => {
     // events: state.events.events,
     // fetching: state.events.fetchingAll,
     // error: state.events.errorAll,
-    myEvents: state.events.myEvents
+    myEvents: state.events.events
   }
 }
 

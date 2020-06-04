@@ -46,6 +46,8 @@ export default Creators
 export const INITIAL_STATE = Immutable({
   fetchingOne: null,
   fetchingAll: null,
+  fetchingHosted: null,
+  fetchingAccepted: null,
   updating: null,
   deleting: null,
   event: null,
@@ -54,6 +56,8 @@ export const INITIAL_STATE = Immutable({
   errorAll: null,
   errorUpdating: null,
   errorDeleting: null,
+  errorHosted: null,
+  errorAccepted: null,
   maybeEvents: [],
   myEvents: [],
   hostedEvents: [],
@@ -73,6 +77,18 @@ export const allRequest = state =>
   state.merge({
     fetchingAll: true,
     events: [],
+  })
+
+export const acceptedRequest = state =>
+  state.merge({
+    fetchingAccepted: true,
+    myEvents: [],
+  })
+
+export const hostedRequest = state =>
+  state.merge({
+    fetchingHosted: true,
+    hostedEvents: [],
   })
 
 // request to update from an api
@@ -159,6 +175,24 @@ export const deleteFailure = (state, action) => {
   })
 }
 
+export const acceptedFailure = (state, action) => {
+  const { error } = action
+  return state.merge({
+    fetchingAccepted: false,
+    errorAccepted: error,
+    myEvents: [],
+  })
+}
+
+export const hostedFailure = (state, action) => {
+  const { error } = action
+  return state.merge({
+    fetchingHosted: false,
+    errorHosted: error,
+    hostedEvents: [],
+  })
+}
+
 export const  setMaybe = (state,action) =>{
   const {events} = action
   return state.merge({
@@ -166,16 +200,20 @@ export const  setMaybe = (state,action) =>{
   })
 }
 
-export const allAccepted = (state,action) =>{
-  const {events} = action
+export const acceptedSuccess = (state,action) =>{
+  const { events } = action
   return state.merge({
-    myEvents: events,
+    fetchingAccepted: false,
+    errorAccepted: null,
+    myEvents: events
   })
 }
 
-export const allHosted = (state,action) => {
-  const {events} = action
+export const hostedSuccess = (state,action) => {
+  const { events } = action
   return state.merge({
+    fetchingHosted: false,
+    errorHosted: null,
     hostedEvents: events
   })
 }
@@ -190,8 +228,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.EVENT_ACCEPT_REQUEST]: updateRequest,
   [Types.EVENT_ALL_NEARBY_REQUEST]: allRequest,
   [Types.EVENT_ALL_FROM_CITY_REQUEST]: allRequest,
-  [Types.EVENT_ALL_HOSTED_REQUEST]: allRequest,
-  [Types.EVENT_ALL_ACCEPTED_REQUEST]: allRequest,
+  [Types.EVENT_ALL_HOSTED_REQUEST]: hostedRequest,
+  [Types.EVENT_ALL_ACCEPTED_REQUEST]: acceptedRequest,
 
   [Types.EVENT_SUCCESS]: success,
   [Types.EVENT_ALL_SUCCESS]: allSuccess,
@@ -201,8 +239,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.EVENT_ALL_NEARBY_SUCCESS]: allSuccess,
   [Types.EVENT_ALL_FROM_CITY_SUCCESS]: allSuccess,
   [Types.EVENT_ALL_HOSTED_SUCCESS]: allSuccess,
-  [Types.EVENT_ALL_ACCEPTED_SUCCESS]: allAccepted,
-  [Types.EVENT_ALL_HOSTED_SUCCESS]: allHosted,
+  [Types.EVENT_ALL_ACCEPTED_SUCCESS]: acceptedSuccess,
+  [Types.EVENT_ALL_HOSTED_SUCCESS]: hostedSuccess,
 
   [Types.EVENT_FAILURE]: failure,
   [Types.EVENT_ALL_FAILURE]: allFailure,
@@ -211,8 +249,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.EVENT_ACCEPT_FAILURE]: updateFailure,
   [Types.EVENT_ALL_NEARBY_FAILURE]: allFailure,
   [Types.EVENT_ALL_FROM_CITY_FAILURE]: allFailure,
-  [Types.EVENT_ALL_HOSTED_FAILURE]: allFailure,
-  [Types.EVENT_ALL_ACCEPTED_FAILURE]: allFailure,
+  [Types.EVENT_ALL_HOSTED_FAILURE]: hostedFailure,
+  [Types.EVENT_ALL_ACCEPTED_FAILURE]: acceptedFailure,
 
   [Types.EVENT_SET_MAYBE]: setMaybe,
 })

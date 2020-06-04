@@ -38,6 +38,7 @@ import MessageEntityDetailScreen from '../modules/entities/message/message-entit
 import MessageEntityEditScreen from '../modules/entities/message/message-entity-edit-screen'
 import MaybeEventsScreen from '../modules/account/maybe-events/maybe-events-screen'
 import Initializing from '../modules/initialize/Initializing'
+import MyEventsScreen from '../modules/account/events/events-screen'
 // ignite-jhipster-navigation-import-needle
 
 export const LOGIN_SCREEN = 'nav.LoginScreen'
@@ -70,6 +71,7 @@ export const MESSAGE_ENTITY_EDIT_SCREEN = 'nav.MessageEntityEditScreen'
 export const INITIALIZING = 'nav.Initializing'
 export const MAYBE_EVENTS_SCREEN = 'nav.MaybeEventsScreen'
 export const MAP_PICKER = 'nav.MapPicker'
+export const MY_EVENTS_SCREEN = 'nav.MyEventsScreen'
 // ignite-jhipster-navigation-declaration-needle
 
 const store = createStore()
@@ -238,6 +240,7 @@ export function registerScreensAndStartApp() {
   Navigation.registerComponentWithRedux(MAYBE_EVENTS_SCREEN, () => MaybeEventsScreen, Provider, store)
   Navigation.registerComponentWithRedux(INITIALIZING, () => Initializing, Provider, store)
   Navigation.registerComponentWithRedux(MAP_PICKER, () => MapPicker, Provider, store)
+  Navigation.registerComponentWithRedux(MY_EVENTS_SCREEN, () => MyEventsScreen, Provider, store)
   // ignite-jhipster-navigation-registration-needle
 
   Navigation.events().registerAppLaunchedListener(() => {
@@ -783,6 +786,21 @@ export const initializing = () =>
           },
         },
       ],
+    },
+  })
+
+export const myEventsScreen = () =>
+  Navigation.push('center', {
+    component: {
+      name: MY_EVENTS_SCREEN,
+      options: {
+        topBar: {
+          title: {
+            text: 'My events',
+            color: Colors.snow,
+          },
+        },
+      },
     },
   })
 

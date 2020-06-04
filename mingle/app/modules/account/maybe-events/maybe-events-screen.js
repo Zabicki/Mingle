@@ -31,7 +31,7 @@ class MaybeEventsScreen extends React.PureComponent {
   *************************************************************/
   renderRow({ item }) {
     return (
-      <TouchableOpacity style={styles.button} onPress={eventInfoScreen.bind(this, { entityId: item.id })} underlayColor="#D59F4E">
+      <TouchableOpacity style={styles.button} onPress={eventInfoScreen.bind(this, { entityId: item.id , visible: true})} underlayColor="#D59F4E">
         <View style={styles.row}>
           <Text style={styles.itemName} >{item.name}</Text>
           <Text style={styles.item}>{item.host.firstName}</Text>

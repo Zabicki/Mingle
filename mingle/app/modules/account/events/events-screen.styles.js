@@ -65,6 +65,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.sun,
     marginVertical: Metrics.baseMargin,
+    justifyContent: 'flex-end',
   },
   itemName: {
     padding: 10,
@@ -82,7 +83,6 @@ export default StyleSheet.create({
     paddingBottom: 30,
     borderRadius: 10,
     elevation: 5,
-    borderRadius: 8,
     shadowColor: 'black',
     flexDirection: 'row',
     backgroundColor: Colors.greyDark,
@@ -98,6 +98,13 @@ export default StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: Colors.snow,
+    marginTop: 15,
+  },
+  sectionText: {
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '700',
+    color: Colors.black,
     marginTop: 15,
   },
   item: {
@@ -129,5 +136,10 @@ export default StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'center',
     alignSelf: 'stretch',
+  },
+  renderButton: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '600',
   },
 })

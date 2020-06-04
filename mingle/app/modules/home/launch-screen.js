@@ -200,7 +200,7 @@ export class LaunchScreen extends React.Component {
       <View style={styles.mainContainer} testID="launchScreen">
         <Dialog.Container visible={this.state.showDialog}>
           <Dialog.Title>Search by city</Dialog.Title>
-           <Dialog.Input style = {styles.textInput}  placeholder="Enter city..." onChangeText={(city) => this.setState({cityInput: city})}></Dialog.Input>
+           <Dialog.Input style = {styles.textInput}  placeholder="Enter city..." onChangeText={(city) => this.setState({cityInput: city})}/>
            <Dialog.Button label="Cancel" onPress={this.handleCancel} />
            <Dialog.Button label="Ok" onPress={this.handleCitySearch} />
         </Dialog.Container>

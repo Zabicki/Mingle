@@ -1,10 +1,9 @@
 import React from 'react'
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import {FlatList, Text, TouchableHighlight, TouchableOpacity, View} from 'react-native'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation'
-import {eventEntityDetailScreen, eventEntityEditScreen, eventInfoScreen} from '../../../navigation/layouts'
+import { eventInfoScreen } from '../../../navigation/layouts'
 import EventActions from '../../entities/event/event.reducer'
-import AccountActions from '../../../shared/reducers/account.reducer'
 import styles from './events-screen.styles'
 import AlertMessage from '../../../shared/components/alert-message/alert-message'
 
@@ -14,9 +13,6 @@ class EventsScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     Navigation.events().bindComponent(this)
-
-
-      //this.props.getAccount()
 
     this.state = {
       page: 0,
@@ -29,20 +25,14 @@ class EventsScreen extends React.PureComponent {
     this.fetchEvents()
   }
 
-  // navigationButtonPressed({ buttonId }) {
-  //   eventEntityEditScreen({ entityId: null })
-  // }
-
   renderRow({ item }) {
     return (
-      <TouchableOpacity style={styles.button} onPress={eventInfoScreen.bind(this, { entityId: item.id, visible: false})} underlayColor="#D59F4E">
-        <View style={styles.row}>
-          <Text style={styles.itemName} >{item.name}</Text>
-          <Text style={styles.item}>{item.host.firstName}</Text>
-          {/*<Text style={styles.boldLabel}>{item.id}</Text>*/}
-          {/*/!* <Text style={styles.label}>{item.description}</Text> *!/*/}
-        </View>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={eventInfoScreen.bind(this, { entityId: item.id, visible: false})} underlayColor="#D59F4E">
+          <View style={styles.row}>
+            <Text style={styles.itemName} >{item.name}</Text>
+            <Text style={styles.item}>{item.host.firstName}</Text>
+          </View>
+        </TouchableOpacity>
     )
   }
 
@@ -59,37 +49,18 @@ class EventsScreen extends React.PureComponent {
   oneScreensWorth = 20
 
   fetchEvents = () => {
-    //this.props.getAllAcceptedEvents({ page: this.state.page, sort: this.state.sort, size: this.state.size })
     this.props.getAllAcceptedEvents({ page: this.state.page, sort: this.state.sort, size: this.state.size })
+    this.props.getAllHostedEvents({ page: this.state.page, sort: this.state.sort, size: this.state.size })
   }
 
-  // handleLoadMore = () => {
-  //   if (this.state.done || this.props.fetching) {
-  //     return
-  //   }
-  //   this.setState(
-  //     {
-  //       page: this.state.page + 1,
-  //     },
-  //     () => {
-  //       this.fetchEvents()
-  //     },
-  //   )
-  // }
-  //
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if (nextProps.events) {
-  //     return {
-  //       done: nextProps.events.length < prevState.size,
-  //       dataObjects: [...prevState.dataObjects, ...nextProps.events],
-  //     }
-  //   }
-  //   return null
-  // }
-
   render() {
+    console.log('Accepted:', this.state.myEvents)
+    console.log('Hosted: ', this.state.hostedEvents)
     return (
       <View style={styles.container} testID="eventScreen">
+        <Text style={styles.sectionText}>
+          Participated events
+        </Text>
         <FlatList
           contentContainerStyle={styles.listContent}
           data={this.props.myEvents}
@@ -97,31 +68,39 @@ class EventsScreen extends React.PureComponent {
           keyExtractor={this.keyExtractor}
           initialNumToRender={this.oneScreensWorth}
           onEndReached={this.handleLoadMore}
-          /* ListHeaderComponent={this.renderHeader} */
-          /* ListFooterComponent={this.renderFooter} */
+          ListEmptyComponent={this.renderEmpty}
+          ItemSeparatorComponent={this.renderSeparator}
+        />
+        <Text style={styles.sectionText}>
+          Hosted events
+        </Text>
+        <FlatList
+          contentContainerStyle={styles.listContent}
+          data={this.props.hostedEvents}
+          renderItem={this.renderRow}
+          keyExtractor={this.keyExtractor}
+          initialNumToRender={this.oneScreensWorth}
+          onEndReached={this.handleLoadMore}
           ListEmptyComponent={this.renderEmpty}
           ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
+
     )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    // ...redux state to props here
-    // events: state.events.events,
-    // fetching: state.events.fetchingAll,
-    // error: state.events.errorAll,
-    myEvents: state.events.myEvents
+    myEvents: state.events.myEvents,
+    hostedEvents: state.events.hostedEvents
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    // getAccount: () => dispatch(AccountActions.accountRequest()),
-    // getAllEvents: options => dispatch(EventActions.eventAllRequest(options)),
-    getAllAcceptedEvents: options => dispatch(EventActions.eventAllAcceptedRequest(options))
+    getAllAcceptedEvents: options => dispatch(EventActions.eventAllAcceptedRequest(options)),
+    getAllHostedEvents: options => dispatch(EventActions.eventAllHostedRequest(options))
   }
 }
 

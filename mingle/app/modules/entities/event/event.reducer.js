@@ -55,7 +55,8 @@ export const INITIAL_STATE = Immutable({
   errorUpdating: null,
   errorDeleting: null,
   maybeEvents: [],
-  myEvents: []
+  myEvents: [],
+  hostedEvents: [],
 })
 
 /* ------------- Reducers ------------- */
@@ -172,6 +173,13 @@ export const allAccepted = (state,action) =>{
   })
 }
 
+export const allHosted = (state,action) => {
+  const {events} = action
+  return state.merge({
+    hostedEvents: events
+  })
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -184,7 +192,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.EVENT_ALL_FROM_CITY_REQUEST]: allRequest,
   [Types.EVENT_ALL_HOSTED_REQUEST]: allRequest,
   [Types.EVENT_ALL_ACCEPTED_REQUEST]: allRequest,
- // [Types.EVENT_ALL_ACCEPTED_REQUEST]: allAccepted,
 
   [Types.EVENT_SUCCESS]: success,
   [Types.EVENT_ALL_SUCCESS]: allSuccess,
@@ -194,8 +201,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.EVENT_ALL_NEARBY_SUCCESS]: allSuccess,
   [Types.EVENT_ALL_FROM_CITY_SUCCESS]: allSuccess,
   [Types.EVENT_ALL_HOSTED_SUCCESS]: allSuccess,
-  //[Types.EVENT_ALL_ACCEPTED_SUCCESS]: allSuccess,
   [Types.EVENT_ALL_ACCEPTED_SUCCESS]: allAccepted,
+  [Types.EVENT_ALL_HOSTED_SUCCESS]: allHosted,
 
   [Types.EVENT_FAILURE]: failure,
   [Types.EVENT_ALL_FAILURE]: allFailure,

@@ -77,7 +77,6 @@ export default StyleSheet.create({
     paddingBottom: 30,
     borderRadius: 10,
     elevation: 5,
-    borderRadius: 8,
     shadowColor: 'black',
     flexDirection: 'row',
     backgroundColor: Colors.greyDark,

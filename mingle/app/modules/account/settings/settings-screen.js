@@ -25,7 +25,6 @@ class SettingsScreen extends React.Component {
         login: t.String,
         email: t.maybe(t.String),
         langKey: t.String,
-        show_current_localization: t.Boolean,
       }),
       accountValue: this.props.account,
       options: {
@@ -44,9 +43,6 @@ class SettingsScreen extends React.Component {
           },
           langKey: {
             hidden: true,
-          },
-          show_current_localization: {
-            hidden: false,
           },
         },
       },

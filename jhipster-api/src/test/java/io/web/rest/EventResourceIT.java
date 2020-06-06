@@ -333,44 +333,10 @@ public class EventResourceIT {
     }
 
     @Test
-    public void checkRecurrentIsRequired() throws Exception {
-        int databaseSizeBeforeTest = eventRepository.findAll().size();
-        // set the field null
-        event.setRecurrent(null);
-
-        // Create the Event, which fails.
-
-        restEventMockMvc.perform(post("/api/events")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(event)))
-            .andExpect(status().isBadRequest());
-
-        List<Event> eventList = eventRepository.findAll();
-        assertThat(eventList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
     public void checkCategoryIsRequired() throws Exception {
         int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
         event.setCategory(null);
-
-        // Create the Event, which fails.
-
-        restEventMockMvc.perform(post("/api/events")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(event)))
-            .andExpect(status().isBadRequest());
-
-        List<Event> eventList = eventRepository.findAll();
-        assertThat(eventList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    public void checkPrivacyIsRequired() throws Exception {
-        int databaseSizeBeforeTest = eventRepository.findAll().size();
-        // set the field null
-        event.setPrivacy(null);
 
         // Create the Event, which fails.
 

@@ -4,20 +4,13 @@ import { ScrollView, Image, BackHandler } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 
 import {
-  loginScreen,
-  registerScreen,
-  forgotPasswordScreen,
-  changePasswordScreen,
   settingsScreen,
   preferencesScreen,
   profileScreen,
-  eventInfoScreen,
-  entitiesScreen,
-  storybookScreen,
   goToAuth,
   maybeScreen,
   eventEntityEditScreen,
-  myEventsScreen
+  myEventsScreen, chatEntityScreen,
 } from '../layouts'
 import { connect } from 'react-redux'
 
@@ -49,18 +42,6 @@ class DrawerContent extends Component {
     })
   }
 
-  handlePressLogin = () => {
-    this.hideSideMenu()
-    loginScreen()
-  }
-  handlePressRegister = () => {
-    this.hideSideMenu()
-    registerScreen()
-  }
-  handlePressForgotPassword = () => {
-    this.hideSideMenu()
-    forgotPasswordScreen()
-  }
   handlePressSettings = () => {
     this.hideSideMenu()
     settingsScreen()
@@ -73,14 +54,6 @@ class DrawerContent extends Component {
     this.hideSideMenu()
     profileScreen()
   }
-  handlePressEventInfo = () => {
-    this.hideSideMenu()
-    eventInfoScreen()
-  }
-  handlePressChangePassword = () => {
-    this.hideSideMenu()
-    changePasswordScreen()
-  }
   handlePressMaybe = () => {
     this.hideSideMenu()
     maybeScreen()
@@ -89,22 +62,18 @@ class DrawerContent extends Component {
     this.hideSideMenu()
     myEventsScreen()
   }
-  handlePressEntities = () => {
-    this.hideSideMenu()
-    entitiesScreen()
-  }
   handlePressLogout = () => {
     this.hideSideMenu()
     this.props.logout()
     goToAuth()
   }
-  handlePressStorybook = () => {
-    this.hideSideMenu()
-    storybookScreen()
-  }
   handlePressNewEvent = () =>{
     this.hideSideMenu()
     eventEntityEditScreen({ entityId: null })
+  }
+  handlePressChats = () =>{
+    this.hideSideMenu()
+    chatEntityScreen({ entityId: null })
   }
 
   render() {
@@ -115,11 +84,10 @@ class DrawerContent extends Component {
         {<DrawerButton testID="newEventDrawerButton" text="New Event" onPress={this.handlePressNewEvent} />}
         {<DrawerButton testID="myEventsDrawerButton" text="My Events" onPress={this.handlePressMyEvents} />}
         {<DrawerButton testID="maybeDrawerButton" text="Maybe events" onPress={this.handlePressMaybe} />}
-        {<DrawerButton testID="entitiesDrawerButton" text="Entities" onPress={this.handlePressEntities} />}
+        {<DrawerButton testID="chatsButton" text="Chats" onPress={this.handlePressChats} />}
         {<DrawerButton testID="preferencesDrawerButton" text="Preferences" onPress={this.handlePressPreferences} />}
         {<DrawerButton testID="settingsDrawerButton" text="Settings" onPress={this.handlePressSettings} />}
         {<DrawerButton testID="logoutDrawerButton" text="Logout" onPress={this.handlePressLogout} />}
-        {__DEV__ && <DrawerButton testID="storybookDrawerButton" text="Storybook" onPress={this.handlePressStorybook} />}
       </ScrollView>
     )
   }

@@ -8,7 +8,7 @@ import styles from './login-screen.styles'
 import { Images, Metrics } from '../../shared/themes'
 import LoginActions from './login.reducer'
 
-import {forgotPasswordScreen, goHome, registerScreen} from '../../navigation/layouts'
+import { registerScreen } from '../../navigation/layouts'
 
 class LoginScreen extends React.Component {
   static propTypes = {
@@ -44,10 +44,6 @@ class LoginScreen extends React.Component {
 
   handlePressRegister = () => {
     registerScreen()
-  }
-
-  handlePressForgotPassword = () => {
-    forgotPasswordScreen()
   }
 
   handleChangeUsername = text => {
@@ -120,7 +116,6 @@ class LoginScreen extends React.Component {
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableHighlight>
           <Text style = {styles.clickable} onPress={()=> this.handlePressRegister()}>Don't have account? <Text style={{ fontWeight: 'bold' }}>Sign up</Text> now!</Text>
-          <Text style = {styles.clickable} onPress={()=> this.handlePressForgotPassword()}>Forgot password?</Text>
           </View>
       </ScrollView>
     )

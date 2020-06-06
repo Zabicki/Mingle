@@ -85,6 +85,7 @@ function LogoTitle() {
   );
 }
 
+//navigation stack used to authenticate user
 export const authStack = {
   root: {
     sideMenu: {
@@ -115,6 +116,7 @@ export const authStack = {
   },
 }
 
+//navigation stack used after user is authenticated (does not include login and register screens)
 const homeStack = {
   root: {
     sideMenu: {
@@ -209,6 +211,7 @@ function handleOpenURL(event) {
   }
 }
 
+//register screens in navigation module
 export function registerScreensAndStartApp() {
   Navigation.registerComponentWithRedux(LOGIN_SCREEN, () => LoginScreen, Provider, store)
   Navigation.registerComponentWithRedux(REGISTER_SCREEN, () => RegisterScreen, Provider, store)
@@ -275,6 +278,8 @@ export function registerScreensAndStartApp() {
   })
 }
 
+
+//functions used to switch screens in the whole application
 export const maybeScreen = () =>
   Navigation.push('center', {
     component: {

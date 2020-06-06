@@ -50,10 +50,6 @@ const Category = t.enums({
   EDUCATION: 'EDUCATION',
   OTHER: 'OTHER',
 })
-const Privacy = t.enums({
-  PUBLIC: 'PUBLIC',
-  PRIVATE: 'PRIVATE',
-})
 
 class EventEntityEditScreen extends React.Component {
   constructor(props) {
@@ -63,13 +59,9 @@ class EventEntityEditScreen extends React.Component {
       formModel: t.struct({
         name: t.String,
         description: t.String,
-        picture: t.maybe(t.String),
         maxParticipants: t.maybe(t.Number),
         date: t.Date,
-        recurrent: t.Boolean,
-        interval: t.maybe(t.Number),
         category: Category,
-        privacy: Privacy,
       }),
       formOptions: {
 
@@ -81,13 +73,8 @@ class EventEntityEditScreen extends React.Component {
           },
           description: {
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('picture').refs.input.focus(),
-            testID: 'descriptionInput',
-          },
-          picture: {
-            returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('maxParticipants').refs.input.focus(),
-            testID: 'pictureInput',
+            testID: 'descriptionInput',
           },
           maxParticipants: {
             returnKeyType: 'next',
@@ -111,26 +98,13 @@ class EventEntityEditScreen extends React.Component {
               format: date => jsDateToLocalDate(date),
             },
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('recurrent').refs.input.focus(),
-            testID: 'dateInput',
-          },
-          recurrent: {
-            returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('interval').refs.input.focus(),
-            testID: 'recurrentInput',
-          },
-          interval: {
-            returnKeyType: 'next',
             onSubmitEditing: () => this.form.getComponent('category').refs.input.focus(),
-            testID: 'intervalInput',
+            testID: 'dateInput',
           },
           category: {
             returnKeyType: 'next',
-            onSubmitEditing: () => this.form.getComponent('privacy').refs.input.focus(),
+            onSubmitEditing: () => this.form.getComponent('name').refs.input.focus(),
             testID: 'categoryInput',
-          },
-          privacy: {
-            testID: 'privacyInput',
           },
         },
         stylesheet: stylesheet,
@@ -156,13 +130,9 @@ class EventEntityEditScreen extends React.Component {
       const newForm = {
         name: res.name,
         description: res.description,
-        picture: res.picture,
         maxParticipants: res.maxParticipants,
         date: res.date,
-        recurrent: res.recurrent,
-        interval: res.interval,
         category: res.category,
-        privacy: res.privacy,
       }
       return { formValue: newForm, event: nextProps.event,
        location: {
@@ -190,7 +160,7 @@ class EventEntityEditScreen extends React.Component {
           })
         }
         Navigation.pop(this.props.componentId)
-        Alert.alert('Success', 'Entity saved successfully', alertOptions)
+        Alert.alert('Success', 'Event created successfully', alertOptions)
       }
     }
   }
@@ -283,7 +253,6 @@ const entityToFormValue = value => {
   return {
     name: value.name || null,
     description: value.description || null,
-    picture: value.picture || null,
     city: value.city || null,
     address: value.address || null,
     maxParticipants: value.maxParticipants || null,
@@ -292,26 +261,19 @@ const entityToFormValue = value => {
       longitude: value.location[0],
     },
     date: value.date || null,
-    recurrent: value.recurrent || null,
-    interval: value.interval || null,
     category: value.category || null,
-    privacy: value.privacy || null,
   }
 }
 const formValueToEntity = (value,location) => {
   const entity = {
     name: value.name || null,
     description: value.description || null,
-    picture: value.picture || null,
     city: location.city,
     address: location.address,
     maxParticipants: value.maxParticipants || null,
     location: [location.longitude, location.latitude],
     date: value.date || null,
-    recurrent: value.recurrent || false,
-    interval: value.interval || null,
     category: value.category || null,
-    privacy: value.privacy || null,
   }
   return entity
 }

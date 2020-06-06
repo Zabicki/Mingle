@@ -1,17 +1,13 @@
 import React from 'react'
-import { ScrollView, Text, Image, View, Platform, TouchableHighlight } from 'react-native'
-import { DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen'
+import {Text, Image, View, TouchableHighlight, Alert} from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { connect } from 'react-redux'
 import Geolocation from '@react-native-community/geolocation';
 import Dialog from 'react-native-dialog';
 
-import LearnMoreLinks from './learn-more-links.component.js'
 import { Images } from '../../shared/themes'
 import styles from './launch-screen.styles'
-import RoundedButton from '../../shared/components/rounded-button/rounded-button'
 import EventAction from '../entities/event/event.reducer'
-import {launchScreen} from '../../navigation/layouts'
 
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions'
 
@@ -31,9 +27,11 @@ export class LaunchScreen extends React.Component {
         cityInput: '',
         byCity: false,
         showDialog: false,
+        image: null,
     }
     this.handlePermissions();
   }
+
   fetchEvents = () =>{
     const options = {
       page: this.state.page,
@@ -89,6 +87,27 @@ export class LaunchScreen extends React.Component {
         }
       }
     );
+  }
+
+  getImageForEvent = (category) => {
+    if (category === "SPORT") {
+        return Images.football
+    }
+    if (category === "MUSIC") {
+      return Images.musicNote
+    }
+    if (category === "PARTY") {
+      return Images.drink
+    }
+    if (category === "FOOD") {
+      return Images.musicNote
+    }
+    if (category === "EDUCATION") {
+      return Images.book
+    }
+    if (category === "OTHER") {
+      return Images.other
+    }
   }
 
   showNext = () =>{
@@ -195,33 +214,35 @@ export class LaunchScreen extends React.Component {
 
   render() {
    const {events} = this.props
-   const {position} =this.state
+   const {position} = this.state
     return (
       <View style={styles.mainContainer} testID="launchScreen">
         <Dialog.Container visible={this.state.showDialog}>
           <Dialog.Title>Search by city</Dialog.Title>
-           <Dialog.Input style = {styles.textInput}  placeholder="Enter city..." onChangeText={(city) => this.setState({cityInput: city})}></Dialog.Input>
+           <Dialog.Input style = {styles.textInput}  placeholder="Enter city..." onChangeText={(city) => this.setState({cityInput: city})}/>
            <Dialog.Button label="Cancel" onPress={this.handleCancel} />
            <Dialog.Button label="Ok" onPress={this.handleCitySearch} />
         </Dialog.Container>
       { events && events[position] ? (
+
         <View style={styles.scrollView}>
           <View style={styles.form}>
             <View style={styles.row}>
               <View style={styles.wrapper}>
+
                 <Text style={styles.text}>
-                  {events[position] ?  events[position].date : 'Date'}
+                  {events[position] ?  events[position].date: 'Date'}
                 </Text>
               </View>
               <View style={styles.wrapper}>
-                <Text style={styles.text}>
+                <Text style={styles.locationText}>
                   {events[position] ?  events[position].address : 'Location'}
                 </Text>
               </View>
             </View>
             <View style={styles.rowHost}>
               <View style={styles.wrapper}>
-                <Image source={ events[position] ?  { uri: `data:image/png;base64,${events[position].picture}` }: Images.football }
+                <Image source={ this.getImageForEvent(events[position].category) }
                  style={styles.logo} />
               </View>
               <View style={styles.wrapper}>
@@ -233,10 +254,16 @@ export class LaunchScreen extends React.Component {
                 </View>
               </View>
             </View>
+            <View style={styles.eventName}>
+              <Text style={styles.eventNameText}>
+                {events[position] ?  events[position].name :
+                  'Event name'}
+              </Text>
+            </View>
             <View style={styles.description}>
               <Text style={styles.textDescription}>
               {events[position] ?  events[position].description :
-              'Looking for someone who plays at intermediate level. Meeting at 3 pm at AGH, building C1'}
+              'Description'}
               </Text>
             </View>
             <View style={styles.row}>
@@ -278,6 +305,7 @@ const mapStateToProps = state => {
     fetching: state.events.fetchingAll,
     error:  state.events.errorAll,
     maybe: state.events.maybeEvents,
+    account: state.account.account,
     }
   }
 

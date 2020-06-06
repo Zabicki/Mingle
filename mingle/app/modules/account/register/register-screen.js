@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Navigation } from 'react-native-navigation'
 import t from 'tcomb-form-native'
-import { format } from 'date-fns'
 
 import RegisterActions from '../register/register.reducer'
 // Styles
@@ -31,7 +30,6 @@ stylesheet.textboxView.error.marginBottom = 5;
 stylesheet.textboxView.normal.marginTop = 8;
 stylesheet.textboxView.error.marginTop = 8;
 
-//stylesheet.dateValue.normal.borderColor = 'grey';
 stylesheet.dateValue.normal.color = 'grey';
 stylesheet.dateValue.normal.borderWidth = 1;
 
@@ -130,7 +128,7 @@ class RegisterScreen extends React.Component {
         Alert.alert('Error', this.props.error, [{ text: 'OK' }])
       } else {
         Navigation.popToRoot(this.props.componentId)
-        Alert.alert('Registration Successful', 'Please check your email', [{ text: 'OK' }])
+        Alert.alert('Registration Successful', 'Account has been created', [{ text: 'OK' }])
       }
     }
   }

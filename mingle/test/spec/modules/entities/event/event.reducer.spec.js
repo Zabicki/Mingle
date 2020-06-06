@@ -165,45 +165,45 @@ test('failure retrieving a list of events from city', () => {
 test('attempt retrieving a list of hosted events', () => {
   const state = reducer(INITIAL_STATE, Actions.eventAllHostedRequest({ id: 1 }))
 
-  expect(state.fetchingAll).toBe(true)
-  expect(state.events).toEqual([])
+  expect(state.fetchingHosted).toBe(true)
+  expect(state.hostedEvents).toEqual([])
 })
 
 test('success retrieving a list of hosted events', () => {
   const state = reducer(INITIAL_STATE, Actions.eventAllHostedSuccess([{ id: 1 }, { id: 2 }]))
 
-  expect(state.fetchingAll).toBe(false)
-  expect(state.errorAll).toBe(null)
-  expect(state.events).toEqual([{ id: 1 }, { id: 2 }])
+  expect(state.fetchingHosted).toBe(false)
+  expect(state.errorHosted).toBe(null)
+  expect(state.hostedEvents).toEqual([{ id: 1 }, { id: 2 }])
 })
 
 test('failure retrieving a list of hosted events', () => {
   const state = reducer(INITIAL_STATE, Actions.eventAllHostedFailure({ error: 'Not found' }))
 
-  expect(state.fetchingAll).toBe(false)
-  expect(state.errorAll).toEqual({ error: 'Not found' })
-  expect(state.events).toEqual([])
+  expect(state.fetchingHosted).toBe(false)
+  expect(state.errorHosted).toEqual({ error: 'Not found' })
+  expect(state.hostedEvents).toEqual([])
 })
 
 test('attempt retrieving a list of accepted events', () => {
   const state = reducer(INITIAL_STATE, Actions.eventAllAcceptedRequest({ id: 1 }))
 
-  expect(state.fetchingAll).toBe(true)
-  expect(state.events).toEqual([])
+  expect(state.fetchingAccepted).toBe(true)
+  expect(state.myEvents).toEqual([])
 })
 
 test('success retrieving a list of accepted events', () => {
   const state = reducer(INITIAL_STATE, Actions.eventAllAcceptedSuccess([{ id: 1 }, { id: 2 }]))
 
-  expect(state.fetchingAll).toBe(false)
-  expect(state.errorAll).toBe(null)
-  expect(state.events).toEqual([{ id: 1 }, { id: 2 }])
+  expect(state.fetchingAccepted).toBe(false)
+  expect(state.errorAccepted).toBe(null)
+  expect(state.myEvents).toEqual([{ id: 1 }, { id: 2 }])
 })
 
 test('failure retrieving a list of accepted events', () => {
   const state = reducer(INITIAL_STATE, Actions.eventAllAcceptedFailure({ error: 'Not found' }))
 
-  expect(state.fetchingAll).toBe(false)
-  expect(state.errorAll).toEqual({ error: 'Not found' })
-  expect(state.events).toEqual([])
+  expect(state.fetchingAccepted).toBe(false)
+  expect(state.errorAccepted).toEqual({ error: 'Not found' })
+  expect(state.myEvents).toEqual([])
 })

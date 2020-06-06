@@ -43,8 +43,8 @@ class ChatEntityScreen extends React.PureComponent {
   renderRow({ item }) {
     return (
       <TouchableOpacity onPress={chatEntityDetailScreen.bind(this, { entityId: item.id })}>
-        <View style={styles.row}>
-          <Text style={styles.boldLabel}>{item.name}</Text>
+        <View style={styles.button}>
+          <Text style={styles.item}>{item.event.name}</Text>
           {/* <Text style={styles.label}>{item.description}</Text> */}
         </View>
       </TouchableOpacity>
@@ -93,7 +93,7 @@ class ChatEntityScreen extends React.PureComponent {
   // )}
 
   fetchChats = () => {
-    this.props.getUserChats({ page: this.state.page, sort: this.state.sort, size: this.state.size })
+    this.props.getAllChats({ page: this.state.page, sort: this.state.sort, size: this.state.size })
   }
 
   handleLoadMore = () => {
@@ -114,13 +114,14 @@ class ChatEntityScreen extends React.PureComponent {
     if (nextProps.chats) {
       return {
         done: nextProps.chats.length < prevState.size,
-        dataObjects: [...prevState.dataObjects, ...nextProps.chats],
+        dataObjects: [...nextProps.chats],
       }
     }
     return null
   }
 
   render() {
+    console.log('Chats: ', this.props.chats)
     return (
       <View style={styles.container} testID="chatScreen">
         <FlatList

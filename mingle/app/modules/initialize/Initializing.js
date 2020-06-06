@@ -19,9 +19,7 @@ class Initializing extends React.Component {
 
   async componentDidMount() {
 
-    // sometimes loggedIn property was wrongly evaluated as false, 1 second timeout solved the problem
-    // so I guess redux store was not loaded fully before checking the condition
-    // to be replaced with better solution
+    // sometimes loggedIn property was wrongly evaluated as false, 1 second wait solved the problem
     await waitForStoreLoad(1000)
 
     try {

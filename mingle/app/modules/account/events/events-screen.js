@@ -85,7 +85,6 @@ class EventsScreen extends React.PureComponent {
           ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
-
     )
   }
 }

@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
-import { TextInput, Text, View, SafeAreaView, Image, ScrollView, TouchableHighlight, FlatList, List, ListItem, Alert} from "react-native";
+import React from 'react'
+import { Text, View, Image, TouchableHighlight, FlatList, List, ListItem, Alert} from "react-native";
 import styles from './event-info-screen.styles'
 import {Navigation} from 'react-native-navigation'
 import EventActions from './event/event.reducer'
-import UserActions from '../../shared/reducers/user.reducer'
 import {connect} from 'react-redux'
 import {jsDateToLocalDate} from '../../shared/util/date-transforms'
 

@@ -62,7 +62,6 @@ public class Event implements Serializable {
     @Field("date")
     private ZonedDateTime date;
 
-    @NotNull
     @Field("recurrent")
     private Boolean recurrent;
 
@@ -73,7 +72,6 @@ public class Event implements Serializable {
     @Field("category")
     private Category category;
 
-    @NotNull
     @Field("privacy")
     private Privacy privacy;
 

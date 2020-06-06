@@ -111,6 +111,14 @@ export default StyleSheet.create({
     color: Colors.greyDark,
     marginTop: 15,
   },
+  locationText: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.greyDark,
+    marginTop: 15,
+  },
   textHost: {
     textAlign: 'center',
     fontSize: 30,
@@ -135,11 +143,28 @@ export default StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
-  description: {
-    height: 230,
+  eventName: {
+    height: 20,
     padding: 5,
     margin: 5,
     marginBottom: 20,
     alignItems: 'center',
+  },
+  description: {
+    height: 180,
+    padding: 5,
+    margin: 5,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  eventNameText: {
+    textAlign: 'center',
+    fontSize: 28,
+    fontWeight: '700',
+    color: Colors.greyDark,
+    marginTop: 15,
+  },
+  title: {
+    alignItems: "center",
   },
 })
